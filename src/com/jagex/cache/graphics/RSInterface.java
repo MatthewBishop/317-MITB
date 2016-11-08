@@ -5,7 +5,7 @@ package com.jagex.cache.graphics;
 
 import com.jagex.Client;
 import com.jagex.cache.Archive;
-import com.jagex.cache.anim.Class36;
+import com.jagex.cache.anim.Frame;
 import com.jagex.cache.def.EntityDef;
 import com.jagex.cache.def.ItemDef;
 import com.jagex.entity.model.Model;
@@ -319,7 +319,7 @@ public final class RSInterface
             return null;
         if(k == -1 && j == -1 && model.anIntArray1640 == null)
             return model;
-        Model model_1 = new Model(true, Class36.method532(k) & Class36.method532(j), false, model);
+        Model model_1 = new Model(true, Frame.isInvalid(k) & Frame.isInvalid(j), false, model);
         if(k != -1 || j != -1)
             model_1.method469();
         if(k != -1)

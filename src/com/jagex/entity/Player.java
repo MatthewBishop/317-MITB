@@ -5,7 +5,7 @@ package com.jagex.entity;
 
 import com.jagex.Client;
 import com.jagex.cache.anim.Animation;
-import com.jagex.cache.anim.Class36;
+import com.jagex.cache.anim.Frame;
 import com.jagex.cache.anim.Graphic;
 import com.jagex.cache.def.EntityDef;
 import com.jagex.cache.def.ItemDef;
@@ -35,7 +35,7 @@ public final class Player extends Entity
             Model model_2 = SpotAnimModel.getModel(graphic);
             if(model_2 != null)
             {
-                Model model_3 = new Model(true, Class36.method532(super.anInt1521), false, model_2);
+                Model model_3 = new Model(true, Frame.isInvalid(super.anInt1521), false, model_2);
                 model_3.method475(0, -super.anInt1524, 0);
                 model_3.method469();
                 model_3.method470(graphic.animation.anIntArray353[super.anInt1521]);
@@ -285,7 +285,7 @@ public final class Player extends Entity
         if(aBoolean1699)
             return model_1;
         Model model_2 = Model.aModel_1621;
-        model_2.method464(model_1, Class36.method532(k) & Class36.method532(i1));
+        model_2.method464(model_1, Frame.isInvalid(k) & Frame.isInvalid(i1));
         if(k != -1 && i1 != -1)
             model_2.method471(Animation.animations[super.anim].anIntArray357, i1, k);
         else

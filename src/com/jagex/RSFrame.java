@@ -5,37 +5,53 @@ package com.jagex;
 
 import java.awt.*;
 
-final class RSFrame extends Frame
-{
+final class RSFrame extends Frame {
 
-    public RSFrame(RSApplet RSApplet_, int i, int j)
-    {
-        rsApplet = RSApplet_;
-        setTitle("Jagex");
-        setResizable(false);
-        //show();        //deprecated
-        setVisible(true);
-        toFront();
-        //resize(i + 8, j + 28);   //deprecated
-        setSize(i + 8, j + 28);
-    }
+	private final RSApplet applet;
+	private Toolkit toolkit = Toolkit.getDefaultToolkit();
+	private final Insets insets;
+	private static final long serialVersionUID = 1L;
 
-    public Graphics getGraphics()
-    {
-        Graphics g = super.getGraphics();
-        g.translate(4, 24);
-        return g;
-    }
+	public RSFrame(RSApplet applet, int width, int height, boolean resizable, boolean fullscreen) {
+		this.applet = applet;
+		setTitle("Fagex");
+		setResizable(resizable);
+		setUndecorated(fullscreen);
+		setVisible(true); 
+		insets = getInsets();
+		if (resizable) {
+			setMinimumSize(new Dimension(766 + insets.left + insets.right, 536 + insets.top + insets.bottom));
+		}
+		setSize(width + insets.left + insets.right, height + insets.top + insets.bottom);
+		setLocationRelativeTo(null);
+		setBackground(Color.BLACK);
+		requestFocus();
+		toFront();
+	}
 
-    public void update(Graphics g)
-    {
-        rsApplet.update(g);
-    }
+	public Graphics getGraphics() {
+		final Graphics graphics = super.getGraphics();
+		Insets insets = this.getInsets();
+		graphics.fillRect(0, 0, getWidth(), getHeight());
+		graphics.translate(insets != null ? insets.left : 0, insets != null ? insets.top : 0);
+		return graphics;
+	}
 
-    public void paint(Graphics g)
-    {
-        rsApplet.paint(g);
-    }
+	public int getFrameWidth() {
+		Insets insets = this.getInsets();
+		return getWidth() - (insets.left + insets.right);
+	}
 
-    private final RSApplet rsApplet;
+	public int getFrameHeight() {
+		Insets insets = this.getInsets();
+		return getHeight() - (insets.top + insets.bottom);
+	}
+
+	public void update(Graphics graphics) {
+		applet.update(graphics);
+	}
+
+	public void paint(Graphics graphics) {
+		applet.paint(graphics);
+	}
 }

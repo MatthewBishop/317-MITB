@@ -7,14 +7,33 @@ import java.awt.*;
 import java.awt.image.*;
 
 public final class RSImageProducer
-        implements ImageProducer, ImageObserver
 {
 
-    public RSImageProducer(int i, int j, Component component)
+	public final int[] canvasRaster;
+	public final int canvasWidth;
+	public final int canvasHeight;
+	private final BufferedImage bufferedImage;
+
+	public RSImageProducer(int canvasWidth, int canvasHeight) {
+		this.canvasWidth = canvasWidth;
+		this.canvasHeight = canvasHeight;
+		bufferedImage = new BufferedImage(canvasWidth, canvasHeight, BufferedImage.TYPE_INT_RGB);
+		canvasRaster = ((DataBufferInt) bufferedImage.getRaster().getDataBuffer()).getData();
+		initDrawingArea();
+	}
+
+	public void drawGraphics(int y, Graphics graphics, int x) {
+		graphics.drawImage(bufferedImage, x, y, null);
+	}
+
+	public void initDrawingArea() {
+		DrawingArea.initDrawingArea(canvasHeight, canvasWidth, canvasRaster);
+	}
+  /*  public RSImageProducer(int i, int j, Component component)
     {
-        anInt316 = i;
-        anInt317 = j;
-        anIntArray315 = new int[i * j];
+        canvasWidth = i;
+        canvasHeight = j;
+        canvasRaster = new int[i * j];
         aColorModel318 = new DirectColorModel(32, 0xff0000, 65280, 255);
         anImage320 = component.createImage(this);
         method239();
@@ -28,7 +47,7 @@ public final class RSImageProducer
 
     public void initDrawingArea()
     {
-        DrawingArea.initDrawingArea(anInt317, anInt316, anIntArray315);
+        DrawingArea.initDrawingArea(canvasHeight, canvasWidth, canvasRaster);
     }
 
     public void drawGraphics(int i, Graphics g, int k)
@@ -40,7 +59,7 @@ public final class RSImageProducer
     public synchronized void addConsumer(ImageConsumer imageconsumer)
     {
         anImageConsumer319 = imageconsumer;
-        imageconsumer.setDimensions(anInt316, anInt317);
+        imageconsumer.setDimensions(canvasWidth, canvasHeight);
         imageconsumer.setProperties(null);
         imageconsumer.setColorModel(aColorModel318);
         imageconsumer.setHints(14);
@@ -71,7 +90,7 @@ public final class RSImageProducer
     {
         if(anImageConsumer319 != null)
         {
-            anImageConsumer319.setPixels(0, 0, anInt316, anInt317, aColorModel318, anIntArray315, 0, anInt316);
+            anImageConsumer319.setPixels(0, 0, canvasWidth, canvasHeight, aColorModel318, canvasRaster, 0, canvasWidth);
             anImageConsumer319.imageComplete(2);
         }
     }
@@ -81,10 +100,10 @@ public final class RSImageProducer
         return true;
     }
 
-    public final int[] anIntArray315;
-    private final int anInt316;
-    private final int anInt317;
+    public final int[] canvasRaster;
+    private final int canvasWidth;
+    private final int canvasHeight;
     private final ColorModel aColorModel318;
     private ImageConsumer anImageConsumer319;
-    private final Image anImage320;
+    private final Image anImage320;*/
 }

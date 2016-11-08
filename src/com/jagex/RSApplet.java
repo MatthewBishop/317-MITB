@@ -13,25 +13,53 @@ public class RSApplet extends Applet
     implements Runnable, MouseListener, MouseMotionListener, KeyListener, FocusListener, WindowListener
 {
 
-    final void createClientFrame(int i, int j)
+    private boolean isApplet;
+    
+	final void createClientFrame(int i, int j)
     {
+		isApplet = false;
         myWidth = j;
         myHeight = i;
-            gameFrame = new RSFrame(this, myWidth, myHeight);
+		gameFrame = new RSFrame(this, myWidth, myHeight, Client.frameMode == Client.ScreenMode.RESIZABLE, Client.frameMode == Client.ScreenMode.FULLSCREEN);
+		gameFrame.setFocusTraversalKeysEnabled(false);
             graphics = getGameComponent().getGraphics();
-            fullGameScreen = new RSImageProducer(myWidth, myHeight, getGameComponent());
             Utils.startRunnable(this, 1);
     }
 
     final void initClientFrame(int i, int j)
     {
+		isApplet = true;
         myWidth = j;
         myHeight = i;
         graphics = getGameComponent().getGraphics();
-        fullGameScreen = new RSImageProducer(myWidth, myHeight, getGameComponent());
         Utils.startRunnable(this, 1);
     }
 
+	public boolean appletClient() {
+		return gameFrame == null && isApplet == true;
+	}
+	
+	public void refreshFrameSize(boolean undecorated, int width, int height, boolean resizable, boolean full) {
+		boolean createdByApplet = (isApplet && !full);
+		myWidth = width;
+		myHeight = height;
+		if(gameFrame != null) {
+			gameFrame.dispose();
+		}
+		if (!createdByApplet){
+			gameFrame = new RSFrame(this, width, height, resizable, undecorated);
+			gameFrame.addWindowListener(this);
+		}
+		graphics = (createdByApplet ? this : gameFrame).getGraphics();
+		if (!createdByApplet) {
+	//		getGameComponent().addMouseWheelListener(this);
+			getGameComponent().addMouseListener(this);
+			getGameComponent().addMouseMotionListener(this);
+			getGameComponent().addKeyListener(this);
+			getGameComponent().addFocusListener(this);
+		}
+	}
+    	
     public void run()
     {
         getGameComponent().addMouseListener(this);
@@ -497,7 +525,6 @@ public class RSApplet extends Applet
     int myWidth;
     int myHeight;
     Graphics graphics;
-    RSImageProducer fullGameScreen;
     RSFrame gameFrame;
     private boolean shouldClearScreen;
     boolean awtFocus;

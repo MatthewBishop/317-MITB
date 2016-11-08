@@ -4,7 +4,7 @@ package com.jagex.entity;
 // Decompiler options: packimports(3) 
 
 import com.jagex.cache.anim.Animation;
-import com.jagex.cache.anim.Class36;
+import com.jagex.cache.anim.Frame;
 import com.jagex.cache.anim.Graphic;
 import com.jagex.cache.def.EntityDef;
 import com.jagex.entity.model.Model;
@@ -43,7 +43,7 @@ public final class NPC extends Entity
             if(model_1 != null)
             {
                 int j = graphic.animation.anIntArray353[super.anInt1521];
-                Model model_2 = new Model(true, Class36.method532(j), false, model_1);
+                Model model_2 = new Model(true, Frame.isInvalid(j), false, model_1);
                 model_2.method475(0, -super.anInt1524, 0);
                 model_2.method469();
                 model_2.method470(j);

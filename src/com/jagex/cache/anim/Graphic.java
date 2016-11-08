@@ -18,7 +18,7 @@ public final class Graphic {
         {
             if(graphics[j] == null)
                 graphics[j] = new Graphic();
-            graphics[j].anInt404 = j;
+            graphics[j].id = j;
             graphics[j].readValues(stream);
         }
 
@@ -65,24 +65,15 @@ public final class Graphic {
         } while(true);
     }
 
-    private Graphic()
-    {
-        animationId = -1;
-        originalColours = new int[6];
-        replacementColours = new int[6];
-        breadthScale = 128;
-        depthScale = 128;
-    }
-
     public static Graphic graphics[];
-    public int anInt404;
+    public int id;
     public int model;
-    private int animationId;
+    private int animationId = -1;
     public Animation animation;
-    public final int[] originalColours;
-    public final int[] replacementColours;
-    public int breadthScale;
-    public int depthScale;
+    public final int[] originalColours = new int[6];
+    public final int[] replacementColours = new int[6];
+    public int breadthScale = 128;
+    public int depthScale = 128;
     public int orientation;
     public int ambience;
     public int modelShadow;

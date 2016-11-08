@@ -8,7 +8,7 @@ public class SpotAnimModel {
 
 	public static Model getModel(Graphic anim)
 	{
-	    Model model = (Model) SpotAnimModel.spotanimcache.get(anim.anInt404);
+	    Model model = (Model) SpotAnimModel.spotanimcache.get(anim.id);
 	    if(model != null)
 	        return model;
 	    model = Model.method462(anim.model);
@@ -18,7 +18,7 @@ public class SpotAnimModel {
 	        if(anim.originalColours[0] != 0)
 	            model.method476(anim.originalColours[i], anim.replacementColours[i]);
 	
-	    SpotAnimModel.spotanimcache.put(anim.anInt404, model);
+	    SpotAnimModel.spotanimcache.put(anim.id, model);
 	    return model;
 	}
 

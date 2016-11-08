@@ -5,7 +5,7 @@ package com.jagex.cache.def;
 
 import com.jagex.Client;
 import com.jagex.cache.Archive;
-import com.jagex.cache.anim.Class36;
+import com.jagex.cache.anim.Frame;
 import com.jagex.entity.model.Model;
 import com.jagex.io.Stream;
 import com.jagex.link.Cache;
@@ -151,7 +151,7 @@ public final class EntityDef
             mruNodes.put(type, model);
         }
         Model model_1 = Model.aModel_1621;
-        model_1.method464(model, Class36.method532(k) & Class36.method532(j));
+        model_1.method464(model, Frame.isInvalid(k) & Frame.isInvalid(j));
         if(k != -1 && j != -1)
             model_1.method471(ai, j, k);
         else

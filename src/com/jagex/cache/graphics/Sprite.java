@@ -3,6 +3,9 @@ package com.jagex.cache.graphics;
 import java.awt.*;
 import java.awt.image.PixelGrabber;
 
+import javax.swing.ImageIcon;
+
+import com.jagex.Constants;
 import com.jagex.cache.Archive;
 import com.jagex.io.Stream;
 import com.jagex.link.Cacheable;
@@ -36,6 +39,34 @@ public final class Sprite extends Cacheable {
 		}
 	}
 
+	public String location = Constants.findcachedir() + "Sprites/";
+	
+	public Sprite(String img) {
+		try {
+			Image image = Toolkit.getDefaultToolkit().getImage(location + img + ".png");
+			ImageIcon sprite = new ImageIcon(image);
+			width = sprite.getIconWidth();
+			height = sprite.getIconHeight();
+			resizeWidth = width;
+			resizeHeight = height;
+			horizontalOffset = 0;
+			verticalOffset = 0;
+			raster = new int[width * height];
+			PixelGrabber pixelgrabber = new PixelGrabber(image, 0, 0, width, height, raster, 0, width);
+			pixelgrabber.grabPixels();
+			image = null;
+			setTransparency(255, 0, 255);
+		} catch (Exception _ex) {
+			System.out.println(_ex);
+		}
+	}
+	
+	private void setTransparency(int transRed, int transGreen, int transBlue) {
+		for (int index = 0; index < raster.length; index++)
+			if (((raster[index] >> 16) & 255) == transRed && ((raster[index] >> 8) & 255) == transGreen && (raster[index] & 255) == transBlue)
+				raster[index] = 0;
+	}
+	
 	public Sprite(Archive archive, String s, int i) {
 		Stream stream = new Stream(archive.getEntry(s + ".dat"));
 		Stream stream_1 = new Stream(archive.getEntry("index.dat"));
@@ -78,7 +109,6 @@ public final class Sprite extends Cacheable {
 
 		}
 	}
-
 
 	public void recolour(int redOffset, int greenOffset, int blueOffset) {
 		for (int i1 = 0; i1 < raster.length; i1++) {

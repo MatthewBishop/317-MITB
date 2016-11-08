@@ -5,19 +5,19 @@ package com.jagex.cache.anim;
 
 import com.jagex.io.Stream;
 
-public final class Class36
+public final class Frame
 {
 
-    public static void method528(int i)
+    public static void init(int i)
     {
-        aClass36Array635 = new Class36[i + 1];
-        aBooleanArray643 = new boolean[i + 1];
+        frames = new Frame[i + 1];
+        opaque = new boolean[i + 1];
         for(int j = 0; j < i + 1; j++)
-            aBooleanArray643[j] = true;
+            opaque[j] = true;
 
     }
 
-    public static void method529(byte abyte0[])
+    public static void load(byte abyte0[])
     {
         Stream stream = new Stream(abyte0);
         stream.currentOffset = abyte0.length - 8;
@@ -40,7 +40,7 @@ public final class Class36
         i1 += l;
         Stream stream_5 = new Stream(abyte0);
         stream_5.currentOffset = i1;
-        Class18 class18 = new Class18(stream_5);
+        FrameBase frameBase = new FrameBase(stream_5);
         int k1 = stream_1.readUnsignedWord();
         int ai[] = new int[500];
         int ai1[] = new int[500];
@@ -49,9 +49,9 @@ public final class Class36
         for(int l1 = 0; l1 < k1; l1++)
         {
             int i2 = stream_1.readUnsignedWord();
-            Class36 class36 = aClass36Array635[i2] = new Class36();
-            class36.anInt636 = stream_4.readUnsignedByte();
-            class36.aClass18_637 = class18;
+            Frame frame = frames[i2] = new Frame();
+            frame.anInt636 = stream_4.readUnsignedByte();
+            frame.aClass18_637 = frameBase;
             int j2 = stream_1.readUnsignedByte();
             int k2 = -1;
             int l2 = 0;
@@ -60,11 +60,11 @@ public final class Class36
                 int j3 = stream_2.readUnsignedByte();
                 if(j3 > 0)
                 {
-                    if(class18.anIntArray342[i3] != 0)
+                    if(frameBase.transformationType[i3] != 0)
                     {
                         for(int l3 = i3 - 1; l3 > k2; l3--)
                         {
-                            if(class18.anIntArray342[l3] != 0)
+                            if(frameBase.transformationType[l3] != 0)
                                 continue;
                             ai[l2] = l3;
                             ai1[l2] = 0;
@@ -77,7 +77,7 @@ public final class Class36
                     }
                     ai[l2] = i3;
                     char c = '\0';
-                    if(class18.anIntArray342[i3] == 3)
+                    if(frameBase.transformationType[i3] == 3)
                         c = '\200';
                     if((j3 & 1) != 0)
                         ai1[l2] = stream_3.method421();
@@ -93,58 +93,54 @@ public final class Class36
                         ai3[l2] = c;
                     k2 = i3;
                     l2++;
-                    if(class18.anIntArray342[i3] == 5)
-                        aBooleanArray643[i2] = false;
+                    if(frameBase.transformationType[i3] == 5)
+                        opaque[i2] = false;
                 }
             }
 
-            class36.anInt638 = l2;
-            class36.anIntArray639 = new int[l2];
-            class36.anIntArray640 = new int[l2];
-            class36.anIntArray641 = new int[l2];
-            class36.anIntArray642 = new int[l2];
+            frame.transformationCount = l2;
+            frame.transformationIndices = new int[l2];
+            frame.transformX = new int[l2];
+            frame.transformY = new int[l2];
+            frame.transformZ = new int[l2];
             for(int k3 = 0; k3 < l2; k3++)
             {
-                class36.anIntArray639[k3] = ai[k3];
-                class36.anIntArray640[k3] = ai1[k3];
-                class36.anIntArray641[k3] = ai2[k3];
-                class36.anIntArray642[k3] = ai3[k3];
+                frame.transformationIndices[k3] = ai[k3];
+                frame.transformX[k3] = ai1[k3];
+                frame.transformY[k3] = ai2[k3];
+                frame.transformZ[k3] = ai3[k3];
             }
 
         }
 
     }
 
-    public static void nullLoader()
+    public static void clearFrames()
     {
-        aClass36Array635 = null;
+        frames = null;
     }
 
-    public static Class36 method531(int j)
-    {
-        if(aClass36Array635 == null)
-            return null;
-        else
-            return aClass36Array635[j];
-    }
+    public static Frame lookup(int index) {
+		return (frames == null) ? null : frames[index];
+	}
 
-    public static boolean method532(int i)
+    public static boolean isInvalid(int i)
     {
         return i == -1;
     }
 
-    private Class36()
+    private Frame()
     {
     }
 
-    private static Class36[] aClass36Array635;
+    private static Frame[] frames;
     public int anInt636;
-    public Class18 aClass18_637;
-    public int anInt638;
-    public int anIntArray639[];
-    public int anIntArray640[];
-    public int anIntArray641[];
-    public int anIntArray642[];
-    private static boolean[] aBooleanArray643;
+    public FrameBase aClass18_637;
+    public int transformationCount;
+    public int transformationIndices[];
+    public int transformX[];
+    public int transformY[];
+    public int transformZ[];
+    private static boolean[] opaque;
 
 }

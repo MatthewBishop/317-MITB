@@ -5,28 +5,28 @@ package com.jagex.cache.anim;
 
 import com.jagex.io.Stream;
 
-public final class Class18
+public final class FrameBase
 {
 
-    public Class18(Stream stream)
+    public FrameBase(Stream stream)
     {
         int anInt341 = stream.readUnsignedByte();
-        anIntArray342 = new int[anInt341];
-        anIntArrayArray343 = new int[anInt341][];
+        transformationType = new int[anInt341];
+        labels = new int[anInt341][];
         for(int j = 0; j < anInt341; j++)
-            anIntArray342[j] = stream.readUnsignedByte();
+            transformationType[j] = stream.readUnsignedByte();
 
         for(int k = 0; k < anInt341; k++)
         {
             int l = stream.readUnsignedByte();
-            anIntArrayArray343[k] = new int[l];
+            labels[k] = new int[l];
             for(int i1 = 0; i1 < l; i1++)
-                anIntArrayArray343[k][i1] = stream.readUnsignedByte();
+                labels[k][i1] = stream.readUnsignedByte();
 
         }
 
     }
 
-    public final int[] anIntArray342;
-    public final int[][] anIntArrayArray343;
+    public final int[] transformationType;
+    public final int[][] labels;
 }

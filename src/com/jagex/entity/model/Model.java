@@ -3,8 +3,9 @@ package com.jagex.entity.model;
 // Jad home page: http://www.kpdus.com/jad.html
 // Decompiler options: packimports(3) 
 
-import com.jagex.cache.anim.Class18;
-import com.jagex.cache.anim.Class36;
+import com.jagex.Constants;
+import com.jagex.cache.anim.FrameBase;
+import com.jagex.cache.anim.Frame;
 import com.jagex.draw.DrawingArea;
 import com.jagex.draw.Texture;
 import com.jagex.entity.Animable;
@@ -897,17 +898,17 @@ public final class Model extends Animable {
             return;
         if(i == -1)
             return;
-        Class36 class36 = Class36.method531(i);
-        if(class36 == null)
+        Frame frame = Frame.lookup(i);
+        if(frame == null)
             return;
-        Class18 class18 = class36.aClass18_637;
+        FrameBase frameBase = frame.aClass18_637;
         anInt1681 = 0;
         anInt1682 = 0;
         anInt1683 = 0;
-        for(int k = 0; k < class36.anInt638; k++)
+        for(int k = 0; k < frame.transformationCount; k++)
         {
-            int l = class36.anIntArray639[k];
-            method472(class18.anIntArray342[l], class18.anIntArrayArray343[l], class36.anIntArray640[k], class36.anIntArray641[k], class36.anIntArray642[k]);
+            int l = frame.transformationIndices[k];
+            method472(frameBase.transformationType[l], frameBase.labels[l], frame.transformX[k], frame.transformY[k], frame.transformZ[k]);
         }
 
     }
@@ -921,27 +922,27 @@ public final class Model extends Animable {
             method470(k);
             return;
         }
-        Class36 class36 = Class36.method531(k);
-        if(class36 == null)
+        Frame frame = Frame.lookup(k);
+        if(frame == null)
             return;
-        Class36 class36_1 = Class36.method531(j);
+        Frame class36_1 = Frame.lookup(j);
         if(class36_1 == null)
         {
             method470(k);
             return;
         }
-        Class18 class18 = class36.aClass18_637;
+        FrameBase frameBase = frame.aClass18_637;
         anInt1681 = 0;
         anInt1682 = 0;
         anInt1683 = 0;
         int l = 0;
         int i1 = ai[l++];
-        for(int j1 = 0; j1 < class36.anInt638; j1++)
+        for(int j1 = 0; j1 < frame.transformationCount; j1++)
         {
             int k1;
-            for(k1 = class36.anIntArray639[j1]; k1 > i1; i1 = ai[l++]);
-            if(k1 != i1 || class18.anIntArray342[k1] == 0)
-                method472(class18.anIntArray342[k1], class18.anIntArrayArray343[k1], class36.anIntArray640[j1], class36.anIntArray641[j1], class36.anIntArray642[j1]);
+            for(k1 = frame.transformationIndices[j1]; k1 > i1; i1 = ai[l++]);
+            if(k1 != i1 || frameBase.transformationType[k1] == 0)
+                method472(frameBase.transformationType[k1], frameBase.labels[k1], frame.transformX[j1], frame.transformY[j1], frame.transformZ[j1]);
         }
 
         anInt1681 = 0;
@@ -949,12 +950,12 @@ public final class Model extends Animable {
         anInt1683 = 0;
         l = 0;
         i1 = ai[l++];
-        for(int l1 = 0; l1 < class36_1.anInt638; l1++)
+        for(int l1 = 0; l1 < class36_1.transformationCount; l1++)
         {
             int i2;
-            for(i2 = class36_1.anIntArray639[l1]; i2 > i1; i1 = ai[l++]);
-            if(i2 == i1 || class18.anIntArray342[i2] == 0)
-                method472(class18.anIntArray342[i2], class18.anIntArrayArray343[i2], class36_1.anIntArray640[l1], class36_1.anIntArray641[l1], class36_1.anIntArray642[l1]);
+            for(i2 = class36_1.transformationIndices[l1]; i2 > i1; i1 = ai[l++]);
+            if(i2 == i1 || frameBase.transformationType[i2] == 0)
+                method472(frameBase.transformationType[i2], frameBase.labels[i2], class36_1.transformX[l1], class36_1.transformY[l1], class36_1.transformZ[l1]);
         }
 
     }
@@ -1426,19 +1427,19 @@ public final class Model extends Animable {
         if(i3 <= 50 || k2 >= 3500)
             return;
         int j3 = l1 * l + j1 * i1 >> 16;
-        int k3 = j3 - anInt1650 << 9;
+        int k3 = j3 - anInt1650 << Constants.VIEW_DISTANCE;
         if(k3 / i3 >= DrawingArea.centerY)
             return;
-        int l3 = j3 + anInt1650 << 9;
+        int l3 = j3 + anInt1650 << Constants.VIEW_DISTANCE;
         if(l3 / i3 <= -DrawingArea.centerY)
             return;
         int i4 = k1 * k - j2 * j >> 16;
         int j4 = anInt1650 * j >> 16;
-        int k4 = i4 + j4 << 9;
+        int k4 = i4 + j4 << Constants.VIEW_DISTANCE;
         if(k4 / i3 <= -DrawingArea.anInt1387)
             return;
         int l4 = j4 + (super.modelHeight * k >> 16);
-        int i5 = i4 - l4 << 9;
+        int i5 = i4 - l4 << Constants.VIEW_DISTANCE;
         if(i5 / i3 >= DrawingArea.anInt1387)
             return;
         int j5 = l2 + (super.modelHeight * j >> 16);
@@ -1509,8 +1510,8 @@ public final class Model extends Animable {
             anIntArray1667[j7] = i8 - k2;
             if(i8 >= 50)
             {
-                anIntArray1665[j7] = l5 + (k7 << 9) / i8;
-                anIntArray1666[j7] = j6 + (l7 << 9) / i8;
+                anIntArray1665[j7] = l5 + (k7 << Constants.VIEW_DISTANCE) / i8;
+                anIntArray1666[j7] = j6 + (l7 << Constants.VIEW_DISTANCE) / i8;
             } else
             {
                 anIntArray1665[j7] = -5000;
@@ -1784,15 +1785,15 @@ public final class Model extends Animable {
             if(j2 >= 50)
             {
                 int k5 = (50 - l1) * modelIntArray4[j2 - l1];
-                anIntArray1678[l] = j + (k2 + ((anIntArray1668[k1] - k2) * k5 >> 16) << 9) / 50;
-                anIntArray1679[l] = k + (k3 + ((anIntArray1669[k1] - k3) * k5 >> 16) << 9) / 50;
+                anIntArray1678[l] = j + (k2 + ((anIntArray1668[k1] - k2) * k5 >> 16) << Constants.VIEW_DISTANCE) / 50;
+                anIntArray1679[l] = k + (k3 + ((anIntArray1669[k1] - k3) * k5 >> 16) << Constants.VIEW_DISTANCE) / 50;
                 anIntArray1680[l++] = k4 + ((anIntArray1636[i] - k4) * k5 >> 16);
             }
             if(i2 >= 50)
             {
                 int l5 = (50 - l1) * modelIntArray4[i2 - l1];
-                anIntArray1678[l] = j + (k2 + ((anIntArray1668[j1] - k2) * l5 >> 16) << 9) / 50;
-                anIntArray1679[l] = k + (k3 + ((anIntArray1669[j1] - k3) * l5 >> 16) << 9) / 50;
+                anIntArray1678[l] = j + (k2 + ((anIntArray1668[j1] - k2) * l5 >> 16) << Constants.VIEW_DISTANCE) / 50;
+                anIntArray1679[l] = k + (k3 + ((anIntArray1669[j1] - k3) * l5 >> 16) << Constants.VIEW_DISTANCE) / 50;
                 anIntArray1680[l++] = k4 + ((anIntArray1635[i] - k4) * l5 >> 16);
             }
         }
@@ -1809,15 +1810,15 @@ public final class Model extends Animable {
             if(l1 >= 50)
             {
                 int i6 = (50 - i2) * modelIntArray4[l1 - i2];
-                anIntArray1678[l] = j + (l2 + ((anIntArray1668[i1] - l2) * i6 >> 16) << 9) / 50;
-                anIntArray1679[l] = k + (l3 + ((anIntArray1669[i1] - l3) * i6 >> 16) << 9) / 50;
+                anIntArray1678[l] = j + (l2 + ((anIntArray1668[i1] - l2) * i6 >> 16) << Constants.VIEW_DISTANCE) / 50;
+                anIntArray1679[l] = k + (l3 + ((anIntArray1669[i1] - l3) * i6 >> 16) << Constants.VIEW_DISTANCE) / 50;
                 anIntArray1680[l++] = l4 + ((anIntArray1634[i] - l4) * i6 >> 16);
             }
             if(j2 >= 50)
             {
                 int j6 = (50 - i2) * modelIntArray4[j2 - i2];
-                anIntArray1678[l] = j + (l2 + ((anIntArray1668[k1] - l2) * j6 >> 16) << 9) / 50;
-                anIntArray1679[l] = k + (l3 + ((anIntArray1669[k1] - l3) * j6 >> 16) << 9) / 50;
+                anIntArray1678[l] = j + (l2 + ((anIntArray1668[k1] - l2) * j6 >> 16) << Constants.VIEW_DISTANCE) / 50;
+                anIntArray1679[l] = k + (l3 + ((anIntArray1669[k1] - l3) * j6 >> 16) << Constants.VIEW_DISTANCE) / 50;
                 anIntArray1680[l++] = l4 + ((anIntArray1636[i] - l4) * j6 >> 16);
             }
         }
@@ -1834,15 +1835,15 @@ public final class Model extends Animable {
             if(i2 >= 50)
             {
                 int k6 = (50 - j2) * modelIntArray4[i2 - j2];
-                anIntArray1678[l] = j + (i3 + ((anIntArray1668[j1] - i3) * k6 >> 16) << 9) / 50;
-                anIntArray1679[l] = k + (i4 + ((anIntArray1669[j1] - i4) * k6 >> 16) << 9) / 50;
+                anIntArray1678[l] = j + (i3 + ((anIntArray1668[j1] - i3) * k6 >> 16) << Constants.VIEW_DISTANCE) / 50;
+                anIntArray1679[l] = k + (i4 + ((anIntArray1669[j1] - i4) * k6 >> 16) << Constants.VIEW_DISTANCE) / 50;
                 anIntArray1680[l++] = i5 + ((anIntArray1635[i] - i5) * k6 >> 16);
             }
             if(l1 >= 50)
             {
                 int l6 = (50 - j2) * modelIntArray4[l1 - j2];
-                anIntArray1678[l] = j + (i3 + ((anIntArray1668[i1] - i3) * l6 >> 16) << 9) / 50;
-                anIntArray1679[l] = k + (i4 + ((anIntArray1669[i1] - i4) * l6 >> 16) << 9) / 50;
+                anIntArray1678[l] = j + (i3 + ((anIntArray1668[i1] - i3) * l6 >> 16) << Constants.VIEW_DISTANCE) / 50;
+                anIntArray1679[l] = k + (i4 + ((anIntArray1669[i1] - i4) * l6 >> 16) << Constants.VIEW_DISTANCE) / 50;
                 anIntArray1680[l++] = i5 + ((anIntArray1634[i] - i5) * l6 >> 16);
             }
         }

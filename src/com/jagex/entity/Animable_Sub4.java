@@ -3,7 +3,7 @@ package com.jagex.entity;
 // Jad home page: http://www.kpdus.com/jad.html
 // Decompiler options: packimports(3) 
 
-import com.jagex.cache.anim.Class36;
+import com.jagex.cache.anim.Frame;
 import com.jagex.cache.anim.Graphic;
 import com.jagex.entity.model.Model;
 
@@ -37,7 +37,7 @@ public final class Animable_Sub4 extends Animable {
         int j = -1;
         if(aSpotAnim_1592.animation != null)
             j = aSpotAnim_1592.animation.anIntArray353[anInt1593];
-        Model model_1 = new Model(true, Class36.method532(j), false, model);
+        Model model_1 = new Model(true, Frame.isInvalid(j), false, model);
         if(j != -1)
         {
             model_1.method469();

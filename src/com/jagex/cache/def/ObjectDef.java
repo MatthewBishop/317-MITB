@@ -5,7 +5,7 @@ package com.jagex.cache.def;
 
 import com.jagex.Client;
 import com.jagex.cache.Archive;
-import com.jagex.cache.anim.Class36;
+import com.jagex.cache.anim.Frame;
 import com.jagex.entity.model.Model;
 import com.jagex.io.Stream;
 import com.jagex.link.Cache;
@@ -255,7 +255,7 @@ stream = null;
         flag = anInt748 != 128 || anInt772 != 128 || anInt740 != 128;
         boolean flag2;
         flag2 = anInt738 != 0 || anInt745 != 0 || anInt783 != 0;
-        Model model_3 = new Model(modifiedModelColors == null, Class36.method532(k), l == 0 && k == -1 && !flag && !flag2, model);
+        Model model_3 = new Model(modifiedModelColors == null, Frame.isInvalid(k), l == 0 && k == -1 && !flag && !flag2, model);
         if(k != -1)
         {
             model_3.method469();

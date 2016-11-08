@@ -8,6 +8,8 @@ package com.jagex.sign;
 import java.io.*;
 import java.net.*;
 
+import com.jagex.Constants;
+
 public final class signlink
     implements Runnable
 {
@@ -40,7 +42,7 @@ public final class signlink
     public void run()
     {
         active = true;
-        String s = findcachedir();
+        String s = Constants.findcachedir();
         uid = getuid(s);
         try
         {
@@ -56,7 +58,7 @@ public final class signlink
         {
             exception.printStackTrace();
         }
-        for(int i = threadliveid; threadliveid == i;)
+        while(true)
         {
             if(dnsreq != null)
             {
@@ -99,11 +101,6 @@ public final class signlink
             catch(Exception _ex) { }
         }
 
-    }
-
-    private static String findcachedir()
-    {
-        return "./cache/";
     }
 
     private static int getuid(String s)
@@ -190,7 +187,6 @@ public final class signlink
     {
     }
 
-    public static final int clientversion = 317;
     public static int uid;
     public static RandomAccessFile cache_dat = null;
     public static final RandomAccessFile[] cache_idx = new RandomAccessFile[5];

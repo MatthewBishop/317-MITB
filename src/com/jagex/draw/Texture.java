@@ -3,6 +3,7 @@ package com.jagex.draw;
 // Jad home page: http://www.kpdus.com/jad.html
 // Decompiler options: packimports(3) 
 
+import com.jagex.Constants;
 import com.jagex.cache.Archive;
 import com.jagex.cache.graphics.IndexedImage;
 
@@ -1249,13 +1250,13 @@ public final class Texture extends DrawingArea {
         l2 -= j2;
         k3 -= i3;
         j4 -= l3;
-        int l4 = l2 * i3 - k3 * j2 << 14;
+        int l4 = l2 * i3 - k3 * j2 << (Constants.VIEW_DISTANCE == 9 ? 14 : 15);
         int i5 = k3 * l3 - j4 * i3 << 8;
         int j5 = j4 * j2 - l2 * l3 << 5;
-        int k5 = k2 * i3 - j3 * j2 << 14;
+        int k5 = k2 * i3 - j3 * j2 << (Constants.VIEW_DISTANCE == 9 ? 14 : 15);
         int l5 = j3 * l3 - i4 * i3 << 8;
         int i6 = i4 * j2 - k2 * l3 << 5;
-        int j6 = j3 * l2 - k2 * k3 << 14;
+        int j6 = j3 * l2 - k2 * k3 << (Constants.VIEW_DISTANCE == 9 ? 14 : 15);
         int k6 = i4 * k3 - j3 * j4 << 8;
         int l6 = k2 * j4 - i4 * l2 << 5;
         int i7 = 0;

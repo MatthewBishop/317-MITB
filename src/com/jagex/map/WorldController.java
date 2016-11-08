@@ -3,6 +3,7 @@ package com.jagex.map;
 // Jad home page: http://www.kpdus.com/jad.html
 // Decompiler options: packimports(3) 
 
+import com.jagex.Constants;
 import com.jagex.draw.DrawingArea;
 import com.jagex.draw.Texture;
 import com.jagex.entity.Animable;
@@ -922,8 +923,8 @@ label0:
         int k1 = i * anInt459 - i1 * anInt458 >> 16;
         if(j1 < 50 || j1 > 3500)
             return false;
-        int l1 = anInt493 + (l << 9) / j1;
-        int i2 = anInt494 + (k1 << 9) / j1;
+        int l1 = anInt493 + (l << Constants.VIEW_DISTANCE) / j1;
+        int i2 = anInt494 + (k1 << Constants.VIEW_DISTANCE) / j1;
         return l1 >= anInt495 && l1 <= anInt497 && i2 >= anInt496 && i2 <= anInt498;
     }
 
@@ -1627,14 +1628,14 @@ label0:
         k4 = l4;
         if(j3 < 50)
             return;
-        int i5 = Texture.textureInt1 + (i2 << 9) / k2;
-        int j5 = Texture.textureInt2 + (l3 << 9) / k2;
-        int k5 = Texture.textureInt1 + (i3 << 9) / j2;
-        int l5 = Texture.textureInt2 + (i4 << 9) / j2;
-        int i6 = Texture.textureInt1 + (l2 << 9) / k3;
-        int j6 = Texture.textureInt2 + (j4 << 9) / k3;
-        int k6 = Texture.textureInt1 + (l1 << 9) / j3;
-        int l6 = Texture.textureInt2 + (k4 << 9) / j3;
+        int i5 = Texture.textureInt1 + (i2 << Constants.VIEW_DISTANCE) / k2;
+        int j5 = Texture.textureInt2 + (l3 << Constants.VIEW_DISTANCE) / k2;
+        int k5 = Texture.textureInt1 + (i3 << Constants.VIEW_DISTANCE) / j2;
+        int l5 = Texture.textureInt2 + (i4 << Constants.VIEW_DISTANCE) / j2;
+        int i6 = Texture.textureInt1 + (l2 << Constants.VIEW_DISTANCE) / k3;
+        int j6 = Texture.textureInt2 + (j4 << Constants.VIEW_DISTANCE) / k3;
+        int k6 = Texture.textureInt1 + (l1 << Constants.VIEW_DISTANCE) / j3;
+        int l6 = Texture.textureInt2 + (k4 << Constants.VIEW_DISTANCE) / j3;
         Texture.anInt1465 = 0;
         if((i6 - k6) * (l5 - l6) - (j6 - l6) * (k5 - k6) > 0)
         {
@@ -1711,8 +1712,8 @@ label0:
                 Class40.anIntArray691[l1] = k2;
                 Class40.anIntArray692[l1] = i3;
             }
-            Class40.anIntArray688[l1] = Texture.textureInt1 + (i2 << 9) / i3;
-            Class40.anIntArray689[l1] = Texture.textureInt2 + (k2 << 9) / i3;
+            Class40.anIntArray688[l1] = Texture.textureInt1 + (i2 << Constants.VIEW_DISTANCE) / i3;
+            Class40.anIntArray689[l1] = Texture.textureInt2 + (k2 << Constants.VIEW_DISTANCE) / i3;
         }
 
         Texture.anInt1465 = 0;

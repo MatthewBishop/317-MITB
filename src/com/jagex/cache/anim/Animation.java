@@ -27,9 +27,9 @@ public final class Animation {
         int j = anIntArray355[i];
         if(j == 0)
         {
-            Class36 class36 = Class36.method531(anIntArray353[i]);
-            if(class36 != null)
-                j = anIntArray355[i] = class36.anInt636;
+            Frame frame = Frame.lookup(anIntArray353[i]);
+            if(frame != null)
+                j = anIntArray355[i] = frame.anInt636;
         }
         if(j == 0)
             j = 1;

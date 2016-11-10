@@ -1,14 +1,13 @@
-package com.jagex;
+package com.jagex.window;
 // Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
 // Jad home page: http://www.kpdus.com/jad.html
 // Decompiler options: packimports(3) 
 
 import java.awt.*;
 
-final class RSFrame extends Frame {
+public final class RSFrame extends Frame {
 
 	private final RSApplet applet;
-	private Toolkit toolkit = Toolkit.getDefaultToolkit();
 	private final Insets insets;
 	private static final long serialVersionUID = 1L;
 

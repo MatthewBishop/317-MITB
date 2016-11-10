@@ -3,9 +3,9 @@ package com.jagex.sound;
 // Jad home page: http://www.kpdus.com/jad.html
 // Decompiler options: packimports(3) 
 
-import com.jagex.io.Stream;
+import com.jagex.io.Buffer;
 
-final class Class6
+final class Synthesizer
 {
 
     public static void method166()
@@ -221,59 +221,59 @@ final class Class6
             return 0;
     }
 
-    public void method169(Stream stream)
+    public void method169(Buffer buffer)
     {
         aClass29_98 = new Class29();
-        aClass29_98.method325(stream);
+        aClass29_98.method325(buffer);
         aClass29_99 = new Class29();
-        aClass29_99.method325(stream);
-        int i = stream.readUnsignedByte();
+        aClass29_99.method325(buffer);
+        int i = buffer.readUByte();
         if(i != 0)
         {
-            stream.currentOffset--;
+            buffer.position--;
             aClass29_100 = new Class29();
-            aClass29_100.method325(stream);
+            aClass29_100.method325(buffer);
             aClass29_101 = new Class29();
-            aClass29_101.method325(stream);
+            aClass29_101.method325(buffer);
         }
-        i = stream.readUnsignedByte();
+        i = buffer.readUByte();
         if(i != 0)
         {
-            stream.currentOffset--;
+            buffer.position--;
             aClass29_102 = new Class29();
-            aClass29_102.method325(stream);
+            aClass29_102.method325(buffer);
             aClass29_103 = new Class29();
-            aClass29_103.method325(stream);
+            aClass29_103.method325(buffer);
         }
-        i = stream.readUnsignedByte();
+        i = buffer.readUByte();
         if(i != 0)
         {
-            stream.currentOffset--;
+            buffer.position--;
             aClass29_104 = new Class29();
-            aClass29_104.method325(stream);
+            aClass29_104.method325(buffer);
             aClass29_105 = new Class29();
-            aClass29_105.method325(stream);
+            aClass29_105.method325(buffer);
         }
         for(int j = 0; j < 10; j++)
         {
-            int k = stream.method422();
+            int k = buffer.readUSmart();
             if(k == 0)
                 break;
             anIntArray106[j] = k;
-            anIntArray107[j] = stream.method421();
-            anIntArray108[j] = stream.method422();
+            anIntArray107[j] = buffer.readSmart();
+            anIntArray108[j] = buffer.readUSmart();
         }
 
-        anInt109 = stream.method422();
-        anInt110 = stream.method422();
-        anInt113 = stream.readUnsignedWord();
-        anInt114 = stream.readUnsignedWord();
+        anInt109 = buffer.readUSmart();
+        anInt110 = buffer.readUSmart();
+        anInt113 = buffer.readUShort();
+        anInt114 = buffer.readUShort();
         aClass39_111 = new Class39();
         aClass29_112 = new Class29();
-        aClass39_111.method545(stream, aClass29_112);
+        aClass39_111.method545(buffer, aClass29_112);
     }
 
-    public Class6()
+    public Synthesizer()
     {
         anIntArray106 = new int[5];
         anIntArray107 = new int[5];

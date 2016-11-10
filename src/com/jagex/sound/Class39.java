@@ -3,7 +3,7 @@ package com.jagex.sound;
 // Jad home page: http://www.kpdus.com/jad.html
 // Decompiler options: packimports(3) 
 
-import com.jagex.io.Stream;
+import com.jagex.io.Buffer;
 
 final class Class39
 {
@@ -68,22 +68,22 @@ final class Class39
         return anIntArray665[i] * 2;
     }
 
-    public void method545(Stream stream, Class29 class29)
+    public void method545(Buffer buffer, Class29 class29)
     {
-        int i = stream.readUnsignedByte();
+        int i = buffer.readUByte();
         anIntArray665[0] = i >> 4;
         anIntArray665[1] = i & 0xf;
         if(i != 0)
         {
-            anIntArray668[0] = stream.readUnsignedWord();
-            anIntArray668[1] = stream.readUnsignedWord();
-            int j = stream.readUnsignedByte();
+            anIntArray668[0] = buffer.readUShort();
+            anIntArray668[1] = buffer.readUShort();
+            int j = buffer.readUByte();
             for(int k = 0; k < 2; k++)
             {
                 for(int l = 0; l < anIntArray665[k]; l++)
                 {
-                    anIntArrayArrayArray666[k][0][l] = stream.readUnsignedWord();
-                    anIntArrayArrayArray667[k][0][l] = stream.readUnsignedWord();
+                    anIntArrayArrayArray666[k][0][l] = buffer.readUShort();
+                    anIntArrayArrayArray667[k][0][l] = buffer.readUShort();
                 }
 
             }
@@ -93,8 +93,8 @@ final class Class39
                 for(int j1 = 0; j1 < anIntArray665[i1]; j1++)
                     if((j & 1 << i1 * 4 << j1) != 0)
                     {
-                        anIntArrayArrayArray666[i1][1][j1] = stream.readUnsignedWord();
-                        anIntArrayArrayArray667[i1][1][j1] = stream.readUnsignedWord();
+                        anIntArrayArrayArray666[i1][1][j1] = buffer.readUShort();
+                        anIntArrayArrayArray667[i1][1][j1] = buffer.readUShort();
                     } else
                     {
                         anIntArrayArrayArray666[i1][1][j1] = anIntArrayArrayArray666[i1][0][j1];
@@ -104,7 +104,7 @@ final class Class39
             }
 
             if(j != 0 || anIntArray668[1] != anIntArray668[0])
-                class29.method326(stream);
+                class29.method326(buffer);
         } else
         {
             anIntArray668[0] = anIntArray668[1] = 0;

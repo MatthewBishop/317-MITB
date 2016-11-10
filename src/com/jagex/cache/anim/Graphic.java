@@ -4,14 +4,14 @@ package com.jagex.cache.anim;
 // Decompiler options: packimports(3) 
 
 import com.jagex.cache.Archive;
-import com.jagex.io.Stream;
+import com.jagex.io.Buffer;
 
 public final class Graphic {
 
     public static void unpackConfig(Archive archive)
     {
-        Stream stream = new Stream(archive.getEntry("spotanim.dat"));
-        int length = stream.readUnsignedWord();
+        Buffer buffer = new Buffer(archive.getEntry("spotanim.dat"));
+        int length = buffer.readUShort();
         if(graphics == null)
             graphics = new Graphic[length];
         for(int j = 0; j < length; j++)
@@ -19,47 +19,47 @@ public final class Graphic {
             if(graphics[j] == null)
                 graphics[j] = new Graphic();
             graphics[j].id = j;
-            graphics[j].readValues(stream);
+            graphics[j].readValues(buffer);
         }
 
     }
 
-    private void readValues(Stream stream)
+    private void readValues(Buffer buffer)
     {
         do
         {
-            int i = stream.readUnsignedByte();
+            int i = buffer.readUByte();
             if(i == 0)
                 return;
             if(i == 1)
-                model = stream.readUnsignedWord();
+                model = buffer.readUShort();
             else
             if(i == 2)
             {
-                animationId = stream.readUnsignedWord();
+                animationId = buffer.readUShort();
                 if(Animation.animations != null)
                     animation = Animation.animations[animationId];
             } else
             if(i == 4)
-                breadthScale = stream.readUnsignedWord();
+                breadthScale = buffer.readUShort();
             else
             if(i == 5)
-                depthScale = stream.readUnsignedWord();
+                depthScale = buffer.readUShort();
             else
             if(i == 6)
-                orientation = stream.readUnsignedWord();
+                orientation = buffer.readUShort();
             else
             if(i == 7)
-                ambience = stream.readUnsignedByte();
+                ambience = buffer.readUByte();
             else
             if(i == 8)
-                modelShadow = stream.readUnsignedByte();
+                modelShadow = buffer.readUByte();
             else
             if(i >= 40 && i < 50)
-                originalColours[i - 40] = stream.readUnsignedWord();
+                originalColours[i - 40] = buffer.readUShort();
             else
             if(i >= 50 && i < 60)
-                replacementColours[i - 50] = stream.readUnsignedWord();
+                replacementColours[i - 50] = buffer.readUShort();
             else
                 System.out.println("Error unrecognised spotanim config code: " + i);
         } while(true);

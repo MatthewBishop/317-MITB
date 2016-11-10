@@ -6,11 +6,11 @@ package com.jagex.cache.def;
 import com.jagex.Client;
 import com.jagex.cache.Archive;
 import com.jagex.cache.anim.Frame;
+import com.jagex.cache.setting.VariableBits;
 import com.jagex.entity.model.Model;
-import com.jagex.io.Stream;
+import com.jagex.io.Buffer;
 import com.jagex.link.Cache;
 import com.jagex.net.OnDemandFetcher;
-import com.jagex.setting.VarBit;
 
 public final class ObjectDef
 {
@@ -23,10 +23,10 @@ public final class ObjectDef
 
         cacheIndex = (cacheIndex + 1) % 20;
         ObjectDef class46 = cache[cacheIndex];
-        stream.currentOffset = streamIndices[i];
+        buffer.position = streamIndices[i];
         class46.type = i;
         class46.setDefaults();
-        class46.readValues(stream);
+        class46.readValues(buffer);
         return class46;
     }
 
@@ -84,20 +84,20 @@ public final class ObjectDef
         mruNodes2 = null;
         streamIndices = null;
         cache = null;
-stream = null;
+buffer = null;
     }
 
     public static void unpackConfig(Archive archive)
     {
-        stream = new Stream(archive.getEntry("loc.dat"));
-        Stream stream = new Stream(archive.getEntry("loc.idx"));
-        int totalObjects = stream.readUnsignedWord();
+        buffer = new Buffer(archive.getEntry("loc.dat"));
+        Buffer buffer = new Buffer(archive.getEntry("loc.idx"));
+        int totalObjects = buffer.readUShort();
         streamIndices = new int[totalObjects];
         int i = 2;
         for(int j = 0; j < totalObjects; j++)
         {
             streamIndices[j] = i;
-            i += stream.readUnsignedWord();
+            i += buffer.readUShort();
         }
 
         cache = new ObjectDef[20];
@@ -167,12 +167,7 @@ stream = null;
         int i = -1;
         if(anInt774 != -1)
         {
-            VarBit varBit = VarBit.cache[anInt774];
-            int j = varBit.anInt648;
-            int k = varBit.anInt649;
-            int l = varBit.anInt650;
-            int i1 = Client.anIntArray1232[l - k];
-            i = clientInstance.variousSettings[j] >> k & i1;
+        	i = VariableBits.get(anInt774, clientInstance.variousSettings);
         } else
         if(anInt749 != -1)
             i = clientInstance.variousSettings[anInt749];
@@ -282,7 +277,7 @@ stream = null;
         return model_3;
     }
 
-    private void readValues(Stream stream)
+    private void readValues(Buffer buffer)
     {
         int i = -1;
 label0:
@@ -291,12 +286,12 @@ label0:
             int j;
             do
             {
-                j = stream.readUnsignedByte();
+                j = buffer.readUByte();
                 if(j == 0)
                     break label0;
                 if(j == 1)
                 {
-                    int k = stream.readUnsignedByte();
+                    int k = buffer.readUByte();
                     if(k > 0)
                         if(anIntArray773 == null || lowMem)
                         {
@@ -304,42 +299,42 @@ label0:
                             anIntArray773 = new int[k];
                             for(int k1 = 0; k1 < k; k1++)
                             {
-                                anIntArray773[k1] = stream.readUnsignedWord();
-                                anIntArray776[k1] = stream.readUnsignedByte();
+                                anIntArray773[k1] = buffer.readUShort();
+                                anIntArray776[k1] = buffer.readUByte();
                             }
 
                         } else
                         {
-                            stream.currentOffset += k * 3;
+                            buffer.position += k * 3;
                         }
                 } else
                 if(j == 2)
-                    name = stream.readString();
+                    name = buffer.readString();
                 else
                 if(j == 3)
-                    description = stream.readBytes();
+                    description = buffer.readStringBytes();
                 else
                 if(j == 5)
                 {
-                    int l = stream.readUnsignedByte();
+                    int l = buffer.readUByte();
                     if(l > 0)
                         if(anIntArray773 == null || lowMem)
                         {
                             anIntArray776 = null;
                             anIntArray773 = new int[l];
                             for(int l1 = 0; l1 < l; l1++)
-                                anIntArray773[l1] = stream.readUnsignedWord();
+                                anIntArray773[l1] = buffer.readUShort();
 
                         } else
                         {
-                            stream.currentOffset += l * 2;
+                            buffer.position += l * 2;
                         }
                 } else
                 if(j == 14)
-                    anInt744 = stream.readUnsignedByte();
+                    anInt744 = buffer.readUByte();
                 else
                 if(j == 15)
-                    anInt761 = stream.readUnsignedByte();
+                    anInt761 = buffer.readUByte();
                 else
                 if(j == 17)
                     aBoolean767 = false;
@@ -349,7 +344,7 @@ label0:
                 else
                 if(j == 19)
                 {
-                    i = stream.readUnsignedByte();
+                    i = buffer.readUByte();
                     if(i == 1)
                         hasActions = true;
                 } else
@@ -364,41 +359,41 @@ label0:
                 else
                 if(j == 24)
                 {
-                    anInt781 = stream.readUnsignedWord();
+                    anInt781 = buffer.readUShort();
                     if(anInt781 == 65535)
                         anInt781 = -1;
                 } else
                 if(j == 28)
-                    anInt775 = stream.readUnsignedByte();
+                    anInt775 = buffer.readUByte();
                 else
                 if(j == 29)
-                    aByte737 = stream.readSignedByte();
+                    aByte737 = buffer.readByte();
                 else
                 if(j == 39)
-                    aByte742 = stream.readSignedByte();
+                    aByte742 = buffer.readByte();
                 else
                 if(j >= 30 && j < 39)
                 {
                     if(actions == null)
                         actions = new String[5];
-                    actions[j - 30] = stream.readString();
+                    actions[j - 30] = buffer.readString();
                     if(actions[j - 30].equalsIgnoreCase("hidden"))
                         actions[j - 30] = null;
                 } else
                 if(j == 40)
                 {
-                    int i1 = stream.readUnsignedByte();
+                    int i1 = buffer.readUByte();
                     modifiedModelColors = new int[i1];
                     originalModelColors = new int[i1];
                     for(int i2 = 0; i2 < i1; i2++)
                     {
-                        modifiedModelColors[i2] = stream.readUnsignedWord();
-                        originalModelColors[i2] = stream.readUnsignedWord();
+                        modifiedModelColors[i2] = buffer.readUShort();
+                        originalModelColors[i2] = buffer.readUShort();
                     }
 
                 } else
                 if(j == 60)
-                    anInt746 = stream.readUnsignedWord();
+                    anInt746 = buffer.readUShort();
                 else
                 if(j == 62)
                     aBoolean751 = true;
@@ -407,28 +402,28 @@ label0:
                     aBoolean779 = false;
                 else
                 if(j == 65)
-                    anInt748 = stream.readUnsignedWord();
+                    anInt748 = buffer.readUShort();
                 else
                 if(j == 66)
-                    anInt772 = stream.readUnsignedWord();
+                    anInt772 = buffer.readUShort();
                 else
                 if(j == 67)
-                    anInt740 = stream.readUnsignedWord();
+                    anInt740 = buffer.readUShort();
                 else
                 if(j == 68)
-                    anInt758 = stream.readUnsignedWord();
+                    anInt758 = buffer.readUShort();
                 else
                 if(j == 69)
-                    anInt768 = stream.readUnsignedByte();
+                    anInt768 = buffer.readUByte();
                 else
                 if(j == 70)
-                    anInt738 = stream.readSignedWord();
+                    anInt738 = buffer.readShort();
                 else
                 if(j == 71)
-                    anInt745 = stream.readSignedWord();
+                    anInt745 = buffer.readShort();
                 else
                 if(j == 72)
-                    anInt783 = stream.readSignedWord();
+                    anInt783 = buffer.readShort();
                 else
                 if(j == 73)
                     aBoolean736 = true;
@@ -440,21 +435,21 @@ label0:
                 {
                     if(j != 75)
                         continue;
-                    anInt760 = stream.readUnsignedByte();
+                    anInt760 = buffer.readUByte();
                 }
                 continue label0;
             } while(j != 77);
-            anInt774 = stream.readUnsignedWord();
+            anInt774 = buffer.readUShort();
             if(anInt774 == 65535)
                 anInt774 = -1;
-            anInt749 = stream.readUnsignedWord();
+            anInt749 = buffer.readUShort();
             if(anInt749 == 65535)
                 anInt749 = -1;
-            int j1 = stream.readUnsignedByte();
+            int j1 = buffer.readUByte();
             childrenIDs = new int[j1 + 1];
             for(int j2 = 0; j2 <= j1; j2++)
             {
-                childrenIDs[j2] = stream.readUnsignedWord();
+                childrenIDs[j2] = buffer.readUShort();
                 if(childrenIDs[j2] == 65535)
                     childrenIDs[j2] = -1;
             }
@@ -495,7 +490,7 @@ label0:
     public int anInt749;
     private boolean aBoolean751;
     public static boolean lowMem;
-    private static Stream stream;
+    private static Buffer buffer;
     public int type;
     private static int[] streamIndices;
     public boolean aBoolean757;

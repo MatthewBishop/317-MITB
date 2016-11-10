@@ -9,7 +9,7 @@ import com.jagex.cache.anim.Frame;
 import com.jagex.draw.DrawingArea;
 import com.jagex.draw.Texture;
 import com.jagex.entity.Animable;
-import com.jagex.io.Stream;
+import com.jagex.io.Buffer;
 import com.jagex.net.OnDemandFetcherParent;
 
 public final class Model extends Animable {
@@ -54,22 +54,22 @@ public final class Model extends Animable {
             class21.anInt371 = 0;
             return;
         }
-        Stream stream = new Stream(abyte0);
-        stream.currentOffset = abyte0.length - 18;
+        Buffer buffer = new Buffer(abyte0);
+        buffer.position = abyte0.length - 18;
         Class21 class21_1 = aClass21Array1661[j] = new Class21();
         class21_1.aByteArray368 = abyte0;
-        class21_1.anInt369 = stream.readUnsignedWord();
-        class21_1.anInt370 = stream.readUnsignedWord();
-        class21_1.anInt371 = stream.readUnsignedByte();
-        int k = stream.readUnsignedByte();
-        int l = stream.readUnsignedByte();
-        int i1 = stream.readUnsignedByte();
-        int j1 = stream.readUnsignedByte();
-        int k1 = stream.readUnsignedByte();
-        int l1 = stream.readUnsignedWord();
-        int i2 = stream.readUnsignedWord();
-        int j2 = stream.readUnsignedWord();
-        int k2 = stream.readUnsignedWord();
+        class21_1.anInt369 = buffer.readUShort();
+        class21_1.anInt370 = buffer.readUShort();
+        class21_1.anInt371 = buffer.readUByte();
+        int k = buffer.readUByte();
+        int l = buffer.readUByte();
+        int i1 = buffer.readUByte();
+        int j1 = buffer.readUByte();
+        int k1 = buffer.readUByte();
+        int l1 = buffer.readUShort();
+        int i2 = buffer.readUShort();
+        int j2 = buffer.readUShort();
+        int k2 = buffer.readUShort();
         int l2 = 0;
         class21_1.anInt372 = l2;
         l2 += class21_1.anInt369;
@@ -183,31 +183,31 @@ public final class Model extends Animable {
         if(class21.anInt383 >= 0)
             anIntArray1656 = new int[anInt1630];
         anIntArray1640 = new int[anInt1630];
-        Stream stream = new Stream(class21.aByteArray368);
-        stream.currentOffset = class21.anInt372;
-        Stream stream_1 = new Stream(class21.aByteArray368);
-        stream_1.currentOffset = class21.anInt373;
-        Stream stream_2 = new Stream(class21.aByteArray368);
-        stream_2.currentOffset = class21.anInt374;
-        Stream stream_3 = new Stream(class21.aByteArray368);
-        stream_3.currentOffset = class21.anInt375;
-        Stream stream_4 = new Stream(class21.aByteArray368);
-        stream_4.currentOffset = class21.anInt376;
+        Buffer buffer = new Buffer(class21.aByteArray368);
+        buffer.position = class21.anInt372;
+        Buffer buffer_1 = new Buffer(class21.aByteArray368);
+        buffer_1.position = class21.anInt373;
+        Buffer buffer_2 = new Buffer(class21.aByteArray368);
+        buffer_2.position = class21.anInt374;
+        Buffer buffer_3 = new Buffer(class21.aByteArray368);
+        buffer_3.position = class21.anInt375;
+        Buffer buffer_4 = new Buffer(class21.aByteArray368);
+        buffer_4.position = class21.anInt376;
         int k = 0;
         int l = 0;
         int i1 = 0;
         for(int j1 = 0; j1 < anInt1626; j1++)
         {
-            int k1 = stream.readUnsignedByte();
+            int k1 = buffer.readUByte();
             int i2 = 0;
             if((k1 & 1) != 0)
-                i2 = stream_1.method421();
+                i2 = buffer_1.readSmart();
             int k2 = 0;
             if((k1 & 2) != 0)
-                k2 = stream_2.method421();
+                k2 = buffer_2.readSmart();
             int i3 = 0;
             if((k1 & 4) != 0)
-                i3 = stream_3.method421();
+                i3 = buffer_3.readSmart();
             anIntArray1627[j1] = k + i2;
             anIntArray1628[j1] = l + k2;
             anIntArray1629[j1] = i1 + i3;
@@ -215,43 +215,43 @@ public final class Model extends Animable {
             l = anIntArray1628[j1];
             i1 = anIntArray1629[j1];
             if(anIntArray1655 != null)
-                anIntArray1655[j1] = stream_4.readUnsignedByte();
+                anIntArray1655[j1] = buffer_4.readUByte();
         }
 
-        stream.currentOffset = class21.anInt379;
-        stream_1.currentOffset = class21.anInt380;
-        stream_2.currentOffset = class21.anInt381;
-        stream_3.currentOffset = class21.anInt382;
-        stream_4.currentOffset = class21.anInt383;
+        buffer.position = class21.anInt379;
+        buffer_1.position = class21.anInt380;
+        buffer_2.position = class21.anInt381;
+        buffer_3.position = class21.anInt382;
+        buffer_4.position = class21.anInt383;
         for(int l1 = 0; l1 < anInt1630; l1++)
         {
-            anIntArray1640[l1] = stream.readUnsignedWord();
+            anIntArray1640[l1] = buffer.readUShort();
             if(anIntArray1637 != null)
-                anIntArray1637[l1] = stream_1.readUnsignedByte();
+                anIntArray1637[l1] = buffer_1.readUByte();
             if(anIntArray1638 != null)
-                anIntArray1638[l1] = stream_2.readUnsignedByte();
+                anIntArray1638[l1] = buffer_2.readUByte();
             if(anIntArray1639 != null)
-                anIntArray1639[l1] = stream_3.readUnsignedByte();
+                anIntArray1639[l1] = buffer_3.readUByte();
             if(anIntArray1656 != null)
-                anIntArray1656[l1] = stream_4.readUnsignedByte();
+                anIntArray1656[l1] = buffer_4.readUByte();
         }
 
-        stream.currentOffset = class21.anInt377;
-        stream_1.currentOffset = class21.anInt378;
+        buffer.position = class21.anInt377;
+        buffer_1.position = class21.anInt378;
         int j2 = 0;
         int l2 = 0;
         int j3 = 0;
         int k3 = 0;
         for(int l3 = 0; l3 < anInt1630; l3++)
         {
-            int i4 = stream_1.readUnsignedByte();
+            int i4 = buffer_1.readUByte();
             if(i4 == 1)
             {
-                j2 = stream.method421() + k3;
+                j2 = buffer.readSmart() + k3;
                 k3 = j2;
-                l2 = stream.method421() + k3;
+                l2 = buffer.readSmart() + k3;
                 k3 = l2;
-                j3 = stream.method421() + k3;
+                j3 = buffer.readSmart() + k3;
                 k3 = j3;
                 anIntArray1631[l3] = j2;
                 anIntArray1632[l3] = l2;
@@ -261,7 +261,7 @@ public final class Model extends Animable {
             {
                 j2 = j2;
                 l2 = j3;
-                j3 = stream.method421() + k3;
+                j3 = buffer.readSmart() + k3;
                 k3 = j3;
                 anIntArray1631[l3] = j2;
                 anIntArray1632[l3] = l2;
@@ -271,7 +271,7 @@ public final class Model extends Animable {
             {
                 j2 = j3;
                 l2 = l2;
-                j3 = stream.method421() + k3;
+                j3 = buffer.readSmart() + k3;
                 k3 = j3;
                 anIntArray1631[l3] = j2;
                 anIntArray1632[l3] = l2;
@@ -282,7 +282,7 @@ public final class Model extends Animable {
                 int k4 = j2;
                 j2 = l2;
                 l2 = k4;
-                j3 = stream.method421() + k3;
+                j3 = buffer.readSmart() + k3;
                 k3 = j3;
                 anIntArray1631[l3] = j2;
                 anIntArray1632[l3] = l2;
@@ -290,12 +290,12 @@ public final class Model extends Animable {
             }
         }
 
-        stream.currentOffset = class21.anInt384;
+        buffer.position = class21.anInt384;
         for(int j4 = 0; j4 < anInt1642; j4++)
         {
-            anIntArray1643[j4] = stream.readUnsignedWord();
-            anIntArray1644[j4] = stream.readUnsignedWord();
-            anIntArray1645[j4] = stream.readUnsignedWord();
+            anIntArray1643[j4] = buffer.readUShort();
+            anIntArray1644[j4] = buffer.readUShort();
+            anIntArray1645[j4] = buffer.readUShort();
         }
 
     }

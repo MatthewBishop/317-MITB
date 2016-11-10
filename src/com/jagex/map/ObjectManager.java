@@ -8,7 +8,7 @@ import com.jagex.draw.Texture;
 import com.jagex.entity.Animable;
 import com.jagex.entity.Animable_Sub5;
 import com.jagex.entity.model.Model;
-import com.jagex.io.Stream;
+import com.jagex.io.Buffer;
 import com.jagex.net.OnDemandFetcher;
 
 public final class ObjectManager {
@@ -429,14 +429,14 @@ label5:
         return k;
     }
 
-    public static void method173(Stream stream, OnDemandFetcher class42_sub1)
+    public static void method173(Buffer buffer, OnDemandFetcher class42_sub1)
     {
 label0:
         {
             int i = -1;
             do
             {
-                int j = stream.method422();
+                int j = buffer.readUSmart();
                 if(j == 0)
                     break label0;
                 i += j;
@@ -444,10 +444,10 @@ label0:
                 class46.method574(class42_sub1);
                 do
                 {
-                    int k = stream.method422();
+                    int k = buffer.readUSmart();
                     if(k == 0)
                         break;
-                    stream.readUnsignedByte();
+                    buffer.readUByte();
                 } while(true);
             } while(true);
         }
@@ -861,16 +861,16 @@ label0:
                     aclass11[k1].anIntArrayArray294[l + i2][l1 + j2] &= 0xfeffffff;
 
         }
-        Stream stream = new Stream(abyte0);
+        Buffer buffer = new Buffer(abyte0);
         for(int l2 = 0; l2 < 4; l2++)
         {
             for(int i3 = 0; i3 < 64; i3++)
             {
                 for(int j3 = 0; j3 < 64; j3++)
                     if(l2 == i && i3 >= i1 && i3 < i1 + 8 && j3 >= j1 && j3 < j1 + 8)
-                        method181(l1 + Class4.method156(j3 & 7, j, i3 & 7), 0, stream, l + Class4.method155(j, j3 & 7, i3 & 7), k1, j, 0);
+                        method181(l1 + Class4.method156(j3 & 7, j, i3 & 7), 0, buffer, l + Class4.method155(j, j3 & 7, i3 & 7), k1, j, 0);
                     else
-                        method181(-1, 0, stream, -1, 0, 0, 0);
+                        method181(-1, 0, buffer, -1, 0, 0, 0);
 
             }
 
@@ -892,20 +892,20 @@ label0:
 
         }
 
-        Stream stream = new Stream(abyte0);
+        Buffer buffer = new Buffer(abyte0);
         for(int l1 = 0; l1 < 4; l1++)
         {
             for(int i2 = 0; i2 < 64; i2++)
             {
                 for(int j2 = 0; j2 < 64; j2++)
-                    method181(j2 + i, l, stream, i2 + j, l1, 0, k);
+                    method181(j2 + i, l, buffer, i2 + j, l1, 0, k);
 
             }
 
         }
     }
 
-    private void method181(int i, int j, Stream stream, int k, int l, int i1,
+    private void method181(int i, int j, Buffer buffer, int k, int l, int i1,
                                  int k1)
     {
         if(k >= 0 && k < 104 && i >= 0 && i < 104)
@@ -913,7 +913,7 @@ label0:
             aByteArrayArrayArray149[l][k][i] = 0;
             do
             {
-                int l1 = stream.readUnsignedByte();
+                int l1 = buffer.readUByte();
                 if(l1 == 0)
                     if(l == 0)
                     {
@@ -926,7 +926,7 @@ label0:
                     }
                 if(l1 == 1)
                 {
-                    int j2 = stream.readUnsignedByte();
+                    int j2 = buffer.readUByte();
                     if(j2 == 1)
                         j2 = 0;
                     if(l == 0)
@@ -941,7 +941,7 @@ label0:
                 }
                 if(l1 <= 49)
                 {
-                    aByteArrayArrayArray130[l][k][i] = stream.readSignedByte();
+                    aByteArrayArrayArray130[l][k][i] = buffer.readByte();
                     aByteArrayArrayArray136[l][k][i] = (byte)((l1 - 2) / 4);
                     aByteArrayArrayArray148[l][k][i] = (byte)((l1 - 2) + i1 & 3);
                 } else
@@ -953,16 +953,16 @@ label0:
         }
         do
         {
-            int i2 = stream.readUnsignedByte();
+            int i2 = buffer.readUByte();
             if(i2 == 0)
                 break;
             if(i2 == 1)
             {
-                stream.readUnsignedByte();
+                buffer.readUByte();
                 return;
             }
             if(i2 <= 49)
-                stream.readUnsignedByte();
+                buffer.readUByte();
         } while(true);
     }
 
@@ -981,25 +981,25 @@ label0:
     {
 label0:
         {
-            Stream stream = new Stream(abyte0);
+            Buffer buffer = new Buffer(abyte0);
             int l1 = -1;
             do
             {
-                int i2 = stream.method422();
+                int i2 = buffer.readUSmart();
                 if(i2 == 0)
                     break label0;
                 l1 += i2;
                 int j2 = 0;
                 do
                 {
-                    int k2 = stream.method422();
+                    int k2 = buffer.readUSmart();
                     if(k2 == 0)
                         break;
                     j2 += k2 - 1;
                     int l2 = j2 & 0x3f;
                     int i3 = j2 >> 6 & 0x3f;
                     int j3 = j2 >> 12;
-                    int k3 = stream.readUnsignedByte();
+                    int k3 = buffer.readUByte();
                     int l3 = k3 >> 2;
                     int i4 = k3 & 3;
                     if(j3 == i && i3 >= i1 && i3 < i1 + 8 && l2 >= k && l2 < k + 8)
@@ -1291,11 +1291,11 @@ label0:
   ) //xxx bad method, decompiled with JODE
   {
     boolean bool = true;
-    Stream stream = new Stream(is);
+    Buffer buffer = new Buffer(is);
     int i_252_ = -1;
     for (;;)
       {
-	int i_253_ = stream.method422 ();
+	int i_253_ = buffer.readUSmart ();
 	if (i_253_ == 0)
 	  break;
 	i_252_ += i_253_;
@@ -1305,20 +1305,20 @@ label0:
 	  {
 	    if (bool_255_)
 	      {
-		int i_256_ = stream.method422 ();
+		int i_256_ = buffer.readUSmart ();
 		if (i_256_ == 0)
 		  break;
-		stream.readUnsignedByte();
+		buffer.readUByte();
 	      }
 	    else
 	      {
-		int i_257_ = stream.method422 ();
+		int i_257_ = buffer.readUSmart ();
 		if (i_257_ == 0)
 		  break;
 		i_254_ += i_257_ - 1;
 		int i_258_ = i_254_ & 0x3f;
 		int i_259_ = i_254_ >> 6 & 0x3f;
-		int i_260_ = stream.readUnsignedByte() >> 2;
+		int i_260_ = buffer.readUByte() >> 2;
 		int i_261_ = i_259_ + i;
 		int i_262_ = i_258_ + i_250_;
 		if (i_261_ > 0 && i_262_ > 0 && i_261_ < 103 && i_262_ < 103)
@@ -1341,25 +1341,25 @@ label0:
     {
 label0:
         {
-            Stream stream = new Stream(abyte0);
+            Buffer buffer = new Buffer(abyte0);
             int l = -1;
             do
             {
-                int i1 = stream.method422();
+                int i1 = buffer.readUSmart();
                 if(i1 == 0)
                     break label0;
                 l += i1;
                 int j1 = 0;
                 do
                 {
-                    int k1 = stream.method422();
+                    int k1 = buffer.readUSmart();
                     if(k1 == 0)
                         break;
                     j1 += k1 - 1;
                     int l1 = j1 & 0x3f;
                     int i2 = j1 >> 6 & 0x3f;
                     int j2 = j1 >> 12;
-                    int k2 = stream.readUnsignedByte();
+                    int k2 = buffer.readUByte();
                     int l2 = k2 >> 2;
                     int i3 = k2 & 3;
                     int j3 = i2 + i;

@@ -4,17 +4,17 @@ package com.jagex.util;
 // Decompiler options: packimports(3) 
 
 import com.jagex.io.PacketStream;
-import com.jagex.io.Stream;
+import com.jagex.io.Buffer;
 
 public final class TextInput {
 
-    public static String method525(int i, Stream stream)
+    public static String method525(int i, Buffer buffer)
     {
         int j = 0;
         int k = -1;
         for(int l = 0; l < i; l++)
         {
-            int i1 = stream.readUnsignedByte();
+            int i1 = buffer.readUByte();
             int j1 = i1 >> 4 & 0xf;
             if(k == -1)
             {
@@ -81,28 +81,28 @@ public final class TextInput {
                 if(k < 13)
                     i = k;
                 else
-                    stream.writeWordBigEndian(k);
+                    stream.writeByte(k);
             } else
             if(k < 13)
             {
-                stream.writeWordBigEndian((i << 4) + k);
+                stream.writeByte((i << 4) + k);
                 i = -1;
             } else
             {
-                stream.writeWordBigEndian((i << 4) + (k >> 4));
+                stream.writeByte((i << 4) + (k >> 4));
                 i = k & 0xf;
             }
         }
         if(i != -1)
-            stream.writeWordBigEndian(i << 4);
+            stream.writeByte(i << 4);
     }
 
     public static String processText(String s)
     {
-        stream.currentOffset = 0;
+        stream.position = 0;
         method526(s, stream);
-        int j = stream.currentOffset;
-        stream.currentOffset = 0;
+        int j = stream.position;
+        stream.position = 0;
         String s1 = method525(j, stream);
         return s1;
     }

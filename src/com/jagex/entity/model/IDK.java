@@ -4,53 +4,53 @@ package com.jagex.entity.model;
 // Decompiler options: packimports(3) 
 
 import com.jagex.cache.Archive;
-import com.jagex.io.Stream;
+import com.jagex.io.Buffer;
 
 public final class IDK {
 
     public static void unpackConfig(Archive archive)
     {
-        Stream stream = new Stream(archive.getEntry("idk.dat"));
-        length = stream.readUnsignedWord();
+        Buffer buffer = new Buffer(archive.getEntry("idk.dat"));
+        length = buffer.readUShort();
         if(cache == null)
             cache = new IDK[length];
         for(int j = 0; j < length; j++)
         {
             if(cache[j] == null)
                 cache[j] = new IDK();
-            cache[j].readValues(stream);
+            cache[j].readValues(buffer);
         }
     }
 
-    private void readValues(Stream stream)
+    private void readValues(Buffer buffer)
     {
         do
         {
-            int i = stream.readUnsignedByte();
+            int i = buffer.readUByte();
             if(i == 0)
                 return;
             if(i == 1)
-                anInt657 = stream.readUnsignedByte();
+                anInt657 = buffer.readUByte();
             else
             if(i == 2)
             {
-                int j = stream.readUnsignedByte();
+                int j = buffer.readUByte();
                 anIntArray658 = new int[j];
                 for(int k = 0; k < j; k++)
-                    anIntArray658[k] = stream.readUnsignedWord();
+                    anIntArray658[k] = buffer.readUShort();
 
             } else
             if(i == 3)
                 aBoolean662 = true;
             else
             if(i >= 40 && i < 50)
-                anIntArray659[i - 40] = stream.readUnsignedWord();
+                anIntArray659[i - 40] = buffer.readUShort();
             else
             if(i >= 50 && i < 60)
-                anIntArray660[i - 50] = stream.readUnsignedWord();
+                anIntArray660[i - 50] = buffer.readUShort();
             else
             if(i >= 60 && i < 70)
-                anIntArray661[i - 60] = stream.readUnsignedWord();
+                anIntArray661[i - 60] = buffer.readUShort();
             else
                 System.out.println("Error unrecognised config code: " + i);
         } while(true);

@@ -4,41 +4,41 @@ package com.jagex.map;
 // Decompiler options: packimports(3) 
 
 import com.jagex.cache.Archive;
-import com.jagex.io.Stream;
+import com.jagex.io.Buffer;
 
 public final class Flo {
 
     public static void unpackConfig(Archive archive)
     {
-        Stream stream = new Stream(archive.getEntry("flo.dat"));
-        int cacheSize = stream.readUnsignedWord();
+        Buffer buffer = new Buffer(archive.getEntry("flo.dat"));
+        int cacheSize = buffer.readUShort();
         if(cache == null)
             cache = new Flo[cacheSize];
         for(int j = 0; j < cacheSize; j++)
         {
             if(cache[j] == null)
                 cache[j] = new Flo();
-            cache[j].readValues(stream);
+            cache[j].readValues(buffer);
         }
 
     }
 
-    private void readValues(Stream stream)
+    private void readValues(Buffer buffer)
     {
         do
         {
-            int i = stream.readUnsignedByte();
+            int i = buffer.readUByte();
             boolean dummy;
             if(i == 0)
                 return;
             else
             if(i == 1)
             {
-                anInt390 = stream.read3Bytes();
+                anInt390 = buffer.readUTriByte();
                 method262(anInt390);
             } else
             if(i == 2)
-                anInt391 = stream.readUnsignedByte();
+                anInt391 = buffer.readUByte();
             else
             if(i == 3)
                 dummy = true;
@@ -47,7 +47,7 @@ public final class Flo {
                 aBoolean393 = false;
             else
             if(i == 6)
-                stream.readString();
+                buffer.readString();
             else
             if(i == 7)
             {
@@ -55,7 +55,7 @@ public final class Flo {
                 int k = anInt395;
                 int l = anInt396;
                 int i1 = anInt397;
-                int j1 = stream.read3Bytes();
+                int j1 = buffer.readUTriByte();
                 method262(j1);
                 anInt394 = j;
                 anInt395 = k;

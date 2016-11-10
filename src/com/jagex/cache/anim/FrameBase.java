@@ -3,25 +3,25 @@ package com.jagex.cache.anim;
 // Jad home page: http://www.kpdus.com/jad.html
 // Decompiler options: packimports(3) 
 
-import com.jagex.io.Stream;
+import com.jagex.io.Buffer;
 
 public final class FrameBase
 {
 
-    public FrameBase(Stream stream)
+    public FrameBase(Buffer buffer)
     {
-        int anInt341 = stream.readUnsignedByte();
+        int anInt341 = buffer.readUByte();
         transformationType = new int[anInt341];
         labels = new int[anInt341][];
         for(int j = 0; j < anInt341; j++)
-            transformationType[j] = stream.readUnsignedByte();
+            transformationType[j] = buffer.readUByte();
 
         for(int k = 0; k < anInt341; k++)
         {
-            int l = stream.readUnsignedByte();
+            int l = buffer.readUByte();
             labels[k] = new int[l];
             for(int i1 = 0; i1 < l; i1++)
-                labels[k][i1] = stream.readUnsignedByte();
+                labels[k][i1] = buffer.readUByte();
 
         }
 

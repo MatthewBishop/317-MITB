@@ -4,32 +4,32 @@ package com.jagex.sound;
 // Decompiler options: packimports(3) 
 
 import com.jagex.io.PacketStream;
-import com.jagex.io.Stream;
+import com.jagex.io.Buffer;
 
 public final class Sounds {
 
     private Sounds()
     {
-        aClass6Array329 = new Class6[10];
+        aClass6Array329 = new Synthesizer[10];
     }
 
-    public static void unpack(Stream stream)
+    public static void unpack(Buffer buffer)
     {
         aByteArray327 = new byte[0x6baa8];
         aStream_328 = new PacketStream(aByteArray327);
-        Class6.method166();
+        Synthesizer.method166();
         do
         {
-            int j = stream.readUnsignedWord();
+            int j = buffer.readUShort();
             if(j == 65535)
                 return;
             aSoundsArray325s[j] = new Sounds();
-            aSoundsArray325s[j].method242(stream);
+            aSoundsArray325s[j].method242(buffer);
             anIntArray326[j] = aSoundsArray325s[j].method243();
         } while(true);
     }
 
-    public static Stream method241(int i, int j)
+    public static Buffer method241(int i, int j)
     {
         if(aSoundsArray325s[j] != null)
         {
@@ -41,20 +41,20 @@ public final class Sounds {
         }
     }
 
-    private void method242(Stream stream)
+    private void method242(Buffer buffer)
     {
         for(int i = 0; i < 10; i++)
         {
-            int j = stream.readUnsignedByte();
+            int j = buffer.readUByte();
             if(j != 0)
             {
-                stream.currentOffset--;
-                aClass6Array329[i] = new Class6();
-                aClass6Array329[i].method169(stream);
+                buffer.position--;
+                aClass6Array329[i] = new Synthesizer();
+                aClass6Array329[i].method169(buffer);
             }
         }
-        anInt330 = stream.readUnsignedWord();
-        anInt331 = stream.readUnsignedWord();
+        anInt330 = buffer.readUShort();
+        anInt331 = buffer.readUShort();
     }
 
     private int method243()
@@ -80,24 +80,24 @@ public final class Sounds {
         return j;
     }
 
-    private Stream method244(int i)
+    private Buffer method244(int i)
     {
         int k = method245(i);
-        aStream_328.currentOffset = 0;
-        aStream_328.writeDWord(0x52494646);
-        aStream_328.method403(36 + k);
-        aStream_328.writeDWord(0x57415645);
-        aStream_328.writeDWord(0x666d7420);
-        aStream_328.method403(16);
-        aStream_328.method400(1);
-        aStream_328.method400(1);
-        aStream_328.method403(22050);
-        aStream_328.method403(22050);
-        aStream_328.method400(1);
-        aStream_328.method400(8);
-        aStream_328.writeDWord(0x64617461);
-        aStream_328.method403(k);
-        aStream_328.currentOffset += k;
+        aStream_328.position = 0;
+        aStream_328.writeInt(0x52494646);
+        aStream_328.writeLEInt(36 + k);
+        aStream_328.writeInt(0x57415645);
+        aStream_328.writeInt(0x666d7420);
+        aStream_328.writeLEInt(16);
+        aStream_328.writeLEShort2(1);
+        aStream_328.writeLEShort2(1);
+        aStream_328.writeLEInt(22050);
+        aStream_328.writeLEInt(22050);
+        aStream_328.writeLEShort2(1);
+        aStream_328.writeLEShort2(8);
+        aStream_328.writeInt(0x64617461);
+        aStream_328.writeLEInt(k);
+        aStream_328.position += k;
         return aStream_328;
     }
 
@@ -155,7 +155,7 @@ public final class Sounds {
     public static final int[] anIntArray326 = new int[5000];
     private static byte[] aByteArray327;
     private static PacketStream aStream_328;
-    private final Class6[] aClass6Array329;
+    private final Synthesizer[] aClass6Array329;
     private int anInt330;
     private int anInt331;
 

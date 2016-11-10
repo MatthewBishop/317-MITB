@@ -6,8 +6,8 @@ package com.jagex.entity;
 import com.jagex.Client;
 import com.jagex.cache.anim.Animation;
 import com.jagex.cache.def.ObjectDef;
+import com.jagex.cache.setting.VariableBits;
 import com.jagex.entity.model.Model;
-import com.jagex.setting.VarBit;
 
 public final class Animable_Sub5 extends Animable {
 
@@ -54,12 +54,7 @@ public final class Animable_Sub5 extends Animable {
         int i = -1;
         if(anInt1601 != -1)
         {
-            VarBit varBit = VarBit.cache[anInt1601];
-            int k = varBit.anInt648;
-            int l = varBit.anInt649;
-            int i1 = varBit.anInt650;
-            int j1 = Client.anIntArray1232[i1 - l];
-            i = clientInstance.variousSettings[k] >> l & j1;
+            i = VariableBits.get(anInt1601, clientInstance.variousSettings);
         } else
         if(anInt1602 != -1)
             i = clientInstance.variousSettings[anInt1602];

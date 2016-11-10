@@ -4,21 +4,21 @@ package com.jagex.cache.anim;
 // Decompiler options: packimports(3) 
 
 import com.jagex.cache.Archive;
-import com.jagex.io.Stream;
+import com.jagex.io.Buffer;
 
 public final class Animation {
 
     public static void unpackConfig(Archive archive)
     {
-        Stream stream = new Stream(archive.getEntry("seq.dat"));
-        int length = stream.readUnsignedWord();
+        Buffer buffer = new Buffer(archive.getEntry("seq.dat"));
+        int length = buffer.readUShort();
         if(animations == null)
             animations = new Animation[length];
         for(int j = 0; j < length; j++)
         {
             if(animations[j] == null)
                 animations[j] = new Animation();
-            animations[j].readValues(stream);
+            animations[j].readValues(buffer);
         }
     }
 
@@ -36,38 +36,38 @@ public final class Animation {
         return j;
     }
 
-    private void readValues(Stream stream)
+    private void readValues(Buffer buffer)
     {
         do
         {
-            int i = stream.readUnsignedByte();
+            int i = buffer.readUByte();
             if(i == 0)
                 break;
             if(i == 1)
             {
-                anInt352 = stream.readUnsignedByte();
+                anInt352 = buffer.readUByte();
                 anIntArray353 = new int[anInt352];
                 anIntArray354 = new int[anInt352];
                 anIntArray355 = new int[anInt352];
                 for(int j = 0; j < anInt352; j++)
                 {
-                    anIntArray353[j] = stream.readUnsignedWord();
-                    anIntArray354[j] = stream.readUnsignedWord();
+                    anIntArray353[j] = buffer.readUShort();
+                    anIntArray354[j] = buffer.readUShort();
                     if(anIntArray354[j] == 65535)
                         anIntArray354[j] = -1;
-                    anIntArray355[j] = stream.readUnsignedWord();
+                    anIntArray355[j] = buffer.readUShort();
                 }
 
             } else
             if(i == 2)
-                anInt356 = stream.readUnsignedWord();
+                anInt356 = buffer.readUShort();
             else
             if(i == 3)
             {
-                int k = stream.readUnsignedByte();
+                int k = buffer.readUByte();
                 anIntArray357 = new int[k + 1];
                 for(int l = 0; l < k; l++)
-                    anIntArray357[l] = stream.readUnsignedByte();
+                    anIntArray357[l] = buffer.readUByte();
 
                 anIntArray357[k] = 0x98967f;
             } else
@@ -75,28 +75,28 @@ public final class Animation {
                 aBoolean358 = true;
             else
             if(i == 5)
-                anInt359 = stream.readUnsignedByte();
+                anInt359 = buffer.readUByte();
             else
             if(i == 6)
-                anInt360 = stream.readUnsignedWord();
+                anInt360 = buffer.readUShort();
             else
             if(i == 7)
-                anInt361 = stream.readUnsignedWord();
+                anInt361 = buffer.readUShort();
             else
             if(i == 8)
-                anInt362 = stream.readUnsignedByte();
+                anInt362 = buffer.readUByte();
             else
             if(i == 9)
-                anInt363 = stream.readUnsignedByte();
+                anInt363 = buffer.readUByte();
             else
             if(i == 10)
-                anInt364 = stream.readUnsignedByte();
+                anInt364 = buffer.readUByte();
             else
             if(i == 11)
-                anInt365 = stream.readUnsignedByte();
+                anInt365 = buffer.readUByte();
             else
             if(i == 12)
-                stream.readDWord();
+                buffer.readInt();
             else
                 System.out.println("Error unrecognised seq config code: " + i);
         } while(true);

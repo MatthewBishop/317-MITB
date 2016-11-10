@@ -7,7 +7,7 @@ import java.util.Random;
 
 import com.jagex.cache.Archive;
 import com.jagex.draw.DrawingArea;
-import com.jagex.io.Stream;
+import com.jagex.io.Buffer;
 import com.jagex.link.Cacheable;
 
 public final class TextDrawingArea extends Cacheable {
@@ -22,25 +22,25 @@ public final class TextDrawingArea extends Cacheable {
         anIntArray1496 = new int[256];
         aRandom1498 = new Random();
         aBoolean1499 = false;
-        Stream stream = new Stream(archive.getEntry(s + ".dat"));
-        Stream stream_1 = new Stream(archive.getEntry("index.dat"));
-        stream_1.currentOffset = stream.readUnsignedWord() + 4;
-        int k = stream_1.readUnsignedByte();
+        Buffer buffer = new Buffer(archive.getEntry(s + ".dat"));
+        Buffer buffer_1 = new Buffer(archive.getEntry("index.dat"));
+        buffer_1.position = buffer.readUShort() + 4;
+        int k = buffer_1.readUByte();
         if(k > 0)
-            stream_1.currentOffset += 3 * (k - 1);
+            buffer_1.position += 3 * (k - 1);
         for(int l = 0; l < 256; l++)
         {
-            anIntArray1494[l] = stream_1.readUnsignedByte();
-            anIntArray1495[l] = stream_1.readUnsignedByte();
-            int i1 = anIntArray1492[l] = stream_1.readUnsignedWord();
-            int j1 = anIntArray1493[l] = stream_1.readUnsignedWord();
-            int k1 = stream_1.readUnsignedByte();
+            anIntArray1494[l] = buffer_1.readUByte();
+            anIntArray1495[l] = buffer_1.readUByte();
+            int i1 = anIntArray1492[l] = buffer_1.readUShort();
+            int j1 = anIntArray1493[l] = buffer_1.readUShort();
+            int k1 = buffer_1.readUByte();
             int l1 = i1 * j1;
             aByteArrayArray1491[l] = new byte[l1];
             if(k1 == 0)
             {
                 for(int i2 = 0; i2 < l1; i2++)
-                    aByteArrayArray1491[l][i2] = stream.readSignedByte();
+                    aByteArrayArray1491[l][i2] = buffer.readByte();
 
             } else
             if(k1 == 1)
@@ -48,7 +48,7 @@ public final class TextDrawingArea extends Cacheable {
                 for(int j2 = 0; j2 < i1; j2++)
                 {
                     for(int l2 = 0; l2 < j1; l2++)
-                        aByteArrayArray1491[l][j2 + l2 * i1] = stream.readSignedByte();
+                        aByteArrayArray1491[l][j2 + l2 * i1] = buffer.readByte();
 
                 }
 

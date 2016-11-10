@@ -3,7 +3,7 @@ package com.jagex.cache.anim;
 // Jad home page: http://www.kpdus.com/jad.html
 // Decompiler options: packimports(3) 
 
-import com.jagex.io.Stream;
+import com.jagex.io.Buffer;
 
 public final class Frame
 {
@@ -19,45 +19,45 @@ public final class Frame
 
     public static void load(byte abyte0[])
     {
-        Stream stream = new Stream(abyte0);
-        stream.currentOffset = abyte0.length - 8;
-        int i = stream.readUnsignedWord();
-        int j = stream.readUnsignedWord();
-        int k = stream.readUnsignedWord();
-        int l = stream.readUnsignedWord();
+        Buffer buffer = new Buffer(abyte0);
+        buffer.position = abyte0.length - 8;
+        int i = buffer.readUShort();
+        int j = buffer.readUShort();
+        int k = buffer.readUShort();
+        int l = buffer.readUShort();
         int i1 = 0;
-        Stream stream_1 = new Stream(abyte0);
-        stream_1.currentOffset = i1;
+        Buffer buffer_1 = new Buffer(abyte0);
+        buffer_1.position = i1;
         i1 += i + 2;
-        Stream stream_2 = new Stream(abyte0);
-        stream_2.currentOffset = i1;
+        Buffer buffer_2 = new Buffer(abyte0);
+        buffer_2.position = i1;
         i1 += j;
-        Stream stream_3 = new Stream(abyte0);
-        stream_3.currentOffset = i1;
+        Buffer buffer_3 = new Buffer(abyte0);
+        buffer_3.position = i1;
         i1 += k;
-        Stream stream_4 = new Stream(abyte0);
-        stream_4.currentOffset = i1;
+        Buffer buffer_4 = new Buffer(abyte0);
+        buffer_4.position = i1;
         i1 += l;
-        Stream stream_5 = new Stream(abyte0);
-        stream_5.currentOffset = i1;
-        FrameBase frameBase = new FrameBase(stream_5);
-        int k1 = stream_1.readUnsignedWord();
+        Buffer buffer_5 = new Buffer(abyte0);
+        buffer_5.position = i1;
+        FrameBase frameBase = new FrameBase(buffer_5);
+        int k1 = buffer_1.readUShort();
         int ai[] = new int[500];
         int ai1[] = new int[500];
         int ai2[] = new int[500];
         int ai3[] = new int[500];
         for(int l1 = 0; l1 < k1; l1++)
         {
-            int i2 = stream_1.readUnsignedWord();
+            int i2 = buffer_1.readUShort();
             Frame frame = frames[i2] = new Frame();
-            frame.anInt636 = stream_4.readUnsignedByte();
+            frame.anInt636 = buffer_4.readUByte();
             frame.aClass18_637 = frameBase;
-            int j2 = stream_1.readUnsignedByte();
+            int j2 = buffer_1.readUByte();
             int k2 = -1;
             int l2 = 0;
             for(int i3 = 0; i3 < j2; i3++)
             {
-                int j3 = stream_2.readUnsignedByte();
+                int j3 = buffer_2.readUByte();
                 if(j3 > 0)
                 {
                     if(frameBase.transformationType[i3] != 0)
@@ -80,15 +80,15 @@ public final class Frame
                     if(frameBase.transformationType[i3] == 3)
                         c = '\200';
                     if((j3 & 1) != 0)
-                        ai1[l2] = stream_3.method421();
+                        ai1[l2] = buffer_3.readSmart();
                     else
                         ai1[l2] = c;
                     if((j3 & 2) != 0)
-                        ai2[l2] = stream_3.method421();
+                        ai2[l2] = buffer_3.readSmart();
                     else
                         ai2[l2] = c;
                     if((j3 & 4) != 0)
-                        ai3[l2] = stream_3.method421();
+                        ai3[l2] = buffer_3.readSmart();
                     else
                         ai3[l2] = c;
                     k2 = i3;

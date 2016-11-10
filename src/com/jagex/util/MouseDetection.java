@@ -17,8 +17,8 @@ public final class MouseDetection
             {
                 if(coordsIndex < 500)
                 {
-                    coordsX[coordsIndex] = clientInstance.mouseX;
-                    coordsY[coordsIndex] = clientInstance.mouseY;
+                    coordsX[coordsIndex] = clientInstance.applet.mouseX;
+                    coordsY[coordsIndex] = clientInstance.applet.mouseY;
                     coordsIndex++;
                 }
             }

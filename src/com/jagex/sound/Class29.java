@@ -3,28 +3,28 @@ package com.jagex.sound;
 // Jad home page: http://www.kpdus.com/jad.html
 // Decompiler options: packimports(3) 
 
-import com.jagex.io.Stream;
+import com.jagex.io.Buffer;
 
 final class Class29
 {
 
-    public void method325(Stream stream)
+    public void method325(Buffer buffer)
     {
-        anInt540 = stream.readUnsignedByte();
-            anInt538 = stream.readDWord();
-            anInt539 = stream.readDWord();
-            method326(stream);
+        anInt540 = buffer.readUByte();
+            anInt538 = buffer.readInt();
+            anInt539 = buffer.readInt();
+            method326(buffer);
     }
 
-    public void method326(Stream stream)
+    public void method326(Buffer buffer)
     {
-        anInt535 = stream.readUnsignedByte();
+        anInt535 = buffer.readUByte();
         anIntArray536 = new int[anInt535];
         anIntArray537 = new int[anInt535];
         for(int i = 0; i < anInt535; i++)
         {
-            anIntArray536[i] = stream.readUnsignedWord();
-            anIntArray537[i] = stream.readUnsignedWord();
+            anIntArray536[i] = buffer.readUShort();
+            anIntArray537[i] = buffer.readUShort();
         }
 
     }

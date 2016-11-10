@@ -11,7 +11,7 @@ import com.jagex.cache.def.EntityDef;
 import com.jagex.cache.def.ItemDef;
 import com.jagex.entity.model.IDK;
 import com.jagex.entity.model.Model;
-import com.jagex.io.Stream;
+import com.jagex.io.Buffer;
 import com.jagex.link.Cache;
 import com.jagex.util.TextClass;
 
@@ -96,26 +96,26 @@ public final class Player extends Entity
         return model;
     }
 
-    public void updatePlayer(Stream stream)
+    public void updatePlayer(Buffer buffer)
     {
-        stream.currentOffset = 0;
-        anInt1702 = stream.readUnsignedByte();
-        headIcon = stream.readUnsignedByte();
+        buffer.position = 0;
+        anInt1702 = buffer.readUByte();
+        headIcon = buffer.readUByte();
         desc = null;
         team = 0;
         for(int j = 0; j < 12; j++)
         {
-            int k = stream.readUnsignedByte();
+            int k = buffer.readUByte();
             if(k == 0)
             {
                 equipment[j] = 0;
                 continue;
             }
-            int i1 = stream.readUnsignedByte();
+            int i1 = buffer.readUByte();
             equipment[j] = (k << 8) + i1;
             if(j == 0 && equipment[0] == 65535)
             {
-                desc = EntityDef.forID(stream.readUnsignedWord());
+                desc = EntityDef.forID(buffer.readUShort());
                 break;
             }
             if(equipment[j] >= 512 && equipment[j] - 512 < ItemDef.totalItems)
@@ -128,36 +128,36 @@ public final class Player extends Entity
 
         for(int l = 0; l < 5; l++)
         {
-            int j1 = stream.readUnsignedByte();
+            int j1 = buffer.readUByte();
             if(j1 < 0 || j1 >= Client.anIntArrayArray1003[l].length)
                 j1 = 0;
             anIntArray1700[l] = j1;
         }
 
-        super.anInt1511 = stream.readUnsignedWord();
+        super.anInt1511 = buffer.readUShort();
         if(super.anInt1511 == 65535)
             super.anInt1511 = -1;
-        super.anInt1512 = stream.readUnsignedWord();
+        super.anInt1512 = buffer.readUShort();
         if(super.anInt1512 == 65535)
             super.anInt1512 = -1;
-        super.anInt1554 = stream.readUnsignedWord();
+        super.anInt1554 = buffer.readUShort();
         if(super.anInt1554 == 65535)
             super.anInt1554 = -1;
-        super.anInt1555 = stream.readUnsignedWord();
+        super.anInt1555 = buffer.readUShort();
         if(super.anInt1555 == 65535)
             super.anInt1555 = -1;
-        super.anInt1556 = stream.readUnsignedWord();
+        super.anInt1556 = buffer.readUShort();
         if(super.anInt1556 == 65535)
             super.anInt1556 = -1;
-        super.anInt1557 = stream.readUnsignedWord();
+        super.anInt1557 = buffer.readUShort();
         if(super.anInt1557 == 65535)
             super.anInt1557 = -1;
-        super.anInt1505 = stream.readUnsignedWord();
+        super.anInt1505 = buffer.readUShort();
         if(super.anInt1505 == 65535)
             super.anInt1505 = -1;
-        name = TextClass.fixName(TextClass.nameForLong(stream.readQWord()));
-        combatLevel = stream.readUnsignedByte();
-        skill = stream.readUnsignedWord();
+        name = TextClass.fixName(TextClass.nameForLong(buffer.readLong()));
+        combatLevel = buffer.readUByte();
+        skill = buffer.readUShort();
         visible = true;
         aLong1718 = 0L;
         for(int k1 = 0; k1 < 12; k1++)

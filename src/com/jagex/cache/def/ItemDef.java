@@ -9,7 +9,7 @@ import com.jagex.draw.DrawingArea;
 import com.jagex.draw.SpriteRenderer;
 import com.jagex.draw.Texture;
 import com.jagex.entity.model.Model;
-import com.jagex.io.Stream;
+import com.jagex.io.Buffer;
 import com.jagex.link.Cache;
 
 public final class ItemDef
@@ -21,7 +21,7 @@ public final class ItemDef
         mruNodes1 = null;
         streamIndices = null;
         cache = null;
-        stream = null;
+        buffer = null;
     }
 
     public boolean method192(int j)
@@ -45,15 +45,15 @@ public final class ItemDef
 
     public static void unpackConfig(Archive archive)
     {
-        stream = new Stream(archive.getEntry("obj.dat"));
-        Stream stream = new Stream(archive.getEntry("obj.idx"));
-        totalItems = stream.readUnsignedWord();
+        buffer = new Buffer(archive.getEntry("obj.dat"));
+        Buffer buffer = new Buffer(archive.getEntry("obj.idx"));
+        totalItems = buffer.readUShort();
         streamIndices = new int[totalItems];
         int i = 2;
         for(int j = 0; j < totalItems; j++)
         {
             streamIndices[j] = i;
-            i += stream.readUnsignedWord();
+            i += buffer.readUShort();
         }
 
         cache = new ItemDef[10];
@@ -208,10 +208,10 @@ public final class ItemDef
 
         cacheIndex = (cacheIndex + 1) % 10;
         ItemDef itemDef = cache[cacheIndex];
-        stream.currentOffset = streamIndices[i];
+        buffer.position = streamIndices[i];
         itemDef.id = i;
         itemDef.setDefaults();
-        itemDef.readValues(stream);
+        itemDef.readValues(buffer);
         if(itemDef.certTemplateID != -1)
             itemDef.toNote();
         if(!isMembers && itemDef.membersObject)
@@ -441,76 +441,76 @@ public final class ItemDef
         return model;
     }
 
-    private void readValues(Stream stream)
+    private void readValues(Buffer buffer)
     {
         do
         {
-            int i = stream.readUnsignedByte();
+            int i = buffer.readUByte();
             if(i == 0)
                 return;
             if(i == 1)
-                modelID = stream.readUnsignedWord();
+                modelID = buffer.readUShort();
             else
             if(i == 2)
-                name = stream.readString();
+                name = buffer.readString();
             else
             if(i == 3)
-                description = stream.readBytes();
+                description = buffer.readStringBytes();
             else
             if(i == 4)
-                modelZoom = stream.readUnsignedWord();
+                modelZoom = buffer.readUShort();
             else
             if(i == 5)
-                modelRotation1 = stream.readUnsignedWord();
+                modelRotation1 = buffer.readUShort();
             else
             if(i == 6)
-                modelRotation2 = stream.readUnsignedWord();
+                modelRotation2 = buffer.readUShort();
             else
             if(i == 7)
             {
-                modelOffset1 = stream.readUnsignedWord();
+                modelOffset1 = buffer.readUShort();
                 if(modelOffset1 > 32767)
                     modelOffset1 -= 0x10000;
             } else
             if(i == 8)
             {
-                modelOffset2 = stream.readUnsignedWord();
+                modelOffset2 = buffer.readUShort();
                 if(modelOffset2 > 32767)
                     modelOffset2 -= 0x10000;
             } else
             if(i == 10)
-                stream.readUnsignedWord();
+                buffer.readUShort();
             else
             if(i == 11)
                 stackable = true;
             else
             if(i == 12)
-                value = stream.readDWord();
+                value = buffer.readInt();
             else
             if(i == 16)
                 membersObject = true;
             else
             if(i == 23)
             {
-                anInt165 = stream.readUnsignedWord();
-                aByte205 = stream.readSignedByte();
+                anInt165 = buffer.readUShort();
+                aByte205 = buffer.readByte();
             } else
             if(i == 24)
-                anInt188 = stream.readUnsignedWord();
+                anInt188 = buffer.readUShort();
             else
             if(i == 25)
             {
-                anInt200 = stream.readUnsignedWord();
-                aByte154 = stream.readSignedByte();
+                anInt200 = buffer.readUShort();
+                aByte154 = buffer.readByte();
             } else
             if(i == 26)
-                anInt164 = stream.readUnsignedWord();
+                anInt164 = buffer.readUShort();
             else
             if(i >= 30 && i < 35)
             {
                 if(groundActions == null)
                     groundActions = new String[5];
-                groundActions[i - 30] = stream.readString();
+                groundActions[i - 30] = buffer.readString();
                 if(groundActions[i - 30].equalsIgnoreCase("hidden"))
                     groundActions[i - 30] = null;
             } else
@@ -518,46 +518,46 @@ public final class ItemDef
             {
                 if(actions == null)
                     actions = new String[5];
-                actions[i - 35] = stream.readString();
+                actions[i - 35] = buffer.readString();
             } else
             if(i == 40)
             {
-                int j = stream.readUnsignedByte();
+                int j = buffer.readUByte();
                 modifiedModelColors = new int[j];
                 originalModelColors = new int[j];
                 for(int k = 0; k < j; k++)
                 {
-                    modifiedModelColors[k] = stream.readUnsignedWord();
-                    originalModelColors[k] = stream.readUnsignedWord();
+                    modifiedModelColors[k] = buffer.readUShort();
+                    originalModelColors[k] = buffer.readUShort();
                 }
 
             } else
             if(i == 78)
-                anInt185 = stream.readUnsignedWord();
+                anInt185 = buffer.readUShort();
             else
             if(i == 79)
-                anInt162 = stream.readUnsignedWord();
+                anInt162 = buffer.readUShort();
             else
             if(i == 90)
-                anInt175 = stream.readUnsignedWord();
+                anInt175 = buffer.readUShort();
             else
             if(i == 91)
-                anInt197 = stream.readUnsignedWord();
+                anInt197 = buffer.readUShort();
             else
             if(i == 92)
-                anInt166 = stream.readUnsignedWord();
+                anInt166 = buffer.readUShort();
             else
             if(i == 93)
-                anInt173 = stream.readUnsignedWord();
+                anInt173 = buffer.readUShort();
             else
             if(i == 95)
-                anInt204 = stream.readUnsignedWord();
+                anInt204 = buffer.readUShort();
             else
             if(i == 97)
-                certID = stream.readUnsignedWord();
+                certID = buffer.readUShort();
             else
             if(i == 98)
-                certTemplateID = stream.readUnsignedWord();
+                certTemplateID = buffer.readUShort();
             else
             if(i >= 100 && i < 110)
             {
@@ -566,26 +566,26 @@ public final class ItemDef
                     stackIDs = new int[10];
                     stackAmounts = new int[10];
                 }
-                stackIDs[i - 100] = stream.readUnsignedWord();
-                stackAmounts[i - 100] = stream.readUnsignedWord();
+                stackIDs[i - 100] = buffer.readUShort();
+                stackAmounts[i - 100] = buffer.readUShort();
             } else
             if(i == 110)
-                anInt167 = stream.readUnsignedWord();
+                anInt167 = buffer.readUShort();
             else
             if(i == 111)
-                anInt192 = stream.readUnsignedWord();
+                anInt192 = buffer.readUShort();
             else
             if(i == 112)
-                anInt191 = stream.readUnsignedWord();
+                anInt191 = buffer.readUShort();
             else
             if(i == 113)
-                anInt196 = stream.readSignedByte();
+                anInt196 = buffer.readByte();
             else
             if(i == 114)
-                anInt184 = stream.readSignedByte() * 5;
+                anInt184 = buffer.readByte() * 5;
             else
             if(i == 115)
-                team = stream.readUnsignedByte();
+                team = buffer.readUByte();
         } while(true);
     }
 
@@ -621,7 +621,7 @@ public final class ItemDef
     private static int cacheIndex;
     public int modelZoom;
     public static boolean isMembers = true;
-    private static Stream stream;
+    private static Buffer buffer;
     private int anInt184;
     private int anInt185;
     private int anInt188;

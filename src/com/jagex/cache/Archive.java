@@ -4,34 +4,34 @@ package com.jagex.cache;
 // Jad home page: http://www.kpdus.com/jad.html
 // Decompiler options: packimports(3) 
 
-import com.jagex.io.Stream;
+import com.jagex.io.Buffer;
 
 public final class Archive {
 
 	public Archive(byte data[]) {
-		Stream stream = new Stream(data);
-		int length = stream.read3Bytes();
-		int decompressedLength = stream.read3Bytes();
+		Buffer stream = new Buffer(data);
+		int length = stream.readUTriByte();
+		int decompressedLength = stream.readUTriByte();
 		if (decompressedLength != length) {
 			byte output[] = new byte[length];
 			BZip2Decompressor.decompress(output, length, data, decompressedLength, 6);
 			buffer = output;
-			stream = new Stream(buffer);
+			stream = new Buffer(buffer);
 			extracted = true;
 		} else {
 			buffer = data;
 			extracted = false;
 		}
-		entries = stream.readUnsignedWord();
+		entries = stream.readUShort();
 		identifiers = new int[entries];
 		extractedSizes = new int[entries];
 		sizes = new int[entries];
 		indices = new int[entries];
-		int offset = stream.currentOffset + entries * 10;
+		int offset = stream.position + entries * 10;
 		for (int file = 0; file < entries; file++) {
-			identifiers[file] = stream.readDWord();
-			extractedSizes[file] = stream.read3Bytes();
-			sizes[file] = stream.read3Bytes();
+			identifiers[file] = stream.readInt();
+			extractedSizes[file] = stream.readUTriByte();
+			sizes[file] = stream.readUTriByte();
 			indices[file] = offset;
 			offset += sizes[file];
 		}

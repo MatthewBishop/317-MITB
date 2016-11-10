@@ -9,7 +9,7 @@ import java.net.URL;
 import java.util.zip.CRC32;
 
 import com.jagex.cache.Archive;
-import com.jagex.io.Stream;
+import com.jagex.io.Buffer;
 import com.jagex.sign.signlink;
 
 public class Jaggrab {
@@ -54,13 +54,13 @@ public class Jaggrab {
 			try {
 				DataInputStream datainputstream = requestCacheIndex(
 						"crc" + (int) (Math.random() * 99999999D) + "-" + 317);
-				Stream class30_sub2_sub2 = new Stream(new byte[40]);
-				datainputstream.readFully(class30_sub2_sub2.buffer, 0, 40);
+				Buffer class30_sub2_sub2 = new Buffer(new byte[40]);
+				datainputstream.readFully(class30_sub2_sub2.payload, 0, 40);
 				datainputstream.close();
 				for (int i1 = 0; i1 < 9; i1++)
-					expectedCRCs[i1] = class30_sub2_sub2.readDWord();
+					expectedCRCs[i1] = class30_sub2_sub2.readInt();
 
-				int j1 = class30_sub2_sub2.readDWord();
+				int j1 = class30_sub2_sub2.readInt();
 				int k1 = 1234;
 				for (int l1 = 0; l1 < 9; l1++)
 					k1 = (k1 << 1) + expectedCRCs[l1];
@@ -116,9 +116,9 @@ public class Jaggrab {
 				DataInputStream datainputstream = requestCacheIndex(names[i - 1] + expectedCRCs[i]);
 				byte abyte1[] = new byte[6];
 				datainputstream.readFully(abyte1, 0, 6);
-				Stream stream = new Stream(abyte1);
-				stream.currentOffset = 3;
-				int i2 = stream.read3Bytes() + 6;
+				Buffer buffer = new Buffer(abyte1);
+				buffer.position = 3;
+				int i2 = buffer.readUTriByte() + 6;
 				int j2 = 6;
 				abyte0 = new byte[i2];
 				System.arraycopy(abyte1, 0, abyte0, 0, 6);
@@ -203,7 +203,7 @@ public class Jaggrab {
 	}
 	private DataInputStream requestCacheIndex(String s) throws IOException {
 		if (!useJaggrab)
-			return new DataInputStream((new URL(client.getCodeBase(), s)).openStream());
+			return new DataInputStream((new URL(client.applet.getCodeBase(), s)).openStream());
 		if (jaggrab != null) {
 			try {
 				jaggrab.close();

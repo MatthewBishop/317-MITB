@@ -89,28 +89,28 @@ public class DrawingArea extends Cacheable {
         }
     }
 
-    public static void drawPixels(int i, int j, int k, int l, int i1)
+    public static void drawPixels(int h, int y, int x, int color, int w)
     {
-        if(k < topX)
+        if(x < topX)
         {
-            i1 -= topX - k;
-            k = topX;
+            w -= topX - x;
+            x = topX;
         }
-        if(j < topY)
+        if(y < topY)
         {
-            i -= topY - j;
-            j = topY;
+            h -= topY - y;
+            y = topY;
         }
-        if(k + i1 > bottomX)
-            i1 = bottomX - k;
-        if(j + i > bottomY)
-            i = bottomY - j;
-        int k1 = width - i1;
-        int l1 = k + j * width;
-        for(int i2 = -i; i2 < 0; i2++)
+        if(x + w > bottomX)
+            w = bottomX - x;
+        if(y + h > bottomY)
+            h = bottomY - y;
+        int k1 = width - w;
+        int l1 = x + y * width;
+        for(int i2 = -h; i2 < 0; i2++)
         {
-            for(int j2 = -i1; j2 < 0; j2++)
-                pixels[l1++] = l;
+            for(int j2 = -w; j2 < 0; j2++)
+                pixels[l1++] = color;
 
             l1 += k1;
         }
@@ -125,14 +125,14 @@ public class DrawingArea extends Cacheable {
         method341(i1, l, k, (i + j) - 1);
     }
 
-    public static void method338(int i, int j, int k, int l, int i1, int j1)
+    public static void method338(int y, int height, int k, int l, int i1, int j1)
     {
-        method340(l, i1, i, k, j1);
-        method340(l, i1, (i + j) - 1, k, j1);
-        if(j >= 3)
+        method340(l, i1, y, k, j1);
+        method340(l, i1, (y + height) - 1, k, j1);
+        if(height >= 3)
         {
-            method342(l, j1, k, i + 1, j - 2);
-            method342(l, (j1 + i1) - 1, k, i + 1, j - 2);
+            method342(l, j1, k, y + 1, height - 2);
+            method342(l, (j1 + i1) - 1, k, y + 1, height - 2);
         }
     }
 

@@ -4,41 +4,41 @@ package com.jagex.cache.graphics;
 // Decompiler options: packimports(3) 
 
 import com.jagex.cache.Archive;
-import com.jagex.io.Stream;
+import com.jagex.io.Buffer;
 import com.jagex.link.Cacheable;
 
 public final class IndexedImage extends Cacheable {
 
     public IndexedImage(Archive archive, String s, int i)
     {
-        Stream stream = new Stream(archive.getEntry(s + ".dat"));
-        Stream stream_1 = new Stream(archive.getEntry("index.dat"));
-        stream_1.currentOffset = stream.readUnsignedWord();
-        resizeWidth = stream_1.readUnsignedWord();
-        resizeHeight = stream_1.readUnsignedWord();
-        int j = stream_1.readUnsignedByte();
+        Buffer buffer = new Buffer(archive.getEntry(s + ".dat"));
+        Buffer buffer_1 = new Buffer(archive.getEntry("index.dat"));
+        buffer_1.position = buffer.readUShort();
+        resizeWidth = buffer_1.readUShort();
+        resizeHeight = buffer_1.readUShort();
+        int j = buffer_1.readUByte();
         palette = new int[j];
         for(int k = 0; k < j - 1; k++)
-            palette[k + 1] = stream_1.read3Bytes();
+            palette[k + 1] = buffer_1.readUTriByte();
 
         for(int l = 0; l < i; l++)
         {
-            stream_1.currentOffset += 2;
-            stream.currentOffset += stream_1.readUnsignedWord() * stream_1.readUnsignedWord();
-            stream_1.currentOffset++;
+            buffer_1.position += 2;
+            buffer.position += buffer_1.readUShort() * buffer_1.readUShort();
+            buffer_1.position++;
         }
 
-        drawOffsetX = stream_1.readUnsignedByte();
-        drawOffsetY = stream_1.readUnsignedByte();
-        width = stream_1.readUnsignedWord();
-        height = stream_1.readUnsignedWord();
-        int i1 = stream_1.readUnsignedByte();
+        drawOffsetX = buffer_1.readUByte();
+        drawOffsetY = buffer_1.readUByte();
+        width = buffer_1.readUShort();
+        height = buffer_1.readUShort();
+        int i1 = buffer_1.readUByte();
         int j1 = width * height;
         raster = new byte[j1];
         if(i1 == 0)
         {
             for(int k1 = 0; k1 < j1; k1++)
-                raster[k1] = stream.readSignedByte();
+                raster[k1] = buffer.readByte();
 
             return;
         }
@@ -47,7 +47,7 @@ public final class IndexedImage extends Cacheable {
             for(int l1 = 0; l1 < width; l1++)
             {
                 for(int i2 = 0; i2 < height; i2++)
-                    raster[l1 + i2 * width] = stream.readSignedByte();
+                    raster[l1 + i2 * width] = buffer.readByte();
 
             }
 

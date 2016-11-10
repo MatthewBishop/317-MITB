@@ -9,12 +9,12 @@ import java.util.zip.CRC32;
 import java.util.zip.GZIPInputStream;
 
 import com.jagex.Client;
-import com.jagex.Constants;
 import com.jagex.Utils;
 import com.jagex.cache.Archive;
-import com.jagex.io.Stream;
+import com.jagex.io.Buffer;
 import com.jagex.link.Deque;
 import com.jagex.link.Queue;
+import com.jagex.window.RSBase;
 
 public final class OnDemandFetcher extends OnDemandFetcherParent
         implements Runnable
@@ -136,11 +136,11 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
         {
             byte abyte0[] = archive.getEntry(as[i]);
             int j = abyte0.length / 2;
-            Stream stream = new Stream(abyte0);
+            Buffer buffer = new Buffer(abyte0);
             versions[i] = new int[j];
             fileStatus[i] = new byte[j];
             for(int l = 0; l < j; l++)
-                versions[i][l] = stream.readUnsignedWord();
+                versions[i][l] = buffer.readUShort();
 
         }
 
@@ -151,10 +151,10 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
         {
             byte abyte1[] = archive.getEntry(as1[k]);
             int i1 = abyte1.length / 4;
-            Stream stream_1 = new Stream(abyte1);
+            Buffer buffer_1 = new Buffer(abyte1);
             crcs[k] = new int[i1];
             for(int l1 = 0; l1 < i1; l1++)
-                crcs[k][l1] = stream_1.readDWord();
+                crcs[k][l1] = buffer_1.readInt();
 
         }
 
@@ -168,7 +168,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
                 modelIndices[k1] = 0;
 
         abyte2 = archive.getEntry("map_index");
-        Stream stream2 = new Stream(abyte2);
+        Buffer buffer2 = new Buffer(abyte2);
         j1 = abyte2.length / 7;
         mapIndices1 = new int[j1];
         mapIndices2 = new int[j1];
@@ -176,25 +176,25 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
         mapIndices4 = new int[j1];
         for(int i2 = 0; i2 < j1; i2++)
         {
-            mapIndices1[i2] = stream2.readUnsignedWord();
-            mapIndices2[i2] = stream2.readUnsignedWord();
-            mapIndices3[i2] = stream2.readUnsignedWord();
-            mapIndices4[i2] = stream2.readUnsignedByte();
+            mapIndices1[i2] = buffer2.readUShort();
+            mapIndices2[i2] = buffer2.readUShort();
+            mapIndices3[i2] = buffer2.readUShort();
+            mapIndices4[i2] = buffer2.readUByte();
         }
 
         abyte2 = archive.getEntry("anim_index");
-        stream2 = new Stream(abyte2);
+        buffer2 = new Buffer(abyte2);
         j1 = abyte2.length / 2;
         anIntArray1360 = new int[j1];
         for(int j2 = 0; j2 < j1; j2++)
-            anIntArray1360[j2] = stream2.readUnsignedWord();
+            anIntArray1360[j2] = buffer2.readUShort();
 
         abyte2 = archive.getEntry("midi_index");
-        stream2 = new Stream(abyte2);
+        buffer2 = new Buffer(abyte2);
         j1 = abyte2.length;
         anIntArray1348 = new int[j1];
         for(int k2 = 0; k2 < j1; k2++)
-            anIntArray1348[k2] = stream2.readUnsignedByte();
+            anIntArray1348[k2] = buffer2.readUByte();
 
         clientInstance = client1;
         running = true;
@@ -241,7 +241,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
                 if(l - openSocketTime < 4000L)
                     return;
                 openSocketTime = l;
-                socket = clientInstance.openSocket(43594 + Constants.portOff);
+                socket = clientInstance.openSocket(43594 + RSBase.portOff);
                 inputStream = socket.getInputStream();
                 outputStream = socket.getOutputStream();
                 outputStream.write(15);

@@ -18,21 +18,21 @@ public final class RSInterface
 
     public void swapInventoryItems(int i, int j)
     {
-        int k = inv[i];
-        inv[i] = inv[j];
-        inv[j] = k;
-        k = invStackSizes[i];
-        invStackSizes[i] = invStackSizes[j];
-        invStackSizes[j] = k;
+        int k = this.inv[i];
+        this.inv[i] = this.inv[j];
+        this.inv[j] = k;
+        k = this.invStackSizes[i];
+        this.invStackSizes[i] = this.invStackSizes[j];
+        this.invStackSizes[j] = k;
     }
 
     public static void unpack(Archive archive, TextDrawingArea textDrawingAreas[], Archive streamLoader_1)
     {
-        aMRUNodes_238 = new Cache(50000);
+        RSInterface.aMRUNodes_238 = new Cache(50000);
         Buffer buffer = new Buffer(archive.getEntry("data"));
         int i = -1;
         int j = buffer.readUShort();
-        interfaceCache = new RSInterface[j];
+        RSInterface.interfaceCache = new RSInterface[j];
         while(buffer.position < buffer.payload.length)
         {
             int k = buffer.readUShort();
@@ -41,7 +41,7 @@ public final class RSInterface
                 i = buffer.readUShort();
                 k = buffer.readUShort();
             }
-            RSInterface rsInterface = interfaceCache[k] = new RSInterface();
+            RSInterface rsInterface = RSInterface.interfaceCache[k] = new RSInterface();
             rsInterface.id = k;
             rsInterface.parentID = i;
             rsInterface.type = buffer.readUByte();
@@ -126,7 +126,7 @@ public final class RSInterface
                         if(streamLoader_1 != null && s1.length() > 0)
                         {
                             int i5 = s1.lastIndexOf(",");
-                            rsInterface.sprites[j2] = method207(Integer.parseInt(s1.substring(i5 + 1)), streamLoader_1, s1.substring(0, i5));
+                            rsInterface.sprites[j2] = RSInterface.method207(Integer.parseInt(s1.substring(i5 + 1)), streamLoader_1, s1.substring(0, i5));
                         }
                     }
                 }
@@ -169,13 +169,13 @@ public final class RSInterface
                 if(streamLoader_1 != null && s.length() > 0)
                 {
                     int i4 = s.lastIndexOf(",");
-                    rsInterface.sprite1 = method207(Integer.parseInt(s.substring(i4 + 1)), streamLoader_1, s.substring(0, i4));
+                    rsInterface.sprite1 = RSInterface.method207(Integer.parseInt(s.substring(i4 + 1)), streamLoader_1, s.substring(0, i4));
                 }
                 s = buffer.readString();
                 if(streamLoader_1 != null && s.length() > 0)
                 {
                     int j4 = s.lastIndexOf(",");
-                    rsInterface.sprite2 = method207(Integer.parseInt(s.substring(j4 + 1)), streamLoader_1, s.substring(0, j4));
+                    rsInterface.sprite2 = RSInterface.method207(Integer.parseInt(s.substring(j4 + 1)), streamLoader_1, s.substring(0, j4));
                 }
             }
             if(rsInterface.type == 6)
@@ -256,12 +256,12 @@ public final class RSInterface
         
 //aryan	Bot.notifyInterface(rsInterface);
 	}
-        aMRUNodes_238 = null;
+        RSInterface.aMRUNodes_238 = null;
     }
 
     private Model method206(int i, int j)
     {
-        Model model = (Model) aMRUNodes_264.get((i << 16) + j);
+        Model model = (Model) RSInterface.aMRUNodes_264.get((i << 16) + j);
         if(model != null)
             return model;
         if(i == 1)
@@ -275,20 +275,20 @@ public final class RSInterface
         if(i == 5)
             model = null;
         if(model != null)
-            aMRUNodes_264.put((i << 16) + j, model);
+            RSInterface.aMRUNodes_264.put((i << 16) + j, model);
         return model;
     }
 
     private static Sprite method207(int i, Archive archive, String s)
     {
-        long l = (TextClass.method585(s) << 8) + (long)i;
-        Sprite sprite = (Sprite) aMRUNodes_238.get(l);
+        long l = (TextClass.method585(s) << 8) + i;
+        Sprite sprite = (Sprite) RSInterface.aMRUNodes_238.get(l);
         if(sprite != null)
             return sprite;
         try
         {
             sprite = new Sprite(archive, s, i);
-            aMRUNodes_238.put(l, sprite);
+            RSInterface.aMRUNodes_238.put(l, sprite);
         }
         catch(Exception _ex)
         {
@@ -303,18 +303,18 @@ public final class RSInterface
         int j = 5;//was parameter
         if(flag)
             return;
-        aMRUNodes_264.clear();
+        RSInterface.aMRUNodes_264.clear();
         if(model != null && j != 4)
-            aMRUNodes_264.put((j << 16) + i, model);
+            RSInterface.aMRUNodes_264.put((j << 16) + i, model);
     }
 
     public Model method209(int j, int k, boolean flag)
     {
         Model model;
         if(flag)
-            model = method206(anInt255, anInt256);
+            model = this.method206(this.anInt255, this.anInt256);
         else
-            model = method206(anInt233, mediaID);
+            model = this.method206(this.anInt233, this.mediaID);
         if(model == null)
             return null;
         if(k == -1 && j == -1 && model.anIntArray1640 == null)

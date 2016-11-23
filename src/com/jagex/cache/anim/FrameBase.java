@@ -11,17 +11,17 @@ public final class FrameBase
     public FrameBase(Buffer buffer)
     {
         int anInt341 = buffer.readUByte();
-        transformationType = new int[anInt341];
-        labels = new int[anInt341][];
+        this.transformationType = new int[anInt341];
+        this.labels = new int[anInt341][];
         for(int j = 0; j < anInt341; j++)
-            transformationType[j] = buffer.readUByte();
+            this.transformationType[j] = buffer.readUByte();
 
         for(int k = 0; k < anInt341; k++)
         {
             int l = buffer.readUByte();
-            labels[k] = new int[l];
+            this.labels[k] = new int[l];
             for(int i1 = 0; i1 < l; i1++)
-                labels[k][i1] = buffer.readUByte();
+                this.labels[k][i1] = buffer.readUByte();
 
         }
 

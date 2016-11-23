@@ -16,22 +16,22 @@ public final class signlink
 
     public static void startpriv()
     {
-        threadliveid = (int)(Math.random() * 99999999D);
-        if(active)
+        signlink.threadliveid = (int)(Math.random() * 99999999D);
+        if(signlink.active)
         {
             try
             {
                 Thread.sleep(500L);
             }
             catch(Exception _ex) { }
-            active = false;
+            signlink.active = false;
         }
-        dnsreq = null;
-        savereq = null;
+        signlink.dnsreq = null;
+        signlink.savereq = null;
         Thread thread = new Thread(new signlink());
         thread.setDaemon(true);
         thread.start();
-        while(!active)
+        while(!signlink.active)
             try
             {
                 Thread.sleep(50L);
@@ -39,19 +39,20 @@ public final class signlink
             catch(Exception _ex) { }
     }
 
-    public void run()
+    @Override
+	public void run()
     {
-        active = true;
+        signlink.active = true;
         String s = Constants.findcachedir();
-        uid = getuid(s);
+        signlink.uid = signlink.getuid(s);
         try
         {
             File file = new File(s + "main_file_cache.dat");
             if(file.exists() && file.length() > 0x3200000L)
                 file.delete();
-            cache_dat = new RandomAccessFile(s + "main_file_cache.dat", "rw");
+            signlink.cache_dat = new RandomAccessFile(s + "main_file_cache.dat", "rw");
             for(int j = 0; j < 5; j++)
-                cache_idx[j] = new RandomAccessFile(s + "main_file_cache.idx" + j, "rw");
+                signlink.cache_idx[j] = new RandomAccessFile(s + "main_file_cache.idx" + j, "rw");
 
         }
         catch(Exception exception)
@@ -60,39 +61,39 @@ public final class signlink
         }
         while(true)
         {
-            if(dnsreq != null)
+            if(signlink.dnsreq != null)
             {
                 try
                 {
-                    dns = InetAddress.getByName(dnsreq).getHostName();
+                    signlink.dns = InetAddress.getByName(signlink.dnsreq).getHostName();
                 }
                 catch(Exception _ex)
                 {
-                    dns = "unknown";
+                    signlink.dns = "unknown";
                 }
-                dnsreq = null;
+                signlink.dnsreq = null;
             } else
-            if(savereq != null)
+            if(signlink.savereq != null)
             {
-                if(savebuf != null)
+                if(signlink.savebuf != null)
                     try
                     {
-                        FileOutputStream fileoutputstream = new FileOutputStream(s + savereq);
-                        fileoutputstream.write(savebuf, 0, savelen);
+                        FileOutputStream fileoutputstream = new FileOutputStream(s + signlink.savereq);
+                        fileoutputstream.write(signlink.savebuf, 0, signlink.savelen);
                         fileoutputstream.close();
                     }
                     catch(Exception _ex) { }
-                if(waveplay)
+                if(signlink.waveplay)
                 {
-                    String wave = s + savereq;
-                    waveplay = false;
+                    String wave = s + signlink.savereq;
+                    signlink.waveplay = false;
                 }
-                if(midiplay)
+                if(signlink.midiplay)
                 {
-                    midi = s + savereq;
-                    midiplay = false;
+                    signlink.midi = s + signlink.savereq;
+                    signlink.midiplay = false;
                 }
-                savereq = null;
+                signlink.savereq = null;
             } 
             try
             {
@@ -131,38 +132,38 @@ public final class signlink
 
     public static synchronized void dnslookup(String s)
     {
-        dns = s;
-        dnsreq = s;
+        signlink.dns = s;
+        signlink.dnsreq = s;
     }
 
     public static synchronized boolean wavesave(byte abyte0[], int i)
     {
         if(i > 0x1e8480)
             return false;
-        if(savereq != null)
+        if(signlink.savereq != null)
         {
             return false;
         } else
         {
-            wavepos = (wavepos + 1) % 5;
-            savelen = i;
-            savebuf = abyte0;
-            waveplay = true;
-            savereq = "sound" + wavepos + ".wav";
+            signlink.wavepos = (signlink.wavepos + 1) % 5;
+            signlink.savelen = i;
+            signlink.savebuf = abyte0;
+            signlink.waveplay = true;
+            signlink.savereq = "sound" + signlink.wavepos + ".wav";
             return true;
         }
     }
 
     public static synchronized boolean wavereplay()
     {
-        if(savereq != null)
+        if(signlink.savereq != null)
         {
             return false;
         } else
         {
-            savebuf = null;
-            waveplay = true;
-            savereq = "sound" + wavepos + ".wav";
+            signlink.savebuf = null;
+            signlink.waveplay = true;
+            signlink.savereq = "sound" + signlink.wavepos + ".wav";
             return true;
         }
     }
@@ -171,15 +172,15 @@ public final class signlink
     {
         if(i > 0x1e8480)
             return;
-        if(savereq != null)
+        if(signlink.savereq != null)
         {
         } else
         {
-            midipos = (midipos + 1) % 5;
-            savelen = i;
-            savebuf = abyte0;
-            midiplay = true;
-            savereq = "jingle" + midipos + ".mid";
+            signlink.midipos = (signlink.midipos + 1) % 5;
+            signlink.savelen = i;
+            signlink.savebuf = abyte0;
+            signlink.midiplay = true;
+            signlink.savereq = "jingle" + signlink.midipos + ".mid";
         }
     }
 

@@ -9,7 +9,7 @@ public final class OnDemandData extends Cacheable {
 
     public OnDemandData()
     {
-        incomplete = true;
+        this.incomplete = true;
     }
 
     public int dataType;

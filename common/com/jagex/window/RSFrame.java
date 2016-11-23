@@ -13,44 +13,47 @@ public final class RSFrame extends Frame {
 
 	public RSFrame(RSApplet applet, int width, int height, boolean resizable, boolean fullscreen) {
 		this.applet = applet;
-		setTitle("Fagex");
-		setResizable(resizable);
-		setUndecorated(fullscreen);
-		setVisible(true); 
-		insets = getInsets();
+		this.setTitle("Fagex");
+		this.setResizable(resizable);
+		this.setUndecorated(fullscreen);
+		this.setVisible(true); 
+		this.insets = this.getInsets();
 		if (resizable) {
-			setMinimumSize(new Dimension(766 + insets.left + insets.right, 536 + insets.top + insets.bottom));
+			this.setMinimumSize(new Dimension(766 + this.insets.left + this.insets.right, 536 + this.insets.top + this.insets.bottom));
 		}
-		setSize(width + insets.left + insets.right, height + insets.top + insets.bottom);
-		setLocationRelativeTo(null);
-		setBackground(Color.BLACK);
-		requestFocus();
-		toFront();
+		this.setSize(width + this.insets.left + this.insets.right, height + this.insets.top + this.insets.bottom);
+		this.setLocationRelativeTo(null);
+		this.setBackground(Color.BLACK);
+		this.requestFocus();
+		this.toFront();
 	}
 
+	@Override
 	public Graphics getGraphics() {
 		final Graphics graphics = super.getGraphics();
 		Insets insets = this.getInsets();
-		graphics.fillRect(0, 0, getWidth(), getHeight());
+		graphics.fillRect(0, 0, this.getWidth(), this.getHeight());
 		graphics.translate(insets != null ? insets.left : 0, insets != null ? insets.top : 0);
 		return graphics;
 	}
 
 	public int getFrameWidth() {
 		Insets insets = this.getInsets();
-		return getWidth() - (insets.left + insets.right);
+		return this.getWidth() - (insets.left + insets.right);
 	}
 
 	public int getFrameHeight() {
 		Insets insets = this.getInsets();
-		return getHeight() - (insets.top + insets.bottom);
+		return this.getHeight() - (insets.top + insets.bottom);
 	}
 
+	@Override
 	public void update(Graphics graphics) {
-		applet.update(graphics);
+		this.applet.update(graphics);
 	}
 
+	@Override
 	public void paint(Graphics graphics) {
-		applet.paint(graphics);
+		this.applet.paint(graphics);
 	}
 }

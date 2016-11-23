@@ -9,7 +9,7 @@ public final class SpawnedObject extends Linkable {
 
     public SpawnedObject()
     {
-        anInt1294 = -1;
+        this.anInt1294 = -1;
     }
 
     public int anInt1291;

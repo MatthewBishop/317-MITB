@@ -1,6 +1,7 @@
-package com.jagex.draw;
+package com.jagex.draw.render;
 
 import com.jagex.cache.graphics.IndexedImage;
+import com.jagex.draw.DrawingArea;
 
 public class IndexedImageRenderer {
 
@@ -43,7 +44,7 @@ public class IndexedImageRenderer {
 	    }
 	    if(!(k1 <= 0 || j1 <= 0))
 	    {
-	        draw(j1, DrawingArea.pixels, image.raster, l1, l, k1, i1, image.palette, i2);
+	        IndexedImageRenderer.draw(j1, DrawingArea.pixels, image.raster, l1, l, k1, i1, image.palette, i2);
 	    }
 	}
 

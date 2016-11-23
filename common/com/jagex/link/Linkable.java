@@ -7,14 +7,14 @@ public class Linkable {
 
     public final void unlink()
     {
-        if(previous == null)
+        if(this.previous == null)
         {
         } else
         {
-            previous.next = next;
-            next.previous = previous;
-            next = null;
-            previous = null;
+            this.previous.next = this.next;
+            this.next.previous = this.previous;
+            this.next = null;
+            this.previous = null;
         }
     }
 

@@ -19,24 +19,24 @@ public final class TextInput {
             if(k == -1)
             {
                 if(j1 < 13)
-                    aCharArray631[j++] = validChars[j1];
+                    TextInput.aCharArray631[j++] = TextInput.validChars[j1];
                 else
                     k = j1;
             } else
             {
-                aCharArray631[j++] = validChars[((k << 4) + j1) - 195];
+                TextInput.aCharArray631[j++] = TextInput.validChars[((k << 4) + j1) - 195];
                 k = -1;
             }
             j1 = i1 & 0xf;
             if(k == -1)
             {
                 if(j1 < 13)
-                    aCharArray631[j++] = validChars[j1];
+                    TextInput.aCharArray631[j++] = TextInput.validChars[j1];
                 else
                     k = j1;
             } else
             {
-                aCharArray631[j++] = validChars[((k << 4) + j1) - 195];
+                TextInput.aCharArray631[j++] = TextInput.validChars[((k << 4) + j1) - 195];
                 k = -1;
             }
         }
@@ -44,16 +44,16 @@ public final class TextInput {
         boolean flag1 = true;
         for(int k1 = 0; k1 < j; k1++)
         {
-            char c = aCharArray631[k1];
+            char c = TextInput.aCharArray631[k1];
             if(flag1 && c >= 'a' && c <= 'z')
             {
-                aCharArray631[k1] += '\uFFE0';
+                TextInput.aCharArray631[k1] += '\uFFE0';
                 flag1 = false;
             }
             if(c == '.' || c == '!' || c == '?')
                 flag1 = true;
         }
-        return new String(aCharArray631, 0, j);
+        return new String(TextInput.aCharArray631, 0, j);
     }
 
     public static void method526(String s, PacketStream stream)
@@ -66,9 +66,9 @@ public final class TextInput {
         {
             char c = s.charAt(j);
             int k = 0;
-            for(int l = 0; l < validChars.length; l++)
+            for(int l = 0; l < TextInput.validChars.length; l++)
             {
-                if(c != validChars[l])
+                if(c != TextInput.validChars[l])
                     continue;
                 k = l;
                 break;
@@ -99,11 +99,11 @@ public final class TextInput {
 
     public static String processText(String s)
     {
-        stream.position = 0;
-        method526(s, stream);
-        int j = stream.position;
-        stream.position = 0;
-        String s1 = method525(j, stream);
+        TextInput.stream.position = 0;
+        TextInput.method526(s, TextInput.stream);
+        int j = TextInput.stream.position;
+        TextInput.stream.position = 0;
+        String s1 = TextInput.method525(j, TextInput.stream);
         return s1;
     }
 

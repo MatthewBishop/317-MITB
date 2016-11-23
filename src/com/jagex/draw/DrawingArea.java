@@ -9,20 +9,20 @@ public class DrawingArea extends Cacheable {
 
     public static void initDrawingArea(int i, int j, int ai[])
     {
-        pixels = ai;
-        width = j;
-        height = i;
-        setDrawingArea(i, 0, j, 0);
+        DrawingArea.pixels = ai;
+        DrawingArea.width = j;
+        DrawingArea.height = i;
+        DrawingArea.setDrawingArea(i, 0, j, 0);
     }
 
     public static void defaultDrawingAreaSize()
     {
-            topX = 0;
-            topY = 0;
-            bottomX = width;
-            bottomY = height;
-            centerX = bottomX - 1;
-            centerY = bottomX / 2;
+            DrawingArea.topX = 0;
+            DrawingArea.topY = 0;
+            DrawingArea.bottomX = DrawingArea.width;
+            DrawingArea.bottomY = DrawingArea.height;
+            DrawingArea.centerX = DrawingArea.bottomX - 1;
+            DrawingArea.centerY = DrawingArea.bottomX / 2;
     }
 
     public static void setDrawingArea(int i, int j, int k, int l)
@@ -31,58 +31,58 @@ public class DrawingArea extends Cacheable {
             j = 0;
         if(l < 0)
             l = 0;
-        if(k > width)
-            k = width;
-        if(i > height)
-            i = height;
-        topX = j;
-        topY = l;
-        bottomX = k;
-        bottomY = i;
-        centerX = bottomX - 1;
-        centerY = bottomX / 2;
-        anInt1387 = bottomY / 2;
+        if(k > DrawingArea.width)
+            k = DrawingArea.width;
+        if(i > DrawingArea.height)
+            i = DrawingArea.height;
+        DrawingArea.topX = j;
+        DrawingArea.topY = l;
+        DrawingArea.bottomX = k;
+        DrawingArea.bottomY = i;
+        DrawingArea.centerX = DrawingArea.bottomX - 1;
+        DrawingArea.centerY = DrawingArea.bottomX / 2;
+        DrawingArea.anInt1387 = DrawingArea.bottomY / 2;
     }
 
     public static void setAllPixelsToZero()
     {
-        int i = width * height;
+        int i = DrawingArea.width * DrawingArea.height;
         for(int j = 0; j < i; j++)
-            pixels[j] = 0;
+            DrawingArea.pixels[j] = 0;
 
     }
 
     public static void method335(int i, int j, int k, int l, int i1, int k1)
     {
-        if(k1 < topX)
+        if(k1 < DrawingArea.topX)
         {
-            k -= topX - k1;
-            k1 = topX;
+            k -= DrawingArea.topX - k1;
+            k1 = DrawingArea.topX;
         }
-        if(j < topY)
+        if(j < DrawingArea.topY)
         {
-            l -= topY - j;
-            j = topY;
+            l -= DrawingArea.topY - j;
+            j = DrawingArea.topY;
         }
-        if(k1 + k > bottomX)
-            k = bottomX - k1;
-        if(j + l > bottomY)
-            l = bottomY - j;
+        if(k1 + k > DrawingArea.bottomX)
+            k = DrawingArea.bottomX - k1;
+        if(j + l > DrawingArea.bottomY)
+            l = DrawingArea.bottomY - j;
         int l1 = 256 - i1;
         int i2 = (i >> 16 & 0xff) * i1;
         int j2 = (i >> 8 & 0xff) * i1;
         int k2 = (i & 0xff) * i1;
-        int k3 = width - k;
-        int l3 = k1 + j * width;
+        int k3 = DrawingArea.width - k;
+        int l3 = k1 + j * DrawingArea.width;
         for(int i4 = 0; i4 < l; i4++)
         {
             for(int j4 = -k; j4 < 0; j4++)
             {
-                int l2 = (pixels[l3] >> 16 & 0xff) * l1;
-                int i3 = (pixels[l3] >> 8 & 0xff) * l1;
-                int j3 = (pixels[l3] & 0xff) * l1;
+                int l2 = (DrawingArea.pixels[l3] >> 16 & 0xff) * l1;
+                int i3 = (DrawingArea.pixels[l3] >> 8 & 0xff) * l1;
+                int j3 = (DrawingArea.pixels[l3] & 0xff) * l1;
                 int k4 = ((i2 + l2 >> 8) << 16) + ((j2 + i3 >> 8) << 8) + (k2 + j3 >> 8);
-                pixels[l3++] = k4;
+                DrawingArea.pixels[l3++] = k4;
             }
 
             l3 += k3;
@@ -91,26 +91,26 @@ public class DrawingArea extends Cacheable {
 
     public static void drawPixels(int h, int y, int x, int color, int w)
     {
-        if(x < topX)
+        if(x < DrawingArea.topX)
         {
-            w -= topX - x;
-            x = topX;
+            w -= DrawingArea.topX - x;
+            x = DrawingArea.topX;
         }
-        if(y < topY)
+        if(y < DrawingArea.topY)
         {
-            h -= topY - y;
-            y = topY;
+            h -= DrawingArea.topY - y;
+            y = DrawingArea.topY;
         }
-        if(x + w > bottomX)
-            w = bottomX - x;
-        if(y + h > bottomY)
-            h = bottomY - y;
-        int k1 = width - w;
-        int l1 = x + y * width;
+        if(x + w > DrawingArea.bottomX)
+            w = DrawingArea.bottomX - x;
+        if(y + h > DrawingArea.bottomY)
+            h = DrawingArea.bottomY - y;
+        int k1 = DrawingArea.width - w;
+        int l1 = x + y * DrawingArea.width;
         for(int i2 = -h; i2 < 0; i2++)
         {
             for(int j2 = -w; j2 < 0; j2++)
-                pixels[l1++] = color;
+                DrawingArea.pixels[l1++] = color;
 
             l1 += k1;
         }
@@ -119,108 +119,108 @@ public class DrawingArea extends Cacheable {
 
     public static void fillPixels(int i, int j, int k, int l, int i1)
     {
-        method339(i1, l, j, i);
-        method339((i1 + k) - 1, l, j, i);
-        method341(i1, l, k, i);
-        method341(i1, l, k, (i + j) - 1);
+        DrawingArea.method339(i1, l, j, i);
+        DrawingArea.method339((i1 + k) - 1, l, j, i);
+        DrawingArea.method341(i1, l, k, i);
+        DrawingArea.method341(i1, l, k, (i + j) - 1);
     }
 
     public static void method338(int y, int height, int k, int l, int i1, int j1)
     {
-        method340(l, i1, y, k, j1);
-        method340(l, i1, (y + height) - 1, k, j1);
+        DrawingArea.method340(l, i1, y, k, j1);
+        DrawingArea.method340(l, i1, (y + height) - 1, k, j1);
         if(height >= 3)
         {
-            method342(l, j1, k, y + 1, height - 2);
-            method342(l, (j1 + i1) - 1, k, y + 1, height - 2);
+            DrawingArea.method342(l, j1, k, y + 1, height - 2);
+            DrawingArea.method342(l, (j1 + i1) - 1, k, y + 1, height - 2);
         }
     }
 
     public static void method339(int i, int j, int k, int l)
     {
-        if(i < topY || i >= bottomY)
+        if(i < DrawingArea.topY || i >= DrawingArea.bottomY)
             return;
-        if(l < topX)
+        if(l < DrawingArea.topX)
         {
-            k -= topX - l;
-            l = topX;
+            k -= DrawingArea.topX - l;
+            l = DrawingArea.topX;
         }
-        if(l + k > bottomX)
-            k = bottomX - l;
-        int i1 = l + i * width;
+        if(l + k > DrawingArea.bottomX)
+            k = DrawingArea.bottomX - l;
+        int i1 = l + i * DrawingArea.width;
         for(int j1 = 0; j1 < k; j1++)
-            pixels[i1 + j1] = j;
+            DrawingArea.pixels[i1 + j1] = j;
 
     }
 
     private static void method340(int i, int j, int k, int l, int i1)
     {
-        if(k < topY || k >= bottomY)
+        if(k < DrawingArea.topY || k >= DrawingArea.bottomY)
             return;
-        if(i1 < topX)
+        if(i1 < DrawingArea.topX)
         {
-            j -= topX - i1;
-            i1 = topX;
+            j -= DrawingArea.topX - i1;
+            i1 = DrawingArea.topX;
         }
-        if(i1 + j > bottomX)
-            j = bottomX - i1;
+        if(i1 + j > DrawingArea.bottomX)
+            j = DrawingArea.bottomX - i1;
         int j1 = 256 - l;
         int k1 = (i >> 16 & 0xff) * l;
         int l1 = (i >> 8 & 0xff) * l;
         int i2 = (i & 0xff) * l;
-        int i3 = i1 + k * width;
+        int i3 = i1 + k * DrawingArea.width;
         for(int j3 = 0; j3 < j; j3++)
         {
-            int j2 = (pixels[i3] >> 16 & 0xff) * j1;
-            int k2 = (pixels[i3] >> 8 & 0xff) * j1;
-            int l2 = (pixels[i3] & 0xff) * j1;
+            int j2 = (DrawingArea.pixels[i3] >> 16 & 0xff) * j1;
+            int k2 = (DrawingArea.pixels[i3] >> 8 & 0xff) * j1;
+            int l2 = (DrawingArea.pixels[i3] & 0xff) * j1;
             int k3 = ((k1 + j2 >> 8) << 16) + ((l1 + k2 >> 8) << 8) + (i2 + l2 >> 8);
-            pixels[i3++] = k3;
+            DrawingArea.pixels[i3++] = k3;
         }
 
     }
 
     public static void method341(int i, int j, int k, int l)
     {
-        if(l < topX || l >= bottomX)
+        if(l < DrawingArea.topX || l >= DrawingArea.bottomX)
             return;
-        if(i < topY)
+        if(i < DrawingArea.topY)
         {
-            k -= topY - i;
-            i = topY;
+            k -= DrawingArea.topY - i;
+            i = DrawingArea.topY;
         }
-        if(i + k > bottomY)
-            k = bottomY - i;
-        int j1 = l + i * width;
+        if(i + k > DrawingArea.bottomY)
+            k = DrawingArea.bottomY - i;
+        int j1 = l + i * DrawingArea.width;
         for(int k1 = 0; k1 < k; k1++)
-            pixels[j1 + k1 * width] = j;
+            DrawingArea.pixels[j1 + k1 * DrawingArea.width] = j;
 
     }
 
     private static void method342(int i, int j, int k, int l, int i1)
     {
-        if(j < topX || j >= bottomX)
+        if(j < DrawingArea.topX || j >= DrawingArea.bottomX)
             return;
-        if(l < topY)
+        if(l < DrawingArea.topY)
         {
-            i1 -= topY - l;
-            l = topY;
+            i1 -= DrawingArea.topY - l;
+            l = DrawingArea.topY;
         }
-        if(l + i1 > bottomY)
-            i1 = bottomY - l;
+        if(l + i1 > DrawingArea.bottomY)
+            i1 = DrawingArea.bottomY - l;
         int j1 = 256 - k;
         int k1 = (i >> 16 & 0xff) * k;
         int l1 = (i >> 8 & 0xff) * k;
         int i2 = (i & 0xff) * k;
-        int i3 = j + l * width;
+        int i3 = j + l * DrawingArea.width;
         for(int j3 = 0; j3 < i1; j3++)
         {
-            int j2 = (pixels[i3] >> 16 & 0xff) * j1;
-            int k2 = (pixels[i3] >> 8 & 0xff) * j1;
-            int l2 = (pixels[i3] & 0xff) * j1;
+            int j2 = (DrawingArea.pixels[i3] >> 16 & 0xff) * j1;
+            int k2 = (DrawingArea.pixels[i3] >> 8 & 0xff) * j1;
+            int l2 = (DrawingArea.pixels[i3] & 0xff) * j1;
             int k3 = ((k1 + j2 >> 8) << 16) + ((l1 + k2 >> 8) << 8) + (i2 + l2 >> 8);
-            pixels[i3] = k3;
-            i3 += width;
+            DrawingArea.pixels[i3] = k3;
+            i3 += DrawingArea.width;
         }
 
     }

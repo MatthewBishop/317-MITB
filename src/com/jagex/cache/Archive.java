@@ -15,25 +15,25 @@ public final class Archive {
 		if (decompressedLength != length) {
 			byte output[] = new byte[length];
 			BZip2Decompressor.decompress(output, length, data, decompressedLength, 6);
-			buffer = output;
-			stream = new Buffer(buffer);
-			extracted = true;
+			this.buffer = output;
+			stream = new Buffer(this.buffer);
+			this.extracted = true;
 		} else {
-			buffer = data;
-			extracted = false;
+			this.buffer = data;
+			this.extracted = false;
 		}
-		entries = stream.readUShort();
-		identifiers = new int[entries];
-		extractedSizes = new int[entries];
-		sizes = new int[entries];
-		indices = new int[entries];
-		int offset = stream.position + entries * 10;
-		for (int file = 0; file < entries; file++) {
-			identifiers[file] = stream.readInt();
-			extractedSizes[file] = stream.readUTriByte();
-			sizes[file] = stream.readUTriByte();
-			indices[file] = offset;
-			offset += sizes[file];
+		this.entries = stream.readUShort();
+		this.identifiers = new int[this.entries];
+		this.extractedSizes = new int[this.entries];
+		this.sizes = new int[this.entries];
+		this.indices = new int[this.entries];
+		int offset = stream.position + this.entries * 10;
+		for (int file = 0; file < this.entries; file++) {
+			this.identifiers[file] = stream.readInt();
+			this.extractedSizes[file] = stream.readUTriByte();
+			this.sizes[file] = stream.readUTriByte();
+			this.indices[file] = offset;
+			offset += this.sizes[file];
 		}
 	}
 
@@ -43,13 +43,13 @@ public final class Archive {
 		for (int j = 0; j < s.length(); j++)
 			hash = (hash * 61 + s.charAt(j)) - 32;
 
-		for (int k = 0; k < entries; k++)
-			if (identifiers[k] == hash) {
-				byte output[] = new byte[extractedSizes[k]];
-				if (!extracted) {
-					BZip2Decompressor.decompress(output, extractedSizes[k], buffer, sizes[k], indices[k]);
+		for (int k = 0; k < this.entries; k++)
+			if (this.identifiers[k] == hash) {
+				byte output[] = new byte[this.extractedSizes[k]];
+				if (!this.extracted) {
+					BZip2Decompressor.decompress(output, this.extractedSizes[k], this.buffer, this.sizes[k], this.indices[k]);
 				} else {
-					System.arraycopy(buffer, indices[k], output, 0, extractedSizes[k]);
+					System.arraycopy(this.buffer, this.indices[k], output, 0, this.extractedSizes[k]);
 
 				}
 				return output;

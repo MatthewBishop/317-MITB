@@ -29,16 +29,16 @@ public class Jaggrab {
 
 	public Jaggrab(Client client) {
 		this.client = client;
-		expectedCRCs = new int[9];
-		requestCrcs();
+		this.expectedCRCs = new int[9];
+		this.requestCrcs();
 	}
 
 	public boolean check(byte[] abyte0, int j) {
 		if (abyte0 != null) {
-			indexCrc.reset();
-			indexCrc.update(abyte0);
-			int i1 = (int) indexCrc.getValue();
-			if (i1 != expectedCRCs[j])
+			Jaggrab.indexCrc.reset();
+			Jaggrab.indexCrc.update(abyte0);
+			int i1 = (int) Jaggrab.indexCrc.getValue();
+			if (i1 != this.expectedCRCs[j])
 				return false;
 		}
 		return true;
@@ -46,49 +46,49 @@ public class Jaggrab {
 		
 	private void requestCrcs() {
 		int j = 5;
-		expectedCRCs[8] = 0;
+		this.expectedCRCs[8] = 0;
 		int k = 0;
-		while (expectedCRCs[8] == 0) {
+		while (this.expectedCRCs[8] == 0) {
 			String s = "Unknown problem";
-			client.drawLoadingText(20, "Connecting to web server");
+			this.client.drawLoadingText(20, "Connecting to web server");
 			try {
-				DataInputStream datainputstream = requestCacheIndex(
+				DataInputStream datainputstream = this.requestCacheIndex(
 						"crc" + (int) (Math.random() * 99999999D) + "-" + 317);
 				Buffer class30_sub2_sub2 = new Buffer(new byte[40]);
 				datainputstream.readFully(class30_sub2_sub2.payload, 0, 40);
 				datainputstream.close();
 				for (int i1 = 0; i1 < 9; i1++)
-					expectedCRCs[i1] = class30_sub2_sub2.readInt();
+					this.expectedCRCs[i1] = class30_sub2_sub2.readInt();
 
 				int j1 = class30_sub2_sub2.readInt();
 				int k1 = 1234;
 				for (int l1 = 0; l1 < 9; l1++)
-					k1 = (k1 << 1) + expectedCRCs[l1];
+					k1 = (k1 << 1) + this.expectedCRCs[l1];
 
 				if (j1 != k1) {
 					s = "checksum problem";
-					expectedCRCs[8] = 0;
+					this.expectedCRCs[8] = 0;
 				}
 			} catch (EOFException _ex) {
 				s = "EOF problem";
-				expectedCRCs[8] = 0;
+				this.expectedCRCs[8] = 0;
 			} catch (IOException _ex) {
 				s = "connection problem";
-				expectedCRCs[8] = 0;
+				this.expectedCRCs[8] = 0;
 			} catch (Exception _ex) {
 				s = "logic problem";
-				expectedCRCs[8] = 0;
+				this.expectedCRCs[8] = 0;
 				if (!signlink.reporterror)
 					return;
 			}
-			if (expectedCRCs[8] == 0) {
+			if (this.expectedCRCs[8] == 0) {
 				k++;
 				for (int l = j; l > 0; l--) {
 					if (k >= 10) {
-						client.drawLoadingText(10, "Game updated - please reload page");
+						this.client.drawLoadingText(10, "Game updated - please reload page");
 						l = 10;
 					} else {
-						client.drawLoadingText(10, s + " - Will retry in " + l + " secs.");
+						this.client.drawLoadingText(10, s + " - Will retry in " + l + " secs.");
 					}
 					try {
 						Thread.sleep(1000L);
@@ -99,7 +99,7 @@ public class Jaggrab {
 				j *= 2;
 				if (j > 60)
 					j = 60;
-				useJaggrab = !useJaggrab;
+				this.useJaggrab = !this.useJaggrab;
 			}
 		}
 
@@ -110,10 +110,10 @@ public class Jaggrab {
 		int errors = 0;
 		while (abyte0 == null) {
 			String s2 = "Unknown error";
-			client.drawLoadingText(completion[i - 1], "Requesting " + displayedName[i - 1]);
+			this.client.drawLoadingText(Jaggrab.completion[i - 1], "Requesting " + Jaggrab.displayedName[i - 1]);
 			try {
 				int k1 = 0;
-				DataInputStream datainputstream = requestCacheIndex(names[i - 1] + expectedCRCs[i]);
+				DataInputStream datainputstream = this.requestCacheIndex(Jaggrab.names[i - 1] + this.expectedCRCs[i]);
 				byte abyte1[] = new byte[6];
 				datainputstream.readFully(abyte1, 0, 6);
 				Buffer buffer = new Buffer(abyte1);
@@ -135,21 +135,21 @@ public class Jaggrab {
 					j2 += j3;
 					int k3 = (j2 * 100) / i2;
 					if (k3 != k1)
-						client.drawLoadingText(completion[i - 1], "Loading " + displayedName[i - 1] + " - " + k3 + "%");
+						this.client.drawLoadingText(Jaggrab.completion[i - 1], "Loading " + Jaggrab.displayedName[i - 1] + " - " + k3 + "%");
 					k1 = k3;
 				}
 				datainputstream.close();
 				try {
-					if (client.indexs[0] != null)
-						client.indexs[0].put(abyte0.length, abyte0, i);
+					if (this.client.indexs[0] != null)
+						this.client.indexs[0].put(abyte0.length, abyte0, i);
 				} catch (Exception _ex) {
-					client.indexs[0] = null;
+					this.client.indexs[0] = null;
 				}
 				if (abyte0 != null) {
-					indexCrc.reset();
-					indexCrc.update(abyte0);
-					int i3 = (int) indexCrc.getValue();
-					if (i3 != expectedCRCs[i]) {
+					Jaggrab.indexCrc.reset();
+					Jaggrab.indexCrc.update(abyte0);
+					int i3 = (int) Jaggrab.indexCrc.getValue();
+					if (i3 != this.expectedCRCs[i]) {
 						abyte0 = null;
 						errors++;
 						s2 = "Checksum error: " + i3;
@@ -179,10 +179,10 @@ public class Jaggrab {
 			if (abyte0 == null) {
 				for (int l1 = reconnectionDelay; l1 > 0; l1--) {
 					if (errors >= 3) {
-						client.drawLoadingText(completion[i - 1], "Game updated - please reload page");
+						this.client.drawLoadingText(Jaggrab.completion[i - 1], "Game updated - please reload page");
 						l1 = 10;
 					} else {
-						client.drawLoadingText(completion[i - 1], s2 + " - Retrying in " + l1);
+						this.client.drawLoadingText(Jaggrab.completion[i - 1], s2 + " - Retrying in " + l1);
 					}
 					try {
 						Thread.sleep(1000L);
@@ -193,7 +193,7 @@ public class Jaggrab {
 				reconnectionDelay *= 2;
 				if (reconnectionDelay > 60)
 					reconnectionDelay = 60;
-				useJaggrab = !useJaggrab;
+				this.useJaggrab = !this.useJaggrab;
 			}
 
 		}
@@ -202,19 +202,19 @@ public class Jaggrab {
 		return streamLoader_1;
 	}
 	private DataInputStream requestCacheIndex(String s) throws IOException {
-		if (!useJaggrab)
-			return new DataInputStream((new URL(client.applet.getCodeBase(), s)).openStream());
-		if (jaggrab != null) {
+		if (!this.useJaggrab)
+			return new DataInputStream((new URL(this.client.applet.getCodeBase(), s)).openStream());
+		if (this.jaggrab != null) {
 			try {
-				jaggrab.close();
+				this.jaggrab.close();
 			} catch (Exception _ex) {
 			}
-			jaggrab = null;
+			this.jaggrab = null;
 		}
-		jaggrab = client.openSocket(43595);
-		jaggrab.setSoTimeout(10000);
-		java.io.InputStream inputstream = jaggrab.getInputStream();
-		OutputStream outputstream = jaggrab.getOutputStream();
+		this.jaggrab = this.client.openSocket(43595);
+		this.jaggrab.setSoTimeout(10000);
+		java.io.InputStream inputstream = this.jaggrab.getInputStream();
+		OutputStream outputstream = this.jaggrab.getOutputStream();
 		outputstream.write(("JAGGRAB /" + s + "\n\n").getBytes());
 		return new DataInputStream(inputstream);
 	}	

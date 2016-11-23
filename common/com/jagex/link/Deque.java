@@ -7,17 +7,17 @@ public final class Deque {
 
     public Deque()
     {
-        tail = new Linkable();
-        tail.next = tail;
-        tail.previous = tail;
+        this.tail = new Linkable();
+        this.tail.next = this.tail;
+        this.tail.previous = this.tail;
     }
 
     public void pushBack(Linkable linkable)
     {
         if(linkable.previous != null)
             linkable.unlink();
-        linkable.previous = tail.previous;
-        linkable.next = tail;
+        linkable.previous = this.tail.previous;
+        linkable.next = this.tail;
         linkable.previous.next = linkable;
         linkable.next.previous = linkable;
     }
@@ -26,16 +26,16 @@ public final class Deque {
     {
         if(linkable.previous != null)
             linkable.unlink();
-        linkable.previous = tail;
-        linkable.next = tail.next;
+        linkable.previous = this.tail;
+        linkable.next = this.tail.next;
         linkable.previous.next = linkable;
         linkable.next.previous = linkable;
     }
 
     public Linkable popFront()
     {
-        Linkable linkable = tail.next;
-        if(linkable == tail)
+        Linkable linkable = this.tail.next;
+        if(linkable == this.tail)
         {
             return null;
         } else
@@ -47,66 +47,66 @@ public final class Deque {
 
     public Linkable getFront()
     {
-        Linkable linkable = tail.next;
-        if(linkable == tail)
+        Linkable linkable = this.tail.next;
+        if(linkable == this.tail)
         {
-            current = null;
+            this.current = null;
             return null;
         } else
         {
-            current = linkable.next;
+            this.current = linkable.next;
             return linkable;
         }
     }
 
     public Linkable getTail()
     {
-        Linkable linkable = tail.previous;
-        if(linkable == tail)
+        Linkable linkable = this.tail.previous;
+        if(linkable == this.tail)
         {
-            current = null;
+            this.current = null;
             return null;
         } else
         {
-            current = linkable.previous;
+            this.current = linkable.previous;
             return linkable;
         }
     }
 
     public Linkable getNext()
     {
-        Linkable linkable = current;
-        if(linkable == tail)
+        Linkable linkable = this.current;
+        if(linkable == this.tail)
         {
-            current = null;
+            this.current = null;
             return null;
         } else
         {
-            current = linkable.next;
+            this.current = linkable.next;
             return linkable;
         }
     }
 
     public Linkable getPrevious()
     {
-        Linkable linkable = current;
-        if(linkable == tail)
+        Linkable linkable = this.current;
+        if(linkable == this.tail)
         {
-            current = null;
+            this.current = null;
             return null;
         }
-        current = linkable.previous;
+        this.current = linkable.previous;
             return linkable;
     }
 
     public void clear()
     {
-        if(tail.next == tail)
+        if(this.tail.next == this.tail)
             return;
         do
         {
-            Linkable linkable = tail.next;
-            if(linkable == tail)
+            Linkable linkable = this.tail.next;
+            if(linkable == this.tail)
                 return;
             linkable.unlink();
         } while(true);

@@ -10,10 +10,10 @@ public final class Frame
 
     public static void init(int i)
     {
-        frames = new Frame[i + 1];
-        opaque = new boolean[i + 1];
+        Frame.frames = new Frame[i + 1];
+        Frame.opaque = new boolean[i + 1];
         for(int j = 0; j < i + 1; j++)
-            opaque[j] = true;
+            Frame.opaque[j] = true;
 
     }
 
@@ -49,7 +49,7 @@ public final class Frame
         for(int l1 = 0; l1 < k1; l1++)
         {
             int i2 = buffer_1.readUShort();
-            Frame frame = frames[i2] = new Frame();
+            Frame frame = Frame.frames[i2] = new Frame();
             frame.anInt636 = buffer_4.readUByte();
             frame.aClass18_637 = frameBase;
             int j2 = buffer_1.readUByte();
@@ -94,7 +94,7 @@ public final class Frame
                     k2 = i3;
                     l2++;
                     if(frameBase.transformationType[i3] == 5)
-                        opaque[i2] = false;
+                        Frame.opaque[i2] = false;
                 }
             }
 
@@ -117,11 +117,11 @@ public final class Frame
 
     public static void clearFrames()
     {
-        frames = null;
+        Frame.frames = null;
     }
 
     public static Frame lookup(int index) {
-		return (frames == null) ? null : frames[index];
+		return (Frame.frames == null) ? null : Frame.frames[index];
 	}
 
     public static boolean isInvalid(int i)

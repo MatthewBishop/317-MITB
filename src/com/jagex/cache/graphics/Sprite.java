@@ -13,10 +13,10 @@ import com.jagex.link.Cacheable;
 public final class Sprite extends Cacheable {
 
 	public Sprite(int i, int j) {
-		raster = new int[i * j];
-		width = resizeWidth = i;
-		height = resizeHeight = j;
-		horizontalOffset = verticalOffset = 0;
+		this.raster = new int[i * j];
+		this.width = this.resizeWidth = i;
+		this.height = this.resizeHeight = j;
+		this.horizontalOffset = this.verticalOffset = 0;
 	}
 
 	public Sprite(byte abyte0[], Component component) {
@@ -25,14 +25,14 @@ public final class Sprite extends Cacheable {
 			MediaTracker mediatracker = new MediaTracker(component);
 			mediatracker.addImage(image, 0);
 			mediatracker.waitForAll();
-			width = image.getWidth(component);
-			height = image.getHeight(component);
-			resizeWidth = width;
-			resizeHeight = height;
-			horizontalOffset = 0;
-			verticalOffset = 0;
-			raster = new int[width * height];
-			PixelGrabber pixelgrabber = new PixelGrabber(image, 0, 0, width, height, raster, 0, width);
+			this.width = image.getWidth(component);
+			this.height = image.getHeight(component);
+			this.resizeWidth = this.width;
+			this.resizeHeight = this.height;
+			this.horizontalOffset = 0;
+			this.verticalOffset = 0;
+			this.raster = new int[this.width * this.height];
+			PixelGrabber pixelgrabber = new PixelGrabber(image, 0, 0, this.width, this.height, this.raster, 0, this.width);
 			pixelgrabber.grabPixels();
 		} catch (Exception _ex) {
 			System.out.println("Error converting jpg");
@@ -43,36 +43,36 @@ public final class Sprite extends Cacheable {
 	
 	public Sprite(String img) {
 		try {
-			Image image = Toolkit.getDefaultToolkit().getImage(location + img + ".png");
+			Image image = Toolkit.getDefaultToolkit().getImage(this.location + img + ".png");
 			ImageIcon sprite = new ImageIcon(image);
-			width = sprite.getIconWidth();
-			height = sprite.getIconHeight();
-			resizeWidth = width;
-			resizeHeight = height;
-			horizontalOffset = 0;
-			verticalOffset = 0;
-			raster = new int[width * height];
-			PixelGrabber pixelgrabber = new PixelGrabber(image, 0, 0, width, height, raster, 0, width);
+			this.width = sprite.getIconWidth();
+			this.height = sprite.getIconHeight();
+			this.resizeWidth = this.width;
+			this.resizeHeight = this.height;
+			this.horizontalOffset = 0;
+			this.verticalOffset = 0;
+			this.raster = new int[this.width * this.height];
+			PixelGrabber pixelgrabber = new PixelGrabber(image, 0, 0, this.width, this.height, this.raster, 0, this.width);
 			pixelgrabber.grabPixels();
 			image = null;
-			setTransparency(255, 0, 255);
+			this.setTransparency(255, 0, 255);
 		} catch (Exception _ex) {
 			System.out.println(_ex);
 		}
 	}
 	
 	private void setTransparency(int transRed, int transGreen, int transBlue) {
-		for (int index = 0; index < raster.length; index++)
-			if (((raster[index] >> 16) & 255) == transRed && ((raster[index] >> 8) & 255) == transGreen && (raster[index] & 255) == transBlue)
-				raster[index] = 0;
+		for (int index = 0; index < this.raster.length; index++)
+			if (((this.raster[index] >> 16) & 255) == transRed && ((this.raster[index] >> 8) & 255) == transGreen && (this.raster[index] & 255) == transBlue)
+				this.raster[index] = 0;
 	}
 	
 	public Sprite(Archive archive, String s, int i) {
 		Buffer buffer = new Buffer(archive.getEntry(s + ".dat"));
 		Buffer buffer_1 = new Buffer(archive.getEntry("index.dat"));
 		buffer_1.position = buffer.readUShort();
-		resizeWidth = buffer_1.readUShort();
-		resizeHeight = buffer_1.readUShort();
+		this.resizeWidth = buffer_1.readUShort();
+		this.resizeHeight = buffer_1.readUShort();
 		int j = buffer_1.readUByte();
 		int ai[] = new int[j];
 		for (int k = 0; k < j - 1; k++) {
@@ -87,23 +87,23 @@ public final class Sprite extends Cacheable {
 			buffer_1.position++;
 		}
 
-		horizontalOffset = buffer_1.readUByte();
-		verticalOffset = buffer_1.readUByte();
-		width = buffer_1.readUShort();
-		height = buffer_1.readUShort();
+		this.horizontalOffset = buffer_1.readUByte();
+		this.verticalOffset = buffer_1.readUByte();
+		this.width = buffer_1.readUShort();
+		this.height = buffer_1.readUShort();
 		int i1 = buffer_1.readUByte();
-		int j1 = width * height;
-		raster = new int[j1];
+		int j1 = this.width * this.height;
+		this.raster = new int[j1];
 		if (i1 == 0) {
 			for (int k1 = 0; k1 < j1; k1++)
-				raster[k1] = ai[buffer.readUByte()];
+				this.raster[k1] = ai[buffer.readUByte()];
 
 			return;
 		}
 		if (i1 == 1) {
-			for (int l1 = 0; l1 < width; l1++) {
-				for (int i2 = 0; i2 < height; i2++)
-					raster[l1 + i2 * width] = ai[buffer.readUByte()];
+			for (int l1 = 0; l1 < this.width; l1++) {
+				for (int i2 = 0; i2 < this.height; i2++)
+					this.raster[l1 + i2 * this.width] = ai[buffer.readUByte()];
 
 			}
 
@@ -111,8 +111,8 @@ public final class Sprite extends Cacheable {
 	}
 
 	public void recolour(int redOffset, int greenOffset, int blueOffset) {
-		for (int i1 = 0; i1 < raster.length; i1++) {
-			int j1 = raster[i1];
+		for (int i1 = 0; i1 < this.raster.length; i1++) {
+			int j1 = this.raster[i1];
 			if (j1 != 0) {
 				int k1 = j1 >> 16 & 0xff;
 				k1 += redOffset;
@@ -132,23 +132,23 @@ public final class Sprite extends Cacheable {
 					i2 = 1;
 				else if (i2 > 255)
 					i2 = 255;
-				raster[i1] = (k1 << 16) + (l1 << 8) + i2;
+				this.raster[i1] = (k1 << 16) + (l1 << 8) + i2;
 			}
 		}
 
 	}
 	
 	public void resize() {
-		int ai[] = new int[resizeWidth * resizeHeight];
-		for (int j = 0; j < height; j++) {
-			System.arraycopy(raster, j * width, ai, j + verticalOffset * resizeWidth + horizontalOffset, width);
+		int ai[] = new int[this.resizeWidth * this.resizeHeight];
+		for (int j = 0; j < this.height; j++) {
+			System.arraycopy(this.raster, j * this.width, ai, j + this.verticalOffset * this.resizeWidth + this.horizontalOffset, this.width);
 		}
 
-		raster = ai;
-		width = resizeWidth;
-		height = resizeHeight;
-		horizontalOffset = 0;
-		verticalOffset = 0;
+		this.raster = ai;
+		this.width = this.resizeWidth;
+		this.height = this.resizeHeight;
+		this.horizontalOffset = 0;
+		this.verticalOffset = 0;
 	}
 
 	public int raster[];

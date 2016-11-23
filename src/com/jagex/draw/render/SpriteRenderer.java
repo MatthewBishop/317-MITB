@@ -1,7 +1,8 @@
-package com.jagex.draw;
+package com.jagex.draw.render;
 
 import com.jagex.cache.graphics.IndexedImage;
 import com.jagex.cache.graphics.Sprite;
+import com.jagex.draw.DrawingArea;
 
 public class SpriteRenderer {
 
@@ -58,7 +59,7 @@ public class SpriteRenderer {
 			i2 += i3;
 		}
 		if (!(l1 <= 0 || k1 <= 0)) {
-			method351(j1, l1, DrawingArea.pixels, 0, sprite.raster, j2, k1, i2, alpha, i1);
+			SpriteRenderer.method351(j1, l1, DrawingArea.pixels, 0, sprite.raster, j2, k1, i2, alpha, i1);
 		}
 	}
 
@@ -66,8 +67,8 @@ public class SpriteRenderer {
 		try {
 			int cx = -x / 2;
 			int cy = -y / 2;
-			int sin = (int) (Math.sin((double) theta / 326.11000000000001D) * 65536D);
-			int cos = (int) (Math.cos((double) theta / 326.11000000000001D) * 65536D);
+			int sin = (int) (Math.sin(theta / 326.11000000000001D) * 65536D);
+			int cos = (int) (Math.cos(theta / 326.11000000000001D) * 65536D);
 			sin = sin * k >> 8;
 			cos = cos * k >> 8;
 			int j3 = (i2 << 16) + (cy * sin + cx * cos);
@@ -167,7 +168,7 @@ public class SpriteRenderer {
 			k1 += k2;
 		}
 		if (!(j1 <= 0 || i1 <= 0)) {
-			method355(sprite.raster, j1, indexedImage.raster, i1, DrawingArea.pixels, 0, k1, k, l1, l);
+			SpriteRenderer.method355(sprite.raster, j1, indexedImage.raster, i1, DrawingArea.pixels, 0, k1, k, l1, l);
 		}
 	}
 
@@ -246,7 +247,7 @@ public class SpriteRenderer {
 			l1 += l2;
 		}
 		if (!(k1 <= 0 || j1 <= 0)) {
-			method349(DrawingArea.pixels, sprite.raster, 0, i1, l, k1, j1, l1, i2);
+			SpriteRenderer.method349(DrawingArea.pixels, sprite.raster, 0, i1, l, k1, j1, l1, i2);
 		}
 	}
 	
@@ -326,7 +327,7 @@ public class SpriteRenderer {
 		}
 		if (k1 <= 0 || j1 <= 0) {
 		} else {
-			method347(l, k1, j1, i2, i1, l1, sprite.raster, DrawingArea.pixels);
+			SpriteRenderer.method347(l, k1, j1, i2, i1, l1, sprite.raster, DrawingArea.pixels);
 		}
 	}
 

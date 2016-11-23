@@ -6,9 +6,10 @@ package com.jagex.cache.def;
 import com.jagex.cache.Archive;
 import com.jagex.cache.graphics.Sprite;
 import com.jagex.draw.DrawingArea;
-import com.jagex.draw.SpriteRenderer;
 import com.jagex.draw.Texture;
+import com.jagex.draw.render.SpriteRenderer;
 import com.jagex.entity.model.Model;
+import com.jagex.entity.model.ModelRenderer;
 import com.jagex.io.Buffer;
 import com.jagex.link.Cache;
 
@@ -17,21 +18,21 @@ public final class ItemDef
 
     public static void nullLoader()
     {
-        mruNodes2 = null;
-        mruNodes1 = null;
-        streamIndices = null;
-        cache = null;
-        buffer = null;
+        ItemDef.mruNodes2 = null;
+        ItemDef.mruNodes1 = null;
+        ItemDef.streamIndices = null;
+        ItemDef.cache = null;
+        ItemDef.buffer = null;
     }
 
     public boolean method192(int j)
     {
-        int k = anInt175;
-        int l = anInt166;
+        int k = this.anInt175;
+        int l = this.anInt166;
         if(j == 1)
         {
-            k = anInt197;
-            l = anInt173;
+            k = this.anInt197;
+            l = this.anInt173;
         }
         if(k == -1)
             return true;
@@ -45,31 +46,31 @@ public final class ItemDef
 
     public static void unpackConfig(Archive archive)
     {
-        buffer = new Buffer(archive.getEntry("obj.dat"));
+        ItemDef.buffer = new Buffer(archive.getEntry("obj.dat"));
         Buffer buffer = new Buffer(archive.getEntry("obj.idx"));
-        totalItems = buffer.readUShort();
-        streamIndices = new int[totalItems];
+        ItemDef.totalItems = buffer.readUShort();
+        ItemDef.streamIndices = new int[ItemDef.totalItems];
         int i = 2;
-        for(int j = 0; j < totalItems; j++)
+        for(int j = 0; j < ItemDef.totalItems; j++)
         {
-            streamIndices[j] = i;
+            ItemDef.streamIndices[j] = i;
             i += buffer.readUShort();
         }
 
-        cache = new ItemDef[10];
+        ItemDef.cache = new ItemDef[10];
         for(int k = 0; k < 10; k++)
-            cache[k] = new ItemDef();
+            ItemDef.cache[k] = new ItemDef();
 
     }
 
     public Model method194(int j)
     {
-        int k = anInt175;
-        int l = anInt166;
+        int k = this.anInt175;
+        int l = this.anInt166;
         if(j == 1)
         {
-            k = anInt197;
-            l = anInt173;
+            k = this.anInt197;
+            l = this.anInt173;
         }
         if(k == -1)
             return null;
@@ -82,10 +83,10 @@ public final class ItemDef
             };
             model = new Model(2, aclass30_sub2_sub4_sub6s);
         }
-        if(modifiedModelColors != null)
+        if(this.modifiedModelColors != null)
         {
-            for(int i1 = 0; i1 < modifiedModelColors.length; i1++)
-                model.method476(modifiedModelColors[i1], originalModelColors[i1]);
+            for(int i1 = 0; i1 < this.modifiedModelColors.length; i1++)
+                model.method476(this.modifiedModelColors[i1], this.originalModelColors[i1]);
 
         }
         return model;
@@ -93,14 +94,14 @@ public final class ItemDef
 
     public boolean method195(int j)
     {
-        int k = anInt165;
-        int l = anInt188;
-        int i1 = anInt185;
+        int k = this.anInt165;
+        int l = this.anInt188;
+        int i1 = this.anInt185;
         if(j == 1)
         {
-            k = anInt200;
-            l = anInt164;
-            i1 = anInt162;
+            k = this.anInt200;
+            l = this.anInt164;
+            i1 = this.anInt162;
         }
         if(k == -1)
             return true;
@@ -116,14 +117,14 @@ public final class ItemDef
 
     public Model method196(int i)
     {
-        int j = anInt165;
-        int k = anInt188;
-        int l = anInt185;
+        int j = this.anInt165;
+        int k = this.anInt188;
+        int l = this.anInt185;
         if(i == 1)
         {
-            j = anInt200;
-            k = anInt164;
-            l = anInt162;
+            j = this.anInt200;
+            k = this.anInt164;
+            l = this.anInt162;
         }
         if(j == -1)
             return null;
@@ -145,14 +146,14 @@ public final class ItemDef
                 };
                 model = new Model(2, aclass30_sub2_sub4_sub6s);
             }
-        if(i == 0 && aByte205 != 0)
-            model.method475(0, aByte205, 0);
-        if(i == 1 && aByte154 != 0)
-            model.method475(0, aByte154, 0);
-        if(modifiedModelColors != null)
+        if(i == 0 && this.aByte205 != 0)
+            model.method475(0, this.aByte205, 0);
+        if(i == 1 && this.aByte154 != 0)
+            model.method475(0, this.aByte154, 0);
+        if(this.modifiedModelColors != null)
         {
-            for(int i1 = 0; i1 < modifiedModelColors.length; i1++)
-                model.method476(modifiedModelColors[i1], originalModelColors[i1]);
+            for(int i1 = 0; i1 < this.modifiedModelColors.length; i1++)
+                model.method476(this.modifiedModelColors[i1], this.originalModelColors[i1]);
 
         }
         return model;
@@ -160,61 +161,61 @@ public final class ItemDef
 
     private void setDefaults()
     {
-        modelID = 0;
-        name = null;
-        description = null;
-        modifiedModelColors = null;
-        originalModelColors = null;
-        modelZoom = 2000;
-        modelRotation1 = 0;
-        modelRotation2 = 0;
-        anInt204 = 0;
-        modelOffset1 = 0;
-        modelOffset2 = 0;
-        stackable = false;
-        value = 1;
-        membersObject = false;
-        groundActions = null;
-        actions = null;
-        anInt165 = -1;
-        anInt188 = -1;
-        aByte205 = 0;
-        anInt200 = -1;
-        anInt164 = -1;
-        aByte154 = 0;
-        anInt185 = -1;
-        anInt162 = -1;
-        anInt175 = -1;
-        anInt166 = -1;
-        anInt197 = -1;
-        anInt173 = -1;
-        stackIDs = null;
-        stackAmounts = null;
-        certID = -1;
-        certTemplateID = -1;
-        anInt167 = 128;
-        anInt192 = 128;
-        anInt191 = 128;
-        anInt196 = 0;
-        anInt184 = 0;
-        team = 0;
+        this.modelID = 0;
+        this.name = null;
+        this.description = null;
+        this.modifiedModelColors = null;
+        this.originalModelColors = null;
+        this.modelZoom = 2000;
+        this.modelRotation1 = 0;
+        this.modelRotation2 = 0;
+        this.anInt204 = 0;
+        this.modelOffset1 = 0;
+        this.modelOffset2 = 0;
+        this.stackable = false;
+        this.value = 1;
+        this.membersObject = false;
+        this.groundActions = null;
+        this.actions = null;
+        this.anInt165 = -1;
+        this.anInt188 = -1;
+        this.aByte205 = 0;
+        this.anInt200 = -1;
+        this.anInt164 = -1;
+        this.aByte154 = 0;
+        this.anInt185 = -1;
+        this.anInt162 = -1;
+        this.anInt175 = -1;
+        this.anInt166 = -1;
+        this.anInt197 = -1;
+        this.anInt173 = -1;
+        this.stackIDs = null;
+        this.stackAmounts = null;
+        this.certID = -1;
+        this.certTemplateID = -1;
+        this.anInt167 = 128;
+        this.anInt192 = 128;
+        this.anInt191 = 128;
+        this.anInt196 = 0;
+        this.anInt184 = 0;
+        this.team = 0;
     }
 
     public static ItemDef forID(int i)
     {
         for(int j = 0; j < 10; j++)
-            if(cache[j].id == i)
-                return cache[j];
+            if(ItemDef.cache[j].id == i)
+                return ItemDef.cache[j];
 
-        cacheIndex = (cacheIndex + 1) % 10;
-        ItemDef itemDef = cache[cacheIndex];
-        buffer.position = streamIndices[i];
+        ItemDef.cacheIndex = (ItemDef.cacheIndex + 1) % 10;
+        ItemDef itemDef = ItemDef.cache[ItemDef.cacheIndex];
+        ItemDef.buffer.position = ItemDef.streamIndices[i];
         itemDef.id = i;
         itemDef.setDefaults();
-        itemDef.readValues(buffer);
+        itemDef.readValues(ItemDef.buffer);
         if(itemDef.certTemplateID != -1)
             itemDef.toNote();
-        if(!isMembers && itemDef.membersObject)
+        if(!ItemDef.isMembers && itemDef.membersObject)
         {
             itemDef.name = "Members Object";
             itemDef.description = "Login to a members' server to use this object.".getBytes();
@@ -227,34 +228,34 @@ public final class ItemDef
 
     private void toNote()
     {
-        ItemDef itemDef = forID(certTemplateID);
-        modelID = itemDef.modelID;
-        modelZoom = itemDef.modelZoom;
-        modelRotation1 = itemDef.modelRotation1;
-        modelRotation2 = itemDef.modelRotation2;
+        ItemDef itemDef = ItemDef.forID(this.certTemplateID);
+        this.modelID = itemDef.modelID;
+        this.modelZoom = itemDef.modelZoom;
+        this.modelRotation1 = itemDef.modelRotation1;
+        this.modelRotation2 = itemDef.modelRotation2;
 
-        anInt204 = itemDef.anInt204;
-        modelOffset1 = itemDef.modelOffset1;
-        modelOffset2 = itemDef.modelOffset2;
-        modifiedModelColors = itemDef.modifiedModelColors;
-        originalModelColors = itemDef.originalModelColors;
-        ItemDef itemDef_1 = forID(certID);
-        name = itemDef_1.name;
-        membersObject = itemDef_1.membersObject;
-        value = itemDef_1.value;
+        this.anInt204 = itemDef.anInt204;
+        this.modelOffset1 = itemDef.modelOffset1;
+        this.modelOffset2 = itemDef.modelOffset2;
+        this.modifiedModelColors = itemDef.modifiedModelColors;
+        this.originalModelColors = itemDef.originalModelColors;
+        ItemDef itemDef_1 = ItemDef.forID(this.certID);
+        this.name = itemDef_1.name;
+        this.membersObject = itemDef_1.membersObject;
+        this.value = itemDef_1.value;
         String s = "a";
         char c = itemDef_1.name.charAt(0);
         if(c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U')
             s = "an";
-        description = ("Swap this note at any bank for " + s + " " + itemDef_1.name + ".").getBytes();
-        stackable = true;
+        this.description = ("Swap this note at any bank for " + s + " " + itemDef_1.name + ".").getBytes();
+        this.stackable = true;
     }
 
     public static Sprite getSprite(int i, int j, int k)
     {
         if(k == 0)
         {
-            Sprite sprite = (Sprite) mruNodes1.get(i);
+            Sprite sprite = (Sprite) ItemDef.mruNodes1.get(i);
             if(sprite != null && sprite.resizeHeight != j && sprite.resizeHeight != -1)
             {
                 sprite.unlink();
@@ -263,7 +264,7 @@ public final class ItemDef
             if(sprite != null)
                 return sprite;
         }
-        ItemDef itemDef = forID(i);
+        ItemDef itemDef = ItemDef.forID(i);
         if(itemDef.stackIDs == null)
             j = -1;
         if(j > 1)
@@ -274,21 +275,21 @@ public final class ItemDef
                     i1 = itemDef.stackIDs[j1];
 
             if(i1 != -1)
-                itemDef = forID(i1);
+                itemDef = ItemDef.forID(i1);
         }
-        Model model = itemDef.method201(1);
+        Model model = itemDef.asGroundStack(1);
         if(model == null)
             return null;
         Sprite sprite = null;
         if(itemDef.certTemplateID != -1)
         {
-            sprite = getSprite(itemDef.certID, 10, -1);
+            sprite = ItemDef.getSprite(itemDef.certID, 10, -1);
             if(sprite == null)
                 return null;
         }
         Sprite sprite2 = new Sprite(32, 32);
-        int k1 = Texture.textureInt1;
-        int l1 = Texture.textureInt2;
+        int k1 = Texture.originViewX;
+        int l1 = Texture.originViewY;
         int ai[] = Texture.anIntArray1472;
         int ai1[] = DrawingArea.pixels;
         int i2 = DrawingArea.width;
@@ -303,12 +304,12 @@ public final class ItemDef
         Texture.method364();
         int k3 = itemDef.modelZoom;
         if(k == -1)
-            k3 = (int)((double)k3 * 1.5D);
+            k3 = (int)(k3 * 1.5D);
         if(k > 0)
-            k3 = (int)((double)k3 * 1.04D);
+            k3 = (int)(k3 * 1.04D);
         int l3 = Texture.anIntArray1470[itemDef.modelRotation1] * k3 >> 16;
         int i4 = Texture.anIntArray1471[itemDef.modelRotation1] * k3 >> 16;
-        model.method482(itemDef.modelRotation2, itemDef.anInt204, itemDef.modelRotation1, itemDef.modelOffset1, l3 + model.modelHeight / 2 + itemDef.modelOffset2, i4 + itemDef.modelOffset2);
+        ModelRenderer.render(model, 0, itemDef.modelRotation2, itemDef.anInt204, itemDef.modelRotation1, itemDef.modelOffset1, l3 + model.modelHeight / 2 + itemDef.modelOffset2, i4 + itemDef.modelOffset2);
         for(int i5 = 31; i5 >= 0; i5--)
         {
             for(int j4 = 31; j4 >= 0; j4--)
@@ -370,11 +371,11 @@ public final class ItemDef
             sprite.resizeHeight = j6;
         }
         if(k == 0)
-            mruNodes1.put(i, sprite2);
+            ItemDef.mruNodes1.put(i, sprite2);
         DrawingArea.initDrawingArea(j2, i2, ai1);
         DrawingArea.setDrawingArea(j3, k2, l2, i3);
-        Texture.textureInt1 = k1;
-        Texture.textureInt2 = l1;
+        Texture.originViewX = k1;
+        Texture.originViewY = l1;
         Texture.anIntArray1472 = ai;
         Texture.aBoolean1464 = true;
         if(itemDef.stackable)
@@ -385,57 +386,57 @@ public final class ItemDef
         return sprite2;
     }
 
-    public Model method201(int i)
+    public Model asGroundStack(int i)
     {
-        if(stackIDs != null && i > 1)
+        if(this.stackIDs != null && i > 1)
         {
             int j = -1;
             for(int k = 0; k < 10; k++)
-                if(i >= stackAmounts[k] && stackAmounts[k] != 0)
-                    j = stackIDs[k];
+                if(i >= this.stackAmounts[k] && this.stackAmounts[k] != 0)
+                    j = this.stackIDs[k];
 
             if(j != -1)
-                return forID(j).method201(1);
+                return ItemDef.forID(j).asGroundStack(1);
         }
-        Model model = (Model) mruNodes2.get(id);
+        Model model = (Model) ItemDef.mruNodes2.get(this.id);
         if(model != null)
             return model;
-        model = Model.method462(modelID);
+        model = Model.method462(this.modelID);
         if(model == null)
             return null;
-        if(anInt167 != 128 || anInt192 != 128 || anInt191 != 128)
-            model.method478(anInt167, anInt191, anInt192);
-        if(modifiedModelColors != null)
+        if(this.anInt167 != 128 || this.anInt192 != 128 || this.anInt191 != 128)
+            model.method478(this.anInt167, this.anInt191, this.anInt192);
+        if(this.modifiedModelColors != null)
         {
-            for(int l = 0; l < modifiedModelColors.length; l++)
-                model.method476(modifiedModelColors[l], originalModelColors[l]);
+            for(int l = 0; l < this.modifiedModelColors.length; l++)
+                model.method476(this.modifiedModelColors[l], this.originalModelColors[l]);
 
         }
-        model.method479(64 + anInt196, 768 + anInt184, -50, -10, -50, true);
+        model.method479(64 + this.anInt196, 768 + this.anInt184, -50, -10, -50, true);
         model.aBoolean1659 = true;
-        mruNodes2.put(id, model);
+        ItemDef.mruNodes2.put(this.id, model);
         return model;
     }
 
     public Model method202(int i)
     {
-        if(stackIDs != null && i > 1)
+        if(this.stackIDs != null && i > 1)
         {
             int j = -1;
             for(int k = 0; k < 10; k++)
-                if(i >= stackAmounts[k] && stackAmounts[k] != 0)
-                    j = stackIDs[k];
+                if(i >= this.stackAmounts[k] && this.stackAmounts[k] != 0)
+                    j = this.stackIDs[k];
 
             if(j != -1)
-                return forID(j).method202(1);
+                return ItemDef.forID(j).method202(1);
         }
-        Model model = Model.method462(modelID);
+        Model model = Model.method462(this.modelID);
         if(model == null)
             return null;
-        if(modifiedModelColors != null)
+        if(this.modifiedModelColors != null)
         {
-            for(int l = 0; l < modifiedModelColors.length; l++)
-                model.method476(modifiedModelColors[l], originalModelColors[l]);
+            for(int l = 0; l < this.modifiedModelColors.length; l++)
+                model.method476(this.modifiedModelColors[l], this.originalModelColors[l]);
 
         }
         return model;
@@ -449,149 +450,149 @@ public final class ItemDef
             if(i == 0)
                 return;
             if(i == 1)
-                modelID = buffer.readUShort();
+                this.modelID = buffer.readUShort();
             else
             if(i == 2)
-                name = buffer.readString();
+                this.name = buffer.readString();
             else
             if(i == 3)
-                description = buffer.readStringBytes();
+                this.description = buffer.readStringBytes();
             else
             if(i == 4)
-                modelZoom = buffer.readUShort();
+                this.modelZoom = buffer.readUShort();
             else
             if(i == 5)
-                modelRotation1 = buffer.readUShort();
+                this.modelRotation1 = buffer.readUShort();
             else
             if(i == 6)
-                modelRotation2 = buffer.readUShort();
+                this.modelRotation2 = buffer.readUShort();
             else
             if(i == 7)
             {
-                modelOffset1 = buffer.readUShort();
-                if(modelOffset1 > 32767)
-                    modelOffset1 -= 0x10000;
+                this.modelOffset1 = buffer.readUShort();
+                if(this.modelOffset1 > 32767)
+                    this.modelOffset1 -= 0x10000;
             } else
             if(i == 8)
             {
-                modelOffset2 = buffer.readUShort();
-                if(modelOffset2 > 32767)
-                    modelOffset2 -= 0x10000;
+                this.modelOffset2 = buffer.readUShort();
+                if(this.modelOffset2 > 32767)
+                    this.modelOffset2 -= 0x10000;
             } else
             if(i == 10)
                 buffer.readUShort();
             else
             if(i == 11)
-                stackable = true;
+                this.stackable = true;
             else
             if(i == 12)
-                value = buffer.readInt();
+                this.value = buffer.readInt();
             else
             if(i == 16)
-                membersObject = true;
+                this.membersObject = true;
             else
             if(i == 23)
             {
-                anInt165 = buffer.readUShort();
-                aByte205 = buffer.readByte();
+                this.anInt165 = buffer.readUShort();
+                this.aByte205 = buffer.readByte();
             } else
             if(i == 24)
-                anInt188 = buffer.readUShort();
+                this.anInt188 = buffer.readUShort();
             else
             if(i == 25)
             {
-                anInt200 = buffer.readUShort();
-                aByte154 = buffer.readByte();
+                this.anInt200 = buffer.readUShort();
+                this.aByte154 = buffer.readByte();
             } else
             if(i == 26)
-                anInt164 = buffer.readUShort();
+                this.anInt164 = buffer.readUShort();
             else
             if(i >= 30 && i < 35)
             {
-                if(groundActions == null)
-                    groundActions = new String[5];
-                groundActions[i - 30] = buffer.readString();
-                if(groundActions[i - 30].equalsIgnoreCase("hidden"))
-                    groundActions[i - 30] = null;
+                if(this.groundActions == null)
+                    this.groundActions = new String[5];
+                this.groundActions[i - 30] = buffer.readString();
+                if(this.groundActions[i - 30].equalsIgnoreCase("hidden"))
+                    this.groundActions[i - 30] = null;
             } else
             if(i >= 35 && i < 40)
             {
-                if(actions == null)
-                    actions = new String[5];
-                actions[i - 35] = buffer.readString();
+                if(this.actions == null)
+                    this.actions = new String[5];
+                this.actions[i - 35] = buffer.readString();
             } else
             if(i == 40)
             {
                 int j = buffer.readUByte();
-                modifiedModelColors = new int[j];
-                originalModelColors = new int[j];
+                this.modifiedModelColors = new int[j];
+                this.originalModelColors = new int[j];
                 for(int k = 0; k < j; k++)
                 {
-                    modifiedModelColors[k] = buffer.readUShort();
-                    originalModelColors[k] = buffer.readUShort();
+                    this.modifiedModelColors[k] = buffer.readUShort();
+                    this.originalModelColors[k] = buffer.readUShort();
                 }
 
             } else
             if(i == 78)
-                anInt185 = buffer.readUShort();
+                this.anInt185 = buffer.readUShort();
             else
             if(i == 79)
-                anInt162 = buffer.readUShort();
+                this.anInt162 = buffer.readUShort();
             else
             if(i == 90)
-                anInt175 = buffer.readUShort();
+                this.anInt175 = buffer.readUShort();
             else
             if(i == 91)
-                anInt197 = buffer.readUShort();
+                this.anInt197 = buffer.readUShort();
             else
             if(i == 92)
-                anInt166 = buffer.readUShort();
+                this.anInt166 = buffer.readUShort();
             else
             if(i == 93)
-                anInt173 = buffer.readUShort();
+                this.anInt173 = buffer.readUShort();
             else
             if(i == 95)
-                anInt204 = buffer.readUShort();
+                this.anInt204 = buffer.readUShort();
             else
             if(i == 97)
-                certID = buffer.readUShort();
+                this.certID = buffer.readUShort();
             else
             if(i == 98)
-                certTemplateID = buffer.readUShort();
+                this.certTemplateID = buffer.readUShort();
             else
             if(i >= 100 && i < 110)
             {
-                if(stackIDs == null)
+                if(this.stackIDs == null)
                 {
-                    stackIDs = new int[10];
-                    stackAmounts = new int[10];
+                    this.stackIDs = new int[10];
+                    this.stackAmounts = new int[10];
                 }
-                stackIDs[i - 100] = buffer.readUShort();
-                stackAmounts[i - 100] = buffer.readUShort();
+                this.stackIDs[i - 100] = buffer.readUShort();
+                this.stackAmounts[i - 100] = buffer.readUShort();
             } else
             if(i == 110)
-                anInt167 = buffer.readUShort();
+                this.anInt167 = buffer.readUShort();
             else
             if(i == 111)
-                anInt192 = buffer.readUShort();
+                this.anInt192 = buffer.readUShort();
             else
             if(i == 112)
-                anInt191 = buffer.readUShort();
+                this.anInt191 = buffer.readUShort();
             else
             if(i == 113)
-                anInt196 = buffer.readByte();
+                this.anInt196 = buffer.readByte();
             else
             if(i == 114)
-                anInt184 = buffer.readByte() * 5;
+                this.anInt184 = buffer.readByte() * 5;
             else
             if(i == 115)
-                team = buffer.readUByte();
+                this.team = buffer.readUByte();
         } while(true);
     }
 
     private ItemDef()
     {
-        id = -1;
+        this.id = -1;
     }
 
     private byte aByte154;

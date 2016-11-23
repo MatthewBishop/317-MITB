@@ -9,46 +9,46 @@ package com.jagex.link;
 public final class Cache {
 
 	public Cache(int i) {
-		empty = new Cacheable();
-		history = new Queue();
-		initialCount = i;
-		unused = i;
-		table = new HashTable();
+		this.empty = new Cacheable();
+		this.history = new Queue();
+		this.initialCount = i;
+		this.unused = i;
+		this.table = new HashTable();
 	}
 
 	public Cacheable get(long l) {
-		Cacheable cacheable = (Cacheable) table.get(l);
+		Cacheable cacheable = (Cacheable) this.table.get(l);
 		if (cacheable != null) {
-			history.push(cacheable);
+			this.history.push(cacheable);
 		}
 		return cacheable;
 	}
 
 	public void put(long l, Cacheable cacheable) {
-		if (unused == 0) {
-			Cacheable nodeSub_1 = history.pop();
+		if (this.unused == 0) {
+			Cacheable nodeSub_1 = this.history.pop();
 			nodeSub_1.unlink();
 			nodeSub_1.unlinkCacheable();
-			if (nodeSub_1 == empty) {
-				Cacheable nodeSub_2 = history.pop();
+			if (nodeSub_1 == this.empty) {
+				Cacheable nodeSub_2 = this.history.pop();
 				nodeSub_2.unlink();
 				nodeSub_2.unlinkCacheable();
 			}
 		} else {
-			unused--;
+			this.unused--;
 		}
-		table.put(l, cacheable);
-		history.push(cacheable);
+		this.table.put(l, cacheable);
+		this.history.push(cacheable);
 	}
 
 	public void clear() {
 		do {
-			Cacheable cacheable = history.pop();
+			Cacheable cacheable = this.history.pop();
 			if (cacheable != null) {
 				cacheable.unlink();
 				cacheable.unlinkCacheable();
 			} else {
-				unused = initialCount;
+				this.unused = this.initialCount;
 				return;
 			}
 		} while (true);

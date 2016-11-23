@@ -10,48 +10,48 @@ final class Class29
 
     public void method325(Buffer buffer)
     {
-        anInt540 = buffer.readUByte();
-            anInt538 = buffer.readInt();
-            anInt539 = buffer.readInt();
-            method326(buffer);
+        this.anInt540 = buffer.readUByte();
+            this.anInt538 = buffer.readInt();
+            this.anInt539 = buffer.readInt();
+            this.method326(buffer);
     }
 
     public void method326(Buffer buffer)
     {
-        anInt535 = buffer.readUByte();
-        anIntArray536 = new int[anInt535];
-        anIntArray537 = new int[anInt535];
-        for(int i = 0; i < anInt535; i++)
+        this.anInt535 = buffer.readUByte();
+        this.anIntArray536 = new int[this.anInt535];
+        this.anIntArray537 = new int[this.anInt535];
+        for(int i = 0; i < this.anInt535; i++)
         {
-            anIntArray536[i] = buffer.readUShort();
-            anIntArray537[i] = buffer.readUShort();
+            this.anIntArray536[i] = buffer.readUShort();
+            this.anIntArray537[i] = buffer.readUShort();
         }
 
     }
 
     void resetValues()
     {
-        anInt541 = 0;
-        anInt542 = 0;
-        anInt543 = 0;
-        anInt544 = 0;
-        anInt545 = 0;
+        this.anInt541 = 0;
+        this.anInt542 = 0;
+        this.anInt543 = 0;
+        this.anInt544 = 0;
+        this.anInt545 = 0;
     }
 
     int method328(int i)
     {
-        if(anInt545 >= anInt541)
+        if(this.anInt545 >= this.anInt541)
         {
-            anInt544 = anIntArray537[anInt542++] << 15;
-            if(anInt542 >= anInt535)
-                anInt542 = anInt535 - 1;
-            anInt541 = (int)(((double)anIntArray536[anInt542] / 65536D) * (double)i);
-            if(anInt541 > anInt545)
-                anInt543 = ((anIntArray537[anInt542] << 15) - anInt544) / (anInt541 - anInt545);
+            this.anInt544 = this.anIntArray537[this.anInt542++] << 15;
+            if(this.anInt542 >= this.anInt535)
+                this.anInt542 = this.anInt535 - 1;
+            this.anInt541 = (int)((this.anIntArray536[this.anInt542] / 65536D) * i);
+            if(this.anInt541 > this.anInt545)
+                this.anInt543 = ((this.anIntArray537[this.anInt542] << 15) - this.anInt544) / (this.anInt541 - this.anInt545);
         }
-        anInt544 += anInt543;
-        anInt545++;
-        return anInt544 - anInt543 >> 15;
+        this.anInt544 += this.anInt543;
+        this.anInt545++;
+        return this.anInt544 - this.anInt543 >> 15;
     }
 
     public Class29()

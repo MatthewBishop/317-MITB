@@ -17,17 +17,17 @@ public final class RSImageProducer
 	public RSImageProducer(int canvasWidth, int canvasHeight) {
 		this.canvasWidth = canvasWidth;
 		this.canvasHeight = canvasHeight;
-		bufferedImage = new BufferedImage(canvasWidth, canvasHeight, BufferedImage.TYPE_INT_RGB);
-		canvasRaster = ((DataBufferInt) bufferedImage.getRaster().getDataBuffer()).getData();
-		initDrawingArea();
+		this.bufferedImage = new BufferedImage(canvasWidth, canvasHeight, BufferedImage.TYPE_INT_RGB);
+		this.canvasRaster = ((DataBufferInt) this.bufferedImage.getRaster().getDataBuffer()).getData();
+		this.initDrawingArea();
 	}
 
 	public void drawGraphics(int y, Graphics graphics, int x) {
-		graphics.drawImage(bufferedImage, x, y, null);
+		graphics.drawImage(this.bufferedImage, x, y, null);
 	}
 
 	public void initDrawingArea() {
-		DrawingArea.initDrawingArea(canvasHeight, canvasWidth, canvasRaster);
+		DrawingArea.initDrawingArea(this.canvasHeight, this.canvasWidth, this.canvasRaster);
 	}
   /*  public RSImageProducer(int i, int j, Component component)
     {

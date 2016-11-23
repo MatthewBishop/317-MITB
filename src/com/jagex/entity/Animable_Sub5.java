@@ -11,84 +11,85 @@ import com.jagex.entity.model.Model;
 
 public final class Animable_Sub5 extends Animable {
 
-    public Model getRotatedModel()
+    @Override
+	public Model getModel()
     {
         int j = -1;
-        if(aAnimation_1607 != null)
+        if(this.aAnimation_1607 != null)
         {
-            int k = Client.loopCycle - anInt1608;
-            if(k > 100 && aAnimation_1607.anInt356 > 0)
+            int k = Client.loopCycle - this.anInt1608;
+            if(k > 100 && this.aAnimation_1607.loopOffset > 0)
                 k = 100;
-            while(k > aAnimation_1607.duration(anInt1599))
+            while(k > this.aAnimation_1607.duration(this.anInt1599))
             {
-                k -= aAnimation_1607.duration(anInt1599);
-                anInt1599++;
-                if(anInt1599 < aAnimation_1607.anInt352)
+                k -= this.aAnimation_1607.duration(this.anInt1599);
+                this.anInt1599++;
+                if(this.anInt1599 < this.aAnimation_1607.frameCount)
                     continue;
-                anInt1599 -= aAnimation_1607.anInt356;
-                if(anInt1599 >= 0 && anInt1599 < aAnimation_1607.anInt352)
+                this.anInt1599 -= this.aAnimation_1607.loopOffset;
+                if(this.anInt1599 >= 0 && this.anInt1599 < this.aAnimation_1607.frameCount)
                     continue;
-                aAnimation_1607 = null;
+                this.aAnimation_1607 = null;
                 break;
             }
-            anInt1608 = Client.loopCycle - k;
-            if(aAnimation_1607 != null)
-                j = aAnimation_1607.anIntArray353[anInt1599];
+            this.anInt1608 = Client.loopCycle - k;
+            if(this.aAnimation_1607 != null)
+                j = this.aAnimation_1607.primaryFrames[this.anInt1599];
         }
         ObjectDef class46;
-        if(anIntArray1600 != null)
-            class46 = method457();
+        if(this.anIntArray1600 != null)
+            class46 = this.method457();
         else
-            class46 = ObjectDef.forID(anInt1610);
+            class46 = ObjectDef.forID(this.anInt1610);
         if(class46 == null)
         {
             return null;
         } else
         {
-            return class46.method578(anInt1611, anInt1612, anInt1603, anInt1604, anInt1605, anInt1606, j);
+            return class46.method578(this.anInt1611, this.anInt1612, this.anInt1603, this.anInt1604, this.anInt1605, this.anInt1606, j);
         }
     }
 
     private ObjectDef method457()
     {
         int i = -1;
-        if(anInt1601 != -1)
+        if(this.anInt1601 != -1)
         {
-            i = VariableBits.get(anInt1601, clientInstance.variousSettings);
+            i = VariableBits.get(this.anInt1601, Animable_Sub5.clientInstance.variousSettings);
         } else
-        if(anInt1602 != -1)
-            i = clientInstance.variousSettings[anInt1602];
-        if(i < 0 || i >= anIntArray1600.length || anIntArray1600[i] == -1)
+        if(this.anInt1602 != -1)
+            i = Animable_Sub5.clientInstance.variousSettings[this.anInt1602];
+        if(i < 0 || i >= this.anIntArray1600.length || this.anIntArray1600[i] == -1)
             return null;
         else
-            return ObjectDef.forID(anIntArray1600[i]);
+            return ObjectDef.forID(this.anIntArray1600[i]);
     }
 
     public Animable_Sub5(int i, int j, int k, int l, int i1, int j1,
                          int k1, int l1, boolean flag)
     {
-        anInt1610 = i;
-        anInt1611 = k;
-        anInt1612 = j;
-        anInt1603 = j1;
-        anInt1604 = l;
-        anInt1605 = i1;
-        anInt1606 = k1;
+        this.anInt1610 = i;
+        this.anInt1611 = k;
+        this.anInt1612 = j;
+        this.anInt1603 = j1;
+        this.anInt1604 = l;
+        this.anInt1605 = i1;
+        this.anInt1606 = k1;
         if(l1 != -1)
         {
-            aAnimation_1607 = Animation.animations[l1];
-            anInt1599 = 0;
-            anInt1608 = Client.loopCycle;
-            if(flag && aAnimation_1607.anInt356 != -1)
+            this.aAnimation_1607 = Animation.animations[l1];
+            this.anInt1599 = 0;
+            this.anInt1608 = Client.loopCycle;
+            if(flag && this.aAnimation_1607.loopOffset != -1)
             {
-                anInt1599 = (int)(Math.random() * (double) aAnimation_1607.anInt352);
-                anInt1608 -= (int)(Math.random() * (double) aAnimation_1607.duration(anInt1599));
+                this.anInt1599 = (int)(Math.random() * this.aAnimation_1607.frameCount);
+                this.anInt1608 -= (int)(Math.random() * this.aAnimation_1607.duration(this.anInt1599));
             }
         }
-        ObjectDef class46 = ObjectDef.forID(anInt1610);
-        anInt1601 = class46.anInt774;
-        anInt1602 = class46.anInt749;
-        anIntArray1600 = class46.childrenIDs;
+        ObjectDef class46 = ObjectDef.forID(this.anInt1610);
+        this.anInt1601 = class46.anInt774;
+        this.anInt1602 = class46.anInt749;
+        this.anIntArray1600 = class46.childrenIDs;
     }
 
     private int anInt1599;

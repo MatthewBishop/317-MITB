@@ -12,14 +12,14 @@ public final class Graphic {
     {
         Buffer buffer = new Buffer(archive.getEntry("spotanim.dat"));
         int length = buffer.readUShort();
-        if(graphics == null)
-            graphics = new Graphic[length];
+        if(Graphic.graphics == null)
+            Graphic.graphics = new Graphic[length];
         for(int j = 0; j < length; j++)
         {
-            if(graphics[j] == null)
-                graphics[j] = new Graphic();
-            graphics[j].id = j;
-            graphics[j].readValues(buffer);
+            if(Graphic.graphics[j] == null)
+                Graphic.graphics[j] = new Graphic();
+            Graphic.graphics[j].id = j;
+            Graphic.graphics[j].readValues(buffer);
         }
 
     }
@@ -32,34 +32,34 @@ public final class Graphic {
             if(i == 0)
                 return;
             if(i == 1)
-                model = buffer.readUShort();
+                this.model = buffer.readUShort();
             else
             if(i == 2)
             {
-                animationId = buffer.readUShort();
+                this.animationId = buffer.readUShort();
                 if(Animation.animations != null)
-                    animation = Animation.animations[animationId];
+                    this.animation = Animation.animations[this.animationId];
             } else
             if(i == 4)
-                breadthScale = buffer.readUShort();
+                this.breadthScale = buffer.readUShort();
             else
             if(i == 5)
-                depthScale = buffer.readUShort();
+                this.depthScale = buffer.readUShort();
             else
             if(i == 6)
-                orientation = buffer.readUShort();
+                this.orientation = buffer.readUShort();
             else
             if(i == 7)
-                ambience = buffer.readUByte();
+                this.ambience = buffer.readUByte();
             else
             if(i == 8)
-                modelShadow = buffer.readUByte();
+                this.modelShadow = buffer.readUByte();
             else
             if(i >= 40 && i < 50)
-                originalColours[i - 40] = buffer.readUShort();
+                this.originalColours[i - 40] = buffer.readUShort();
             else
             if(i >= 50 && i < 60)
-                replacementColours[i - 50] = buffer.readUShort();
+                this.replacementColours[i - 50] = buffer.readUShort();
             else
                 System.out.println("Error unrecognised spotanim config code: " + i);
         } while(true);

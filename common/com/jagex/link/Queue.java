@@ -7,25 +7,25 @@ public final class Queue {
 
     public Queue()
     {
-        head = new Cacheable();
-        head.nextCacheable = head;
-        head.previousCacheable = head;
+        this.head = new Cacheable();
+        this.head.nextCacheable = this.head;
+        this.head.previousCacheable = this.head;
     }
 
     public void push(Cacheable cacheable)
     {
         if(cacheable.previousCacheable != null)
             cacheable.unlinkCacheable();
-        cacheable.previousCacheable = head.previousCacheable;
-        cacheable.nextCacheable = head;
+        cacheable.previousCacheable = this.head.previousCacheable;
+        cacheable.nextCacheable = this.head;
         cacheable.previousCacheable.nextCacheable = cacheable;
         cacheable.nextCacheable.previousCacheable = cacheable;
     }
 
     public Cacheable pop()
     {
-        Cacheable cacheable = head.nextCacheable;
-        if(cacheable == head)
+        Cacheable cacheable = this.head.nextCacheable;
+        if(cacheable == this.head)
         {
             return null;
         } else
@@ -37,28 +37,28 @@ public final class Queue {
 
     public Cacheable peek()
     {
-        Cacheable cacheable = head.nextCacheable;
-        if(cacheable == head)
+        Cacheable cacheable = this.head.nextCacheable;
+        if(cacheable == this.head)
         {
-            current = null;
+            this.current = null;
             return null;
         } else
         {
-            current = cacheable.nextCacheable;
+            this.current = cacheable.nextCacheable;
             return cacheable;
         }
     }
 
     public Cacheable getNext()
     {
-        Cacheable cacheable = current;
-        if(cacheable == head)
+        Cacheable cacheable = this.current;
+        if(cacheable == this.head)
         {
-            current = null;
+            this.current = null;
             return null;
         } else
         {
-            current = cacheable.nextCacheable;
+            this.current = cacheable.nextCacheable;
             return cacheable;
         }
     }
@@ -66,7 +66,7 @@ public final class Queue {
     public int size()
     {
         int i = 0;
-        for(Cacheable cacheable = head.nextCacheable; cacheable != head; cacheable = cacheable.nextCacheable)
+        for(Cacheable cacheable = this.head.nextCacheable; cacheable != this.head; cacheable = cacheable.nextCacheable)
             i++;
 
         return i;

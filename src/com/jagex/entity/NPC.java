@@ -16,23 +16,24 @@ public final class NPC extends Entity
     {
         if(super.anim >= 0 && super.anInt1529 == 0)
         {
-            int k = Animation.animations[super.anim].anIntArray353[super.anInt1527];
+            int k = Animation.animations[super.anim].primaryFrames[super.anInt1527];
             int i1 = -1;
             if(super.anInt1517 >= 0 && super.anInt1517 != super.anInt1511)
-                i1 = Animation.animations[super.anInt1517].anIntArray353[super.anInt1518];
-            return desc.method164(i1, k, Animation.animations[super.anim].anIntArray357);
+                i1 = Animation.animations[super.anInt1517].primaryFrames[super.anInt1518];
+            return this.desc.method164(i1, k, Animation.animations[super.anim].interleaveOrder);
         }
         int l = -1;
         if(super.anInt1517 >= 0)
-            l = Animation.animations[super.anInt1517].anIntArray353[super.anInt1518];
-        return desc.method164(-1, l, null);
+            l = Animation.animations[super.anInt1517].primaryFrames[super.anInt1518];
+        return this.desc.method164(-1, l, null);
     }
 
-    public Model getRotatedModel()
+    @Override
+	public Model getModel()
     {
-        if(desc == null)
+        if(this.desc == null)
             return null;
-        Model model = method450();
+        Model model = this.method450();
         if(model == null)
             return null;
         super.height = model.modelHeight;
@@ -42,7 +43,7 @@ public final class NPC extends Entity
             Model model_1 = SpotAnimModel.getModel(graphic);
             if(model_1 != null)
             {
-                int j = graphic.animation.anIntArray353[super.anInt1521];
+                int j = graphic.animation.primaryFrames[super.anInt1521];
                 Model model_2 = new Model(true, Frame.isInvalid(j), false, model_1);
                 model_2.method475(0, -super.anInt1524, 0);
                 model_2.method469();
@@ -58,14 +59,15 @@ public final class NPC extends Entity
                 model = new Model(aModel);
             }
         }
-        if(desc.aByte68 == 1)
+        if(this.desc.aByte68 == 1)
             model.aBoolean1659 = true;
         return model;
     }
 
-    public boolean isVisible()
+    @Override
+	public boolean isVisible()
     {
-        return desc != null;
+        return this.desc != null;
     }
 
     public NPC()

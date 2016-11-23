@@ -3,9 +3,11 @@ package com.jagex.cache.graphics;
 // Jad home page: http://www.kpdus.com/jad.html
 // Decompiler options: packimports(3) 
 
+import com.jagex.Constants;
 import com.jagex.cache.Archive;
 import com.jagex.io.Buffer;
 import com.jagex.link.Cacheable;
+import com.jagex.util.FileOperations;
 
 public final class IndexedImage extends Cacheable {
 
@@ -14,12 +16,12 @@ public final class IndexedImage extends Cacheable {
         Buffer buffer = new Buffer(archive.getEntry(s + ".dat"));
         Buffer buffer_1 = new Buffer(archive.getEntry("index.dat"));
         buffer_1.position = buffer.readUShort();
-        resizeWidth = buffer_1.readUShort();
-        resizeHeight = buffer_1.readUShort();
+        this.resizeWidth = buffer_1.readUShort();
+        this.resizeHeight = buffer_1.readUShort();
         int j = buffer_1.readUByte();
-        palette = new int[j];
+        this.palette = new int[j];
         for(int k = 0; k < j - 1; k++)
-            palette[k + 1] = buffer_1.readUTriByte();
+            this.palette[k + 1] = buffer_1.readUTriByte();
 
         for(int l = 0; l < i; l++)
         {
@@ -28,128 +30,175 @@ public final class IndexedImage extends Cacheable {
             buffer_1.position++;
         }
 
-        drawOffsetX = buffer_1.readUByte();
-        drawOffsetY = buffer_1.readUByte();
-        width = buffer_1.readUShort();
-        height = buffer_1.readUShort();
+        this.drawOffsetX = buffer_1.readUByte();
+        this.drawOffsetY = buffer_1.readUByte();
+        this.width = buffer_1.readUShort();
+        this.height = buffer_1.readUShort();
         int i1 = buffer_1.readUByte();
-        int j1 = width * height;
-        raster = new byte[j1];
+        int j1 = this.width * this.height;
+        this.raster = new byte[j1];
         if(i1 == 0)
         {
             for(int k1 = 0; k1 < j1; k1++)
-                raster[k1] = buffer.readByte();
+                this.raster[k1] = buffer.readByte();
 
             return;
         }
         if(i1 == 1)
         {
-            for(int l1 = 0; l1 < width; l1++)
+            for(int l1 = 0; l1 < this.width; l1++)
             {
-                for(int i2 = 0; i2 < height; i2++)
-                    raster[l1 + i2 * width] = buffer.readByte();
+                for(int i2 = 0; i2 < this.height; i2++)
+                    this.raster[l1 + i2 * this.width] = buffer.readByte();
 
             }
 
         }
     }
 
+	public String location = Constants.findcachedir() + "Indexed/";
+	
+    public IndexedImage(String s, int i)
+    {
+        Buffer buffer = new Buffer(FileOperations.ReadFile(this.location + s + ".dat"));
+        Buffer buffer_1 = new Buffer(FileOperations.ReadFile(this.location + "index.dat"));
+        buffer_1.position = buffer.readUShort();
+        this.resizeWidth = buffer_1.readUShort();
+        this.resizeHeight = buffer_1.readUShort();
+        int j = buffer_1.readUByte();
+        this.palette = new int[j];
+        for(int k = 0; k < j - 1; k++)
+            this.palette[k + 1] = buffer_1.readUTriByte();
+
+        for(int l = 0; l < i; l++)
+        {
+            buffer_1.position += 2;
+            buffer.position += buffer_1.readUShort() * buffer_1.readUShort();
+            buffer_1.position++;
+        }
+
+        this.drawOffsetX = buffer_1.readUByte();
+        this.drawOffsetY = buffer_1.readUByte();
+        this.width = buffer_1.readUShort();
+        this.height = buffer_1.readUShort();
+        int i1 = buffer_1.readUByte();
+        int j1 = this.width * this.height;
+        this.raster = new byte[j1];
+        if(i1 == 0)
+        {
+            for(int k1 = 0; k1 < j1; k1++)
+                this.raster[k1] = buffer.readByte();
+
+            return;
+        }
+        if(i1 == 1)
+        {
+            for(int l1 = 0; l1 < this.width; l1++)
+            {
+                for(int i2 = 0; i2 < this.height; i2++)
+                    this.raster[l1 + i2 * this.width] = buffer.readByte();
+
+            }
+
+        }
+    }
+    
     public void downscale()
     {
-        resizeWidth /= 2;
-        resizeHeight /= 2;
-        byte abyte0[] = new byte[resizeWidth * resizeHeight];
+        this.resizeWidth /= 2;
+        this.resizeHeight /= 2;
+        byte abyte0[] = new byte[this.resizeWidth * this.resizeHeight];
         int i = 0;
-        for(int j = 0; j < height; j++)
+        for(int j = 0; j < this.height; j++)
         {
-            for(int k = 0; k < width; k++)
-                abyte0[(k + drawOffsetX >> 1) + (j + drawOffsetY >> 1) * resizeWidth] = raster[i++];
+            for(int k = 0; k < this.width; k++)
+                abyte0[(k + this.drawOffsetX >> 1) + (j + this.drawOffsetY >> 1) * this.resizeWidth] = this.raster[i++];
 
         }
 
-        raster = abyte0;
-        width = resizeWidth;
-        height = resizeHeight;
-        drawOffsetX = 0;
-            drawOffsetY = 0;
+        this.raster = abyte0;
+        this.width = this.resizeWidth;
+        this.height = this.resizeHeight;
+        this.drawOffsetX = 0;
+            this.drawOffsetY = 0;
     }
 
     public void resize()
     {
-        if(width == resizeWidth && height == resizeHeight)
+        if(this.width == this.resizeWidth && this.height == this.resizeHeight)
             return;
-        byte abyte0[] = new byte[resizeWidth * resizeHeight];
+        byte abyte0[] = new byte[this.resizeWidth * this.resizeHeight];
         int i = 0;
-        for(int j = 0; j < height; j++)
+        for(int j = 0; j < this.height; j++)
         {
-            for(int k = 0; k < width; k++)
-                abyte0[k + drawOffsetX + (j + drawOffsetY) * resizeWidth] = raster[i++];
+            for(int k = 0; k < this.width; k++)
+                abyte0[k + this.drawOffsetX + (j + this.drawOffsetY) * this.resizeWidth] = this.raster[i++];
 
         }
 
-        raster = abyte0;
-        width = resizeWidth;
-        height = resizeHeight;
-        drawOffsetX = 0;
-        drawOffsetY = 0;
+        this.raster = abyte0;
+        this.width = this.resizeWidth;
+        this.height = this.resizeHeight;
+        this.drawOffsetX = 0;
+        this.drawOffsetY = 0;
     }
 
     public void flipHorizontally()
     {
-        byte abyte0[] = new byte[width * height];
+        byte abyte0[] = new byte[this.width * this.height];
         int j = 0;
-        for(int k = 0; k < height; k++)
+        for(int k = 0; k < this.height; k++)
         {
-            for(int l = width - 1; l >= 0; l--)
-                abyte0[j++] = raster[l + k * width];
+            for(int l = this.width - 1; l >= 0; l--)
+                abyte0[j++] = this.raster[l + k * this.width];
 
         }
 
-        raster = abyte0;
-        drawOffsetX = resizeWidth - width - drawOffsetX;
+        this.raster = abyte0;
+        this.drawOffsetX = this.resizeWidth - this.width - this.drawOffsetX;
     }
 
     public void flipVertically()
     {
-        byte abyte0[] = new byte[width * height];
+        byte abyte0[] = new byte[this.width * this.height];
         int i = 0;
-        for(int j = height - 1; j >= 0; j--)
+        for(int j = this.height - 1; j >= 0; j--)
         {
-            for(int k = 0; k < width; k++)
-                abyte0[i++] = raster[k + j * width];
+            for(int k = 0; k < this.width; k++)
+                abyte0[i++] = this.raster[k + j * this.width];
 
         }
 
-        raster = abyte0;
-        drawOffsetY = resizeHeight - height - drawOffsetY;
+        this.raster = abyte0;
+        this.drawOffsetY = this.resizeHeight - this.height - this.drawOffsetY;
     }
 
     public void offsetColour(int redOffset, int greenOffset, int blueOffset)
     {
-        for(int i1 = 0; i1 < palette.length; i1++)
+        for(int i1 = 0; i1 < this.palette.length; i1++)
         {
-            int j1 = palette[i1] >> 16 & 0xff;
+            int j1 = this.palette[i1] >> 16 & 0xff;
             j1 += redOffset;
             if(j1 < 0)
                 j1 = 0;
             else
             if(j1 > 255)
                 j1 = 255;
-            int k1 = palette[i1] >> 8 & 0xff;
+            int k1 = this.palette[i1] >> 8 & 0xff;
             k1 += greenOffset;
             if(k1 < 0)
                 k1 = 0;
             else
             if(k1 > 255)
                 k1 = 255;
-            int l1 = palette[i1] & 0xff;
+            int l1 = this.palette[i1] & 0xff;
             l1 += blueOffset;
             if(l1 < 0)
                 l1 = 0;
             else
             if(l1 > 255)
                 l1 = 255;
-            palette[i1] = (j1 << 16) + (k1 << 8) + l1;
+            this.palette[i1] = (j1 << 16) + (k1 << 8) + l1;
         }
     }
 

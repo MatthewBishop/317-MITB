@@ -14,30 +14,30 @@ public final class Censor {
         Buffer buffer_1 = new Buffer(archive.getEntry("badenc.txt"));
         Buffer buffer_2 = new Buffer(archive.getEntry("domainenc.txt"));
         Buffer buffer_3 = new Buffer(archive.getEntry("tldlist.txt"));
-        readValues(buffer, buffer_1, buffer_2, buffer_3);
+        Censor.readValues(buffer, buffer_1, buffer_2, buffer_3);
     }
 
     private static void readValues(Buffer buffer, Buffer buffer_1, Buffer buffer_2, Buffer buffer_3)
     {
-        readBadEnc(buffer_1);
-        readDomainEnc(buffer_2);
-        readFragmentsEnc(buffer);
-        readTldList(buffer_3);
+        Censor.readBadEnc(buffer_1);
+        Censor.readDomainEnc(buffer_2);
+        Censor.readFragmentsEnc(buffer);
+        Censor.readTldList(buffer_3);
     }
 
     private static void readTldList(Buffer buffer)
     {
         int i = buffer.readInt();
-        aCharArrayArray624 = new char[i][];
-        anIntArray625 = new int[i];
+        Censor.aCharArrayArray624 = new char[i][];
+        Censor.anIntArray625 = new int[i];
         for(int j = 0; j < i; j++)
         {
-            anIntArray625[j] = buffer.readUByte();
+            Censor.anIntArray625[j] = buffer.readUByte();
             char ac[] = new char[buffer.readUByte()];
             for(int k = 0; k < ac.length; k++)
                 ac[k] = (char) buffer.readUByte();
 
-            aCharArrayArray624[j] = ac;
+            Censor.aCharArrayArray624[j] = ac;
         }
 
     }
@@ -45,23 +45,23 @@ public final class Censor {
     private static void readBadEnc(Buffer buffer)
     {
         int j = buffer.readInt();
-        aCharArrayArray621 = new char[j][];
-        aByteArrayArrayArray622 = new byte[j][][];
-        method493(buffer, aCharArrayArray621, aByteArrayArrayArray622);
+        Censor.aCharArrayArray621 = new char[j][];
+        Censor.aByteArrayArrayArray622 = new byte[j][][];
+        Censor.method493(buffer, Censor.aCharArrayArray621, Censor.aByteArrayArrayArray622);
     }
 
     private static void readDomainEnc(Buffer buffer)
     {
         int i = buffer.readInt();
-        aCharArrayArray623 = new char[i][];
-            method494(aCharArrayArray623, buffer);
+        Censor.aCharArrayArray623 = new char[i][];
+            Censor.method494(Censor.aCharArrayArray623, buffer);
     }
 
     private static void readFragmentsEnc(Buffer buffer)
     {
-        anIntArray620 = new int[buffer.readInt()];
-        for(int i = 0; i < anIntArray620.length; i++)
-            anIntArray620[i] = buffer.readUShort();
+        Censor.anIntArray620 = new int[buffer.readInt()];
+        for(int i = 0; i < Censor.anIntArray620.length; i++)
+            Censor.anIntArray620[i] = buffer.readUShort();
     }
 
     private static void method493(Buffer buffer, char ac[][], byte abyte0[][][])
@@ -104,7 +104,7 @@ public final class Censor {
         int i = 0;
         for(int j = 0; j < ac.length; j++)
         {
-            if(method496(ac[j]))
+            if(Censor.method496(ac[j]))
                 ac[i] = ac[j];
             else
                 ac[i] = ' ';
@@ -125,26 +125,26 @@ public final class Censor {
     {
         long l = System.currentTimeMillis();
         char ac[] = s.toCharArray();
-        method495(ac);
+        Censor.method495(ac);
         String s1 = (new String(ac)).trim();
         ac = s1.toLowerCase().toCharArray();
         String s2 = s1.toLowerCase();
-        method505(ac);
-        method500(ac);
-        method501(ac);
-        method514(ac);
-        for(int j = 0; j < exceptions.length; j++)
+        Censor.method505(ac);
+        Censor.method500(ac);
+        Censor.method501(ac);
+        Censor.method514(ac);
+        for(int j = 0; j < Censor.exceptions.length; j++)
         {
-            for(int k = -1; (k = s2.indexOf(exceptions[j], k + 1)) != -1;)
+            for(int k = -1; (k = s2.indexOf(Censor.exceptions[j], k + 1)) != -1;)
             {
-                char ac1[] = exceptions[j].toCharArray();
+                char ac1[] = Censor.exceptions[j].toCharArray();
                 System.arraycopy(ac1, 0, ac, k, ac1.length);
 
             }
 
         }
-        method498(s1.toCharArray(), ac);
-        method499(ac);
+        Censor.method498(s1.toCharArray(), ac);
+        Censor.method499(ac);
         long l1 = System.currentTimeMillis();
         return (new String(ac)).trim(); //xxx chat filter, return s to avoid
     }
@@ -152,7 +152,7 @@ public final class Censor {
     private static void method498(char ac[], char ac1[])
     {
         for(int j = 0; j < ac.length; j++)
-            if(ac1[j] != '*' && isUpperCaseLetter(ac[j]))
+            if(ac1[j] != '*' && Censor.isUpperCaseLetter(ac[j]))
                 ac1[j] = ac[j];
     }
 
@@ -162,14 +162,14 @@ public final class Censor {
         for(int j = 0; j < ac.length; j++)
         {
             char c = ac[j];
-            if(isLetter(c))
+            if(Censor.isLetter(c))
             {
                 if(flag)
                 {
-                    if(isLowerCaseLetter(c))
+                    if(Censor.isLowerCaseLetter(c))
                         flag = false;
                 } else
-                if(isUpperCaseLetter(c))
+                if(Censor.isUpperCaseLetter(c))
                     ac[j] = (char)((c + 97) - 65);
             } else
             {
@@ -182,8 +182,8 @@ public final class Censor {
     {
         for(int i = 0; i < 2; i++)
         {
-            for(int j = aCharArrayArray621.length - 1; j >= 0; j--)
-                method509(aByteArrayArrayArray622[j], ac, aCharArrayArray621[j]);
+            for(int j = Censor.aCharArrayArray621.length - 1; j >= 0; j--)
+                Censor.method509(Censor.aByteArrayArrayArray622[j], ac, Censor.aCharArrayArray621[j]);
 
         }
     }
@@ -194,14 +194,14 @@ public final class Censor {
         char ac2[] = {
             '(', 'a', ')'
         };
-        method509(null, ac1, ac2);
+        Censor.method509(null, ac1, ac2);
         char ac3[] = ac.clone();
         char ac4[] = {
             'd', 'o', 't'
         };
-        method509(null, ac3, ac4);
-        for(int i = aCharArrayArray623.length - 1; i >= 0; i--)
-            method502(ac, aCharArrayArray623[i], ac3, ac1);
+        Censor.method509(null, ac3, ac4);
+        for(int i = Censor.aCharArrayArray623.length - 1; i >= 0; i--)
+            Censor.method502(ac, Censor.aCharArrayArray623[i], ac3, ac1);
     }
 
     private static void method502(char ac[], char ac1[], char ac2[], char ac3[])
@@ -221,7 +221,7 @@ public final class Censor {
                 char c1 = '\0';
                 if(l + 1 < ac.length)
                     c1 = ac[l + 1];
-                if(i1 < ac1.length && (j1 = method511(c, ac1[i1], c1)) > 0)
+                if(i1 < ac1.length && (j1 = Censor.method511(c, ac1[i1], c1)) > 0)
                 {
                     l += j1;
                     i1++;
@@ -229,22 +229,22 @@ public final class Censor {
                 }
                 if(i1 == 0)
                     break;
-                if((j1 = method511(c, ac1[i1 - 1], c1)) > 0)
+                if((j1 = Censor.method511(c, ac1[i1 - 1], c1)) > 0)
                 {
                     l += j1;
                     if(i1 == 1)
                         j++;
                     continue;
                 }
-                if(i1 >= ac1.length || !method517(c))
+                if(i1 >= ac1.length || !Censor.method517(c))
                     break;
                 l++;
             }
             if(i1 >= ac1.length)
             {
                 boolean flag1 = false;
-                int k1 = method503(ac, ac3, k);
-                int l1 = method504(ac2, l - 1, ac);
+                int k1 = Censor.method503(ac, ac3, k);
+                int l1 = Censor.method504(ac2, l - 1, ac);
                 if(k1 > 2 || l1 > 2)
                     flag1 = true;
                 if(flag1)
@@ -264,7 +264,7 @@ public final class Censor {
             return 2;
         for(int k = j - 1; k >= 0; k--)
         {
-            if(!method517(ac[k]))
+            if(!Censor.method517(ac[k]))
                 break;
             if(ac[k] == '@')
                 return 3;
@@ -273,7 +273,7 @@ public final class Censor {
         int l = 0;
         for(int i1 = j - 1; i1 >= 0; i1--)
         {
-            if(!method517(ac1[i1]))
+            if(!Censor.method517(ac1[i1]))
                 break;
             if(ac1[i1] == '*')
                 l++;
@@ -281,7 +281,7 @@ public final class Censor {
 
         if(l >= 3)
             return 4;
-        return !method517(ac[j - 1]) ? 0 : 1;
+        return !Censor.method517(ac[j - 1]) ? 0 : 1;
     }
 
     private static int method504(char ac[], int i, char ac1[])
@@ -290,7 +290,7 @@ public final class Censor {
             return 2;
         for(int j = i + 1; j < ac1.length; j++)
         {
-            if(!method517(ac1[j]))
+            if(!Censor.method517(ac1[j]))
                 break;
             if(ac1[j] == '.' || ac1[j] == ',')
                 return 3;
@@ -298,7 +298,7 @@ public final class Censor {
         int k = 0;
         for(int l = i + 1; l < ac1.length; l++)
         {
-            if(!method517(ac[l]))
+            if(!Censor.method517(ac[l]))
                 break;
             if(ac[l] == '*')
                 k++;
@@ -306,7 +306,7 @@ public final class Censor {
 
         if(k >= 3)
             return 4;
-        return !method517(ac1[i + 1]) ? 0 : 1;
+        return !Censor.method517(ac1[i + 1]) ? 0 : 1;
     }
 
     private static void method505(char ac[])
@@ -315,14 +315,14 @@ public final class Censor {
         char ac2[] = {
             'd', 'o', 't'
         };
-        method509(null, ac1, ac2);
+        Censor.method509(null, ac1, ac2);
         char ac3[] = ac.clone();
         char ac4[] = {
             's', 'l', 'a', 's', 'h'
         };
-        method509(null, ac3, ac4);
-        for(int i = 0; i < aCharArrayArray624.length; i++)
-            method506(ac3, aCharArrayArray624[i], anIntArray625[i], ac1, ac);
+        Censor.method509(null, ac3, ac4);
+        for(int i = 0; i < Censor.aCharArrayArray624.length; i++)
+            Censor.method506(ac3, Censor.aCharArrayArray624[i], Censor.anIntArray625[i], ac1, ac);
 
     }
 
@@ -343,7 +343,7 @@ public final class Censor {
                 char c1 = '\0';
                 if(l + 1 < ac3.length)
                     c1 = ac3[l + 1];
-                if(i1 < ac1.length && (j1 = method511(c, ac1[i1], c1)) > 0)
+                if(i1 < ac1.length && (j1 = Censor.method511(c, ac1[i1], c1)) > 0)
                 {
                     l += j1;
                     i1++;
@@ -351,22 +351,22 @@ public final class Censor {
                 }
                 if(i1 == 0)
                     break;
-                if((j1 = method511(c, ac1[i1 - 1], c1)) > 0)
+                if((j1 = Censor.method511(c, ac1[i1 - 1], c1)) > 0)
                 {
                     l += j1;
                     if(i1 == 1)
                         j++;
                     continue;
                 }
-                if(i1 >= ac1.length || !method517(c))
+                if(i1 >= ac1.length || !Censor.method517(c))
                     break;
                 l++;
             }
             if(i1 >= ac1.length)
             {
                 boolean flag1 = false;
-                int k1 = method507(ac3, k, ac2);
-                int l1 = method508(ac3, ac, l - 1);
+                int k1 = Censor.method507(ac3, k, ac2);
+                int l1 = Censor.method508(ac3, ac, l - 1);
                 if(i == 1 && k1 > 0 && l1 > 0)
                     flag1 = true;
                 if(i == 2 && (k1 > 2 && l1 > 0 || k1 > 0 && l1 > 2))
@@ -401,11 +401,11 @@ public final class Censor {
                         for(int i3 = i2 - 1; i3 >= 0; i3--)
                             if(flag3)
                             {
-                                if(method517(ac3[i3]))
+                                if(Censor.method517(ac3[i3]))
                                     break;
                                 i2 = i3;
                             } else
-                            if(!method517(ac3[i3]))
+                            if(!Censor.method517(ac3[i3]))
                             {
                                 flag3 = true;
                                 i2 = i3;
@@ -435,11 +435,11 @@ public final class Censor {
                         for(int k3 = j2 + 1; k3 < ac3.length; k3++)
                             if(flag5)
                             {
-                                if(method517(ac3[k3]))
+                                if(Censor.method517(ac3[k3]))
                                     break;
                                 j2 = k3;
                             } else
-                            if(!method517(ac3[k3]))
+                            if(!Censor.method517(ac3[k3]))
                             {
                                 flag5 = true;
                                 j2 = k3;
@@ -460,7 +460,7 @@ public final class Censor {
             return 2;
         for(int k = j - 1; k >= 0; k--)
         {
-            if(!method517(ac[k]))
+            if(!Censor.method517(ac[k]))
                 break;
             if(ac[k] == ',' || ac[k] == '.')
                 return 3;
@@ -469,14 +469,14 @@ public final class Censor {
         int l = 0;
         for(int i1 = j - 1; i1 >= 0; i1--)
         {
-            if(!method517(ac1[i1]))
+            if(!Censor.method517(ac1[i1]))
                 break;
             if(ac1[i1] == '*')
                 l++;
         }
         if(l >= 3)
             return 4;
-        return !method517(ac[j - 1]) ? 0 : 1;
+        return !Censor.method517(ac[j - 1]) ? 0 : 1;
     }
 
     private static int method508(char ac[], char ac1[], int i)
@@ -485,7 +485,7 @@ public final class Censor {
             return 2;
         for(int j = i + 1; j < ac.length; j++)
         {
-            if(!method517(ac[j]))
+            if(!Censor.method517(ac[j]))
                 break;
             if(ac[j] == '\\' || ac[j] == '/')
                 return 3;
@@ -494,7 +494,7 @@ public final class Censor {
         int k = 0;
         for(int l = i + 1; l < ac.length; l++)
         {
-            if(!method517(ac1[l]))
+            if(!Censor.method517(ac1[l]))
                 break;
             if(ac1[l] == '*')
                 k++;
@@ -502,7 +502,7 @@ public final class Censor {
 
         if(k >= 5)
             return 4;
-        return !method517(ac[i + 1]) ? 0 : 1;
+        return !Censor.method517(ac[i + 1]) ? 0 : 1;
     }
 
     private static void method509(byte abyte0[][], char ac[], char ac1[])
@@ -527,11 +527,11 @@ public final class Censor {
                 char c2 = '\0';
                 if(l + 1 < ac.length)
                     c2 = ac[l + 1];
-                if(i1 < ac1.length && (k1 = method512(c2, c, ac1[i1])) > 0)
+                if(i1 < ac1.length && (k1 = Censor.method512(c2, c, ac1[i1])) > 0)
                 {
-                    if(k1 == 1 && isDigit(c))
+                    if(k1 == 1 && Censor.isDigit(c))
                         flag2 = true;
-                    if(k1 == 2 && (isDigit(c) || isDigit(c2)))
+                    if(k1 == 2 && (Censor.isDigit(c) || Censor.isDigit(c2)))
                         flag2 = true;
                     l += k1;
                     i1++;
@@ -539,18 +539,18 @@ public final class Censor {
                 }
                 if(i1 == 0)
                     break;
-                if((k1 = method512(c2, c, ac1[i1 - 1])) > 0)
+                if((k1 = Censor.method512(c2, c, ac1[i1 - 1])) > 0)
                 {
                     l += k1;
                     if(i1 == 1)
                         j++;
                     continue;
                 }
-                if(i1 >= ac1.length || !method518(c))
+                if(i1 >= ac1.length || !Censor.method518(c))
                     break;
-                if(method517(c) && c != '\'')
+                if(Censor.method517(c) && c != '\'')
                     flag1 = true;
-                if(isDigit(c))
+                if(Censor.isDigit(c))
                     flag3 = true;
                 l++;
                 if((++j1 * 100) / (l - k) > 90)
@@ -567,17 +567,17 @@ public final class Censor {
                     char c3 = ' ';
                     if(l < ac.length)
                         c3 = ac[l];
-                    byte byte0 = method513(c1);
-                    byte byte1 = method513(c3);
-                    if(abyte0 != null && method510(byte0, abyte0, byte1))
+                    byte byte0 = Censor.method513(c1);
+                    byte byte1 = Censor.method513(c3);
+                    if(abyte0 != null && Censor.method510(byte0, abyte0, byte1))
                         flag4 = false;
                 } else
                 {
                     boolean flag5 = false;
                     boolean flag6 = false;
-                    if(k - 1 < 0 || method517(ac[k - 1]) && ac[k - 1] != '\'')
+                    if(k - 1 < 0 || Censor.method517(ac[k - 1]) && ac[k - 1] != '\'')
                         flag5 = true;
-                    if(l >= ac.length || method517(ac[l]) && ac[l] != '\'')
+                    if(l >= ac.length || Censor.method517(ac[l]) && ac[l] != '\'')
                         flag6 = true;
                     if(!flag5 || !flag6)
                     {
@@ -586,13 +586,13 @@ public final class Censor {
                         if(flag5)
                             k2 = k;
                         for(; !flag7 && k2 < l; k2++)
-                            if(k2 >= 0 && (!method517(ac[k2]) || ac[k2] == '\''))
+                            if(k2 >= 0 && (!Censor.method517(ac[k2]) || ac[k2] == '\''))
                             {
                                 char ac2[] = new char[3];
                                 int j3;
                                 for(j3 = 0; j3 < 3; j3++)
                                 {
-                                    if(k2 + j3 >= ac.length || method517(ac[k2 + j3]) && ac[k2 + j3] != '\'')
+                                    if(k2 + j3 >= ac.length || Censor.method517(ac[k2 + j3]) && ac[k2 + j3] != '\'')
                                         break;
                                     ac2[j3] = ac[k2 + j3];
                                 }
@@ -600,9 +600,9 @@ public final class Censor {
                                 boolean flag8 = true;
                                 if(j3 == 0)
                                     flag8 = false;
-                                if(j3 < 3 && k2 - 1 >= 0 && (!method517(ac[k2 - 1]) || ac[k2 - 1] == '\''))
+                                if(j3 < 3 && k2 - 1 >= 0 && (!Censor.method517(ac[k2 - 1]) || ac[k2 - 1] == '\''))
                                     flag8 = false;
-                                if(flag8 && !method523(ac2))
+                                if(flag8 && !Censor.method523(ac2))
                                     flag7 = true;
                             }
 
@@ -616,10 +616,10 @@ public final class Censor {
                     int i2 = 0;
                     int j2 = -1;
                     for(int l2 = k; l2 < l; l2++)
-                        if(isDigit(ac[l2]))
+                        if(Censor.isDigit(ac[l2]))
                             l1++;
                         else
-                        if(isLetter(ac[l2]))
+                        if(Censor.isLetter(ac[l2]))
                         {
                             i2++;
                             j2 = l2;
@@ -803,18 +803,18 @@ public final class Censor {
         int k = 0;
         int l = 0;
         int i1 = 0;
-        while((j = method515(ac, k)) != -1)
+        while((j = Censor.method515(ac, k)) != -1)
         {
             boolean flag = false;
             for(int j1 = k; j1 >= 0 && j1 < j && !flag; j1++)
-                if(!method517(ac[j1]) && !method518(ac[j1]))
+                if(!Censor.method517(ac[j1]) && !Censor.method518(ac[j1]))
                     flag = true;
 
             if(flag)
                 l = 0;
             if(l == 0)
                 i1 = j;
-            k = method516(ac, j);
+            k = Censor.method516(ac, j);
             int k1 = 0;
             for(int l1 = j; l1 < k; l1++)
                 k1 = (k1 * 10 + ac[l1]) - 48;
@@ -852,7 +852,7 @@ public final class Censor {
 
     private static boolean method517(char c)
     {
-        return !isLetter(c) && !isDigit(c);
+        return !Censor.isLetter(c) && !Censor.isDigit(c);
     }
 
     private static boolean method518(char c)
@@ -884,22 +884,22 @@ public final class Censor {
     {
         boolean flag = true;
         for(int i = 0; i < ac.length; i++)
-            if(!isDigit(ac[i]) && ac[i] != 0)
+            if(!Censor.isDigit(ac[i]) && ac[i] != 0)
                 flag = false;
 
         if(flag)
             return true;
-        int j = method524(ac);
+        int j = Censor.method524(ac);
         int k = 0;
-        int l = anIntArray620.length - 1;
-        if(j == anIntArray620[k] || j == anIntArray620[l])
+        int l = Censor.anIntArray620.length - 1;
+        if(j == Censor.anIntArray620[k] || j == Censor.anIntArray620[l])
             return true;
         do
         {
             int i1 = (k + l) / 2;
-            if(j == anIntArray620[i1])
+            if(j == Censor.anIntArray620[i1])
                 return true;
-            if(j < anIntArray620[i1])
+            if(j < Censor.anIntArray620[i1])
                 l = i1;
             else
                 k = i1;

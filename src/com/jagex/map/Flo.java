@@ -8,22 +8,22 @@ import com.jagex.io.Buffer;
 
 public final class Flo {
 
-    public static void unpackConfig(Archive archive)
+    public static void init(Archive archive)
     {
         Buffer buffer = new Buffer(archive.getEntry("flo.dat"));
         int cacheSize = buffer.readUShort();
-        if(cache == null)
-            cache = new Flo[cacheSize];
+        if(Flo.cache == null)
+            Flo.cache = new Flo[cacheSize];
         for(int j = 0; j < cacheSize; j++)
         {
-            if(cache[j] == null)
-                cache[j] = new Flo();
-            cache[j].readValues(buffer);
+            if(Flo.cache[j] == null)
+                Flo.cache[j] = new Flo();
+            Flo.cache[j].decode(buffer);
         }
 
     }
 
-    private void readValues(Buffer buffer)
+    private void decode(Buffer buffer)
     {
         do
         {
@@ -34,34 +34,35 @@ public final class Flo {
             else
             if(i == 1)
             {
-                anInt390 = buffer.readUTriByte();
-                method262(anInt390);
+                this.groundRgb = buffer.readUTriByte();
+                this.rgbToHsl(this.groundRgb);
             } else
             if(i == 2)
-                anInt391 = buffer.readUByte();
+                this.textureId = buffer.readUByte();
             else
             if(i == 3)
                 dummy = true;
             else
             if(i == 5)
-                aBoolean393 = false;
+                this.shadowed = false;
             else
             if(i == 6)
                 buffer.readString();
             else
             if(i == 7)
             {
-                int j = anInt394;
-                int k = anInt395;
-                int l = anInt396;
-                int i1 = anInt397;
+                int j = this.hue;
+                int k = this.saturation;
+                int l = this.luminance;
+                int i1 = this.weightedHue;
                 int j1 = buffer.readUTriByte();
-                method262(j1);
-                anInt394 = j;
-                anInt395 = k;
-                anInt396 = l;
-                anInt397 = i1;
-                anInt398 = i1;
+                this.rgbToHsl(j1);
+                this.anInt1198 = this.hslColour;
+                this.hue = j;
+                this.saturation = k;
+                this.luminance = l;
+                this.weightedHue = i1;
+                this.chroma = i1;
             } else
             {
                 System.out.println("Error unrecognised config code: " + i);
@@ -69,11 +70,12 @@ public final class Flo {
         } while(true);
     }
 
-    private void method262(int i)
+	int anInt1198 = -1; 
+    private void rgbToHsl(int i)
     {
-        double d = (double)(i >> 16 & 0xff) / 256D;
-        double d1 = (double)(i >> 8 & 0xff) / 256D;
-        double d2 = (double)(i & 0xff) / 256D;
+        double d = (i >> 16 & 0xff) / 256D;
+        double d1 = (i >> 8 & 0xff) / 256D;
+        double d2 = (i & 0xff) / 256D;
         double d3 = d;
         if(d1 < d3)
             d3 = d1;
@@ -103,48 +105,50 @@ public final class Flo {
                 d5 = 4D + (d - d1) / (d4 - d3);
         }
         d5 /= 6D;
-        anInt394 = (int)(d5 * 256D);
-        anInt395 = (int)(d6 * 256D);
-        anInt396 = (int)(d7 * 256D);
-        if(anInt395 < 0)
-            anInt395 = 0;
+        this.hue = (int)(d5 * 256D);
+        this.saturation = (int)(d6 * 256D);
+        this.luminance = (int)(d7 * 256D);
+        if(this.saturation < 0)
+            this.saturation = 0;
         else
-        if(anInt395 > 255)
-            anInt395 = 255;
-        if(anInt396 < 0)
-            anInt396 = 0;
+        if(this.saturation > 255)
+            this.saturation = 255;
+        if(this.luminance < 0)
+            this.luminance = 0;
         else
-        if(anInt396 > 255)
-            anInt396 = 255;
+        if(this.luminance > 255)
+            this.luminance = 255;
         if(d7 > 0.5D)
-            anInt398 = (int)((1.0D - d7) * d6 * 512D);
+            this.chroma = (int)((1.0D - d7) * d6 * 512D);
         else
-            anInt398 = (int)(d7 * d6 * 512D);
-        if(anInt398 < 1)
-            anInt398 = 1;
-        anInt397 = (int)(d5 * (double)anInt398);
-        int k = (anInt394 + (int)(Math.random() * 16D)) - 8;
+            this.chroma = (int)(d7 * d6 * 512D);
+        if(this.chroma < 1)
+            this.chroma = 1;
+        this.weightedHue = (int)(d5 * this.chroma);
+        
+        
+        int k = (this.hue + (int)(Math.random() * 16D)) - 8;
         if(k < 0)
             k = 0;
         else
         if(k > 255)
             k = 255;
-        int l = (anInt395 + (int)(Math.random() * 48D)) - 24;
+        int l = (this.saturation + (int)(Math.random() * 48D)) - 24;
         if(l < 0)
             l = 0;
         else
         if(l > 255)
             l = 255;
-        int i1 = (anInt396 + (int)(Math.random() * 48D)) - 24;
+        int i1 = (this.luminance + (int)(Math.random() * 48D)) - 24;
         if(i1 < 0)
             i1 = 0;
         else
         if(i1 > 255)
             i1 = 255;
-        anInt399 = method263(k, l, i1);
+        this.hslColour = this.combine(k, l, i1);
     }
 
-    private int method263(int i, int j, int k)
+    private int combine(int i, int j, int k)
     {
         if(k > 179)
             j /= 2;
@@ -159,18 +163,18 @@ public final class Flo {
 
     private Flo()
     {
-        anInt391 = -1;
-        aBoolean393 = true;
+        this.textureId = -1;
+        this.shadowed = true;
     }
 
     public static Flo cache[];
-    public int anInt390;
-    public int anInt391;
-    public boolean aBoolean393;
-    public int anInt394;
-    public int anInt395;
-    public int anInt396;
-    public int anInt397;
-    public int anInt398;
-    public int anInt399;
+    public int groundRgb;
+    public int textureId;
+    public boolean shadowed;
+    public int hue;
+    public int saturation;
+    public int luminance;
+    public int weightedHue;
+    public int chroma;
+    public int hslColour;
 }

@@ -11,14 +11,14 @@ public final class IDK {
     public static void unpackConfig(Archive archive)
     {
         Buffer buffer = new Buffer(archive.getEntry("idk.dat"));
-        length = buffer.readUShort();
-        if(cache == null)
-            cache = new IDK[length];
-        for(int j = 0; j < length; j++)
+        IDK.length = buffer.readUShort();
+        if(IDK.cache == null)
+            IDK.cache = new IDK[IDK.length];
+        for(int j = 0; j < IDK.length; j++)
         {
-            if(cache[j] == null)
-                cache[j] = new IDK();
-            cache[j].readValues(buffer);
+            if(IDK.cache[j] == null)
+                IDK.cache[j] = new IDK();
+            IDK.cache[j].readValues(buffer);
         }
     }
 
@@ -30,27 +30,27 @@ public final class IDK {
             if(i == 0)
                 return;
             if(i == 1)
-                anInt657 = buffer.readUByte();
+                this.part = buffer.readUByte();
             else
             if(i == 2)
             {
                 int j = buffer.readUByte();
-                anIntArray658 = new int[j];
+                this.bodyModels = new int[j];
                 for(int k = 0; k < j; k++)
-                    anIntArray658[k] = buffer.readUShort();
+                    this.bodyModels[k] = buffer.readUShort();
 
             } else
             if(i == 3)
-                aBoolean662 = true;
+                this.validStyle = true;
             else
             if(i >= 40 && i < 50)
-                anIntArray659[i - 40] = buffer.readUShort();
+                this.originalColours[i - 40] = buffer.readUShort();
             else
             if(i >= 50 && i < 60)
-                anIntArray660[i - 50] = buffer.readUShort();
+                this.replacementColours[i - 50] = buffer.readUShort();
             else
             if(i >= 60 && i < 70)
-                anIntArray661[i - 60] = buffer.readUShort();
+                this.headModels[i - 60] = buffer.readUShort();
             else
                 System.out.println("Error unrecognised config code: " + i);
         } while(true);
@@ -58,11 +58,11 @@ public final class IDK {
 
     public boolean method537()
     {
-        if(anIntArray658 == null)
+        if(this.bodyModels == null)
             return true;
         boolean flag = true;
-        for(int j = 0; j < anIntArray658.length; j++)
-            if(!Model.method463(anIntArray658[j]))
+        for(int j = 0; j < this.bodyModels.length; j++)
+            if(!Model.method463(this.bodyModels[j]))
                 flag = false;
 
         return flag;
@@ -70,11 +70,11 @@ public final class IDK {
 
     public Model method538()
     {
-        if(anIntArray658 == null)
+        if(this.bodyModels == null)
             return null;
-        Model aclass30_sub2_sub4_sub6s[] = new Model[anIntArray658.length];
-        for(int i = 0; i < anIntArray658.length; i++)
-            aclass30_sub2_sub4_sub6s[i] = Model.method462(anIntArray658[i]);
+        Model aclass30_sub2_sub4_sub6s[] = new Model[this.bodyModels.length];
+        for(int i = 0; i < this.bodyModels.length; i++)
+            aclass30_sub2_sub4_sub6s[i] = Model.method462(this.bodyModels[i]);
 
         Model model;
         if(aclass30_sub2_sub4_sub6s.length == 1)
@@ -83,9 +83,9 @@ public final class IDK {
             model = new Model(aclass30_sub2_sub4_sub6s.length, aclass30_sub2_sub4_sub6s);
         for(int j = 0; j < 6; j++)
         {
-            if(anIntArray659[j] == 0)
+            if(this.originalColours[j] == 0)
                 break;
-            model.method476(anIntArray659[j], anIntArray660[j]);
+            model.method476(this.originalColours[j], this.replacementColours[j]);
         }
 
         return model;
@@ -95,7 +95,7 @@ public final class IDK {
     {
         boolean flag1 = true;
         for(int i = 0; i < 5; i++)
-            if(anIntArray661[i] != -1 && !Model.method463(anIntArray661[i]))
+            if(this.headModels[i] != -1 && !Model.method463(this.headModels[i]))
                 flag1 = false;
 
         return flag1;
@@ -106,15 +106,15 @@ public final class IDK {
         Model aclass30_sub2_sub4_sub6s[] = new Model[5];
         int j = 0;
         for(int k = 0; k < 5; k++)
-            if(anIntArray661[k] != -1)
-                aclass30_sub2_sub4_sub6s[j++] = Model.method462(anIntArray661[k]);
+            if(this.headModels[k] != -1)
+                aclass30_sub2_sub4_sub6s[j++] = Model.method462(this.headModels[k]);
 
         Model model = new Model(j, aclass30_sub2_sub4_sub6s);
         for(int l = 0; l < 6; l++)
         {
-            if(anIntArray659[l] == 0)
+            if(this.originalColours[l] == 0)
                 break;
-            model.method476(anIntArray659[l], anIntArray660[l]);
+            model.method476(this.originalColours[l], this.replacementColours[l]);
         }
 
         return model;
@@ -122,20 +122,20 @@ public final class IDK {
 
     private IDK()
     {
-        anInt657 = -1;
-        anIntArray659 = new int[6];
-        anIntArray660 = new int[6];
-        aBoolean662 = false;
+        this.part = -1;
+        this.originalColours = new int[6];
+        this.replacementColours = new int[6];
+        this.validStyle = false;
     }
 
     public static int length;
     public static IDK cache[];
-    public int anInt657;
-    private int[] anIntArray658;
-    private final int[] anIntArray659;
-    private final int[] anIntArray660;
-    private final int[] anIntArray661 = {
+    public int part;
+    private int[] bodyModels;
+    private final int[] originalColours;
+    private final int[] replacementColours;
+    private final int[] headModels = {
         -1, -1, -1, -1, -1
     };
-    public boolean aBoolean662;
+    public boolean validStyle;
 }

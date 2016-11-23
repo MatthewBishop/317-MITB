@@ -7,10 +7,10 @@ public final class ISAACRandomGen {
 
     public ISAACRandomGen(int seed[])
     {
-        memory = new int[256];
-        results = new int[256];
-        System.arraycopy(seed, 0, results, 0, seed.length);
-        initializeKeySet();
+        this.memory = new int[256];
+        this.results = new int[256];
+        System.arraycopy(seed, 0, this.results, 0, seed.length);
+        this.initializeKeySet();
     }
 
     public int getNextKey()
@@ -26,25 +26,25 @@ public final class ISAACRandomGen {
 
     private void isaac()
     {
-        lastResult += ++counter;
+        this.lastResult += ++this.counter;
         for(int i = 0; i < 256; i++)
         {
-            int j = memory[i];
+            int j = this.memory[i];
             if((i & 3) == 0)
-                accumulator ^= accumulator << 13;
+                this.accumulator ^= this.accumulator << 13;
             else
             if((i & 3) == 1)
-                accumulator ^= accumulator >>> 6;
+                this.accumulator ^= this.accumulator >>> 6;
             else
             if((i & 3) == 2)
-                accumulator ^= accumulator << 2;
+                this.accumulator ^= this.accumulator << 2;
             else
             if((i & 3) == 3)
-                accumulator ^= accumulator >>> 16;
-            accumulator += memory[i + 128 & 0xff];
+                this.accumulator ^= this.accumulator >>> 16;
+            this.accumulator += this.memory[i + 128 & 0xff];
             int k;
-            memory[i] = k = memory[(j & 0x3fc) >> 2] + accumulator + lastResult;
-            results[i] = lastResult = memory[(k >> 8 & 0x3fc) >> 2] + j;
+            this.memory[i] = k = this.memory[(j & 0x3fc) >> 2] + this.accumulator + this.lastResult;
+            this.results[i] = this.lastResult = this.memory[(k >> 8 & 0x3fc) >> 2] + j;
         }
 
     }
@@ -89,14 +89,14 @@ public final class ISAACRandomGen {
 
         for(int j = 0; j < 256; j += 8)
         {
-            l += results[j];
-            i1 += results[j + 1];
-            j1 += results[j + 2];
-            k1 += results[j + 3];
-            l1 += results[j + 4];
-            i2 += results[j + 5];
-            j2 += results[j + 6];
-            k2 += results[j + 7];
+            l += this.results[j];
+            i1 += this.results[j + 1];
+            j1 += this.results[j + 2];
+            k1 += this.results[j + 3];
+            l1 += this.results[j + 4];
+            i2 += this.results[j + 5];
+            j2 += this.results[j + 6];
+            k2 += this.results[j + 7];
             l ^= i1 << 11;
             k1 += l;
             i1 += j1;
@@ -121,26 +121,26 @@ public final class ISAACRandomGen {
             k2 ^= l >>> 9;
             j1 += k2;
             l += i1;
-            memory[j] = l;
-            memory[j + 1] = i1;
-            memory[j + 2] = j1;
-            memory[j + 3] = k1;
-            memory[j + 4] = l1;
-            memory[j + 5] = i2;
-            memory[j + 6] = j2;
-            memory[j + 7] = k2;
+            this.memory[j] = l;
+            this.memory[j + 1] = i1;
+            this.memory[j + 2] = j1;
+            this.memory[j + 3] = k1;
+            this.memory[j + 4] = l1;
+            this.memory[j + 5] = i2;
+            this.memory[j + 6] = j2;
+            this.memory[j + 7] = k2;
         }
 
         for(int k = 0; k < 256; k += 8)
         {
-            l += memory[k];
-            i1 += memory[k + 1];
-            j1 += memory[k + 2];
-            k1 += memory[k + 3];
-            l1 += memory[k + 4];
-            i2 += memory[k + 5];
-            j2 += memory[k + 6];
-            k2 += memory[k + 7];
+            l += this.memory[k];
+            i1 += this.memory[k + 1];
+            j1 += this.memory[k + 2];
+            k1 += this.memory[k + 3];
+            l1 += this.memory[k + 4];
+            i2 += this.memory[k + 5];
+            j2 += this.memory[k + 6];
+            k2 += this.memory[k + 7];
             l ^= i1 << 11;
             k1 += l;
             i1 += j1;
@@ -165,18 +165,18 @@ public final class ISAACRandomGen {
             k2 ^= l >>> 9;
             j1 += k2;
             l += i1;
-            memory[k] = l;
-            memory[k + 1] = i1;
-            memory[k + 2] = j1;
-            memory[k + 3] = k1;
-            memory[k + 4] = l1;
-            memory[k + 5] = i2;
-            memory[k + 6] = j2;
-            memory[k + 7] = k2;
+            this.memory[k] = l;
+            this.memory[k + 1] = i1;
+            this.memory[k + 2] = j1;
+            this.memory[k + 3] = k1;
+            this.memory[k + 4] = l1;
+            this.memory[k + 5] = i2;
+            this.memory[k + 6] = j2;
+            this.memory[k + 7] = k2;
         }
 
-        isaac();
-        count = 256;
+        this.isaac();
+        this.count = 256;
     }
 
     private int count;

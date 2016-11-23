@@ -8,35 +8,35 @@ import com.jagex.io.Buffer;
 
 public final class Animation {
 
-    public static void unpackConfig(Archive archive)
+    public static void init(Archive archive)
     {
         Buffer buffer = new Buffer(archive.getEntry("seq.dat"));
         int length = buffer.readUShort();
-        if(animations == null)
-            animations = new Animation[length];
+        if(Animation.animations == null)
+            Animation.animations = new Animation[length];
         for(int j = 0; j < length; j++)
         {
-            if(animations[j] == null)
-                animations[j] = new Animation();
-            animations[j].readValues(buffer);
+            if(Animation.animations[j] == null)
+                Animation.animations[j] = new Animation();
+            Animation.animations[j].decode(buffer);
         }
     }
 
     public int duration(int i)
     {
-        int j = anIntArray355[i];
+        int j = this.durations[i];
         if(j == 0)
         {
-            Frame frame = Frame.lookup(anIntArray353[i]);
+            Frame frame = Frame.lookup(this.primaryFrames[i]);
             if(frame != null)
-                j = anIntArray355[i] = frame.anInt636;
+                j = this.durations[i] = frame.anInt636;
         }
         if(j == 0)
             j = 1;
         return j;
     }
 
-    private void readValues(Buffer buffer)
+    private void decode(Buffer buffer)
     {
         do
         {
@@ -45,114 +45,113 @@ public final class Animation {
                 break;
             if(i == 1)
             {
-                anInt352 = buffer.readUByte();
-                anIntArray353 = new int[anInt352];
-                anIntArray354 = new int[anInt352];
-                anIntArray355 = new int[anInt352];
-                for(int j = 0; j < anInt352; j++)
+                this.frameCount = buffer.readUByte();
+                this.primaryFrames = new int[this.frameCount];
+                this.secondaryFrames = new int[this.frameCount];
+                this.durations = new int[this.frameCount];
+                for(int j = 0; j < this.frameCount; j++)
                 {
-                    anIntArray353[j] = buffer.readUShort();
-                    anIntArray354[j] = buffer.readUShort();
-                    if(anIntArray354[j] == 65535)
-                        anIntArray354[j] = -1;
-                    anIntArray355[j] = buffer.readUShort();
+                    this.primaryFrames[j] = buffer.readUShort();
+                    this.secondaryFrames[j] = buffer.readUShort();
+                    if(this.secondaryFrames[j] == 65535)
+                        this.secondaryFrames[j] = -1;
+                    this.durations[j] = buffer.readUShort();
                 }
 
             } else
             if(i == 2)
-                anInt356 = buffer.readUShort();
+                this.loopOffset = buffer.readUShort();
             else
             if(i == 3)
             {
                 int k = buffer.readUByte();
-                anIntArray357 = new int[k + 1];
+                this.interleaveOrder = new int[k + 1];
                 for(int l = 0; l < k; l++)
-                    anIntArray357[l] = buffer.readUByte();
+                    this.interleaveOrder[l] = buffer.readUByte();
 
-                anIntArray357[k] = 0x98967f;
+                this.interleaveOrder[k] = 0x98967f;
             } else
             if(i == 4)
-                aBoolean358 = true;
+                this.stretches = true;
             else
             if(i == 5)
-                anInt359 = buffer.readUByte();
+                this.priority = buffer.readUByte();
             else
             if(i == 6)
-                anInt360 = buffer.readUShort();
+                this.playerOffhand = buffer.readUShort();
             else
             if(i == 7)
-                anInt361 = buffer.readUShort();
+                this.playerMainhand = buffer.readUShort();
             else
             if(i == 8)
-                anInt362 = buffer.readUByte();
+                this.maximumLoops = buffer.readUByte();
             else
             if(i == 9)
-                anInt363 = buffer.readUByte();
+                this.animatingPrecedence = buffer.readUByte();
             else
             if(i == 10)
-                anInt364 = buffer.readUByte();
+                this.walkingPrecedence = buffer.readUByte();
             else
             if(i == 11)
-                anInt365 = buffer.readUByte();
+                this.replayMode = buffer.readUByte();
             else
             if(i == 12)
                 buffer.readInt();
             else
                 System.out.println("Error unrecognised seq config code: " + i);
         } while(true);
-        if(anInt352 == 0)
+        if(this.frameCount == 0)
         {
-            anInt352 = 1;
-            anIntArray353 = new int[1];
-            anIntArray353[0] = -1;
-            anIntArray354 = new int[1];
-            anIntArray354[0] = -1;
-            anIntArray355 = new int[1];
-            anIntArray355[0] = -1;
+            this.frameCount = 1;
+            this.primaryFrames = new int[1];
+            this.primaryFrames[0] = -1;
+            this.secondaryFrames = new int[1];
+            this.secondaryFrames[0] = -1;
+            this.durations = new int[1];
+            this.durations[0] = -1;
         }
-        if(anInt363 == -1)
-            if(anIntArray357 != null)
-                anInt363 = 2;
+        if(this.animatingPrecedence == -1)
+            if(this.interleaveOrder != null)
+                this.animatingPrecedence = 2;
             else
-                anInt363 = 0;
-        if(anInt364 == -1)
+                this.animatingPrecedence = 0;
+        if(this.walkingPrecedence == -1)
         {
-            if(anIntArray357 != null)
+            if(this.interleaveOrder != null)
             {
-                anInt364 = 2;
+                this.walkingPrecedence = 2;
                 return;
             }
-            anInt364 = 0;
+            this.walkingPrecedence = 0;
         }
     }
 
     private Animation()
     {
-        anInt356 = -1;
-        aBoolean358 = false;
-        anInt359 = 5;
-        anInt360 = -1;
-        anInt361 = -1;
-        anInt362 = 99;
-        anInt363 = -1;
-        anInt364 = -1;
-        anInt365 = 2;
+        this.loopOffset = -1;
+        this.stretches = false;
+        this.priority = 5;
+        this.playerOffhand = -1;
+        this.playerMainhand = -1;
+        this.maximumLoops = 99;
+        this.animatingPrecedence = -1;
+        this.walkingPrecedence = -1;
+        this.replayMode = 2;
     }
 
     public static Animation animations[];
-    public int anInt352;
-    public int anIntArray353[];
-    public int anIntArray354[];
-    private int[] anIntArray355;
-    public int anInt356;
-    public int anIntArray357[];
-    public boolean aBoolean358;
-    public int anInt359;
-    public int anInt360;
-    public int anInt361;
-    public int anInt362;
-    public int anInt363;
-    public int anInt364;
-    public int anInt365;
-    public static int anInt367;
+    public int frameCount;
+    public int primaryFrames[];
+    public int secondaryFrames[];
+    private int[] durations;
+    public int loopOffset;
+    public int interleaveOrder[];
+    public boolean stretches;
+    public int priority;
+    public int playerOffhand;
+    public int playerMainhand;
+    public int maximumLoops;
+    public int animatingPrecedence;
+    public int walkingPrecedence;
+    public int replayMode;
 }

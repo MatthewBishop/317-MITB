@@ -11,76 +11,76 @@ public final class Texture extends DrawingArea {
 
     public static void nullLoader()
     {
-        anIntArray1468 = null;
-        anIntArray1468 = null;
-        anIntArray1470 = null;
-        anIntArray1471 = null;
-        anIntArray1472 = null;
-        aBackgroundArray1474s = null;
-        aBooleanArray1475 = null;
-        anIntArray1476 = null;
-        anIntArrayArray1478 = null;
-        anIntArrayArray1479 = null;
-        anIntArray1480 = null;
-        anIntArray1482 = null;
-        anIntArrayArray1483 = null;
+        Texture.anIntArray1468 = null;
+        Texture.anIntArray1468 = null;
+        Texture.anIntArray1470 = null;
+        Texture.anIntArray1471 = null;
+        Texture.anIntArray1472 = null;
+        Texture.aBackgroundArray1474s = null;
+        Texture.aBooleanArray1475 = null;
+        Texture.anIntArray1476 = null;
+        Texture.anIntArrayArray1478 = null;
+        Texture.anIntArrayArray1479 = null;
+        Texture.anIntArray1480 = null;
+        Texture.anIntArray1482 = null;
+        Texture.anIntArrayArray1483 = null;
     }
 
     public static void method364()
     {
-        anIntArray1472 = new int[DrawingArea.height];
+        Texture.anIntArray1472 = new int[DrawingArea.height];
         for(int j = 0; j < DrawingArea.height; j++)
-            anIntArray1472[j] = DrawingArea.width * j;
+            Texture.anIntArray1472[j] = DrawingArea.width * j;
 
-        textureInt1 = DrawingArea.width / 2;
-        textureInt2 = DrawingArea.height / 2;
+        Texture.originViewX = DrawingArea.width / 2;
+        Texture.originViewY = DrawingArea.height / 2;
     }
 
     public static void method365(int j, int k)
     {
-       anIntArray1472 = new int[k];
+       Texture.anIntArray1472 = new int[k];
         for(int l = 0; l < k; l++)
-            anIntArray1472[l] = j * l;
+            Texture.anIntArray1472[l] = j * l;
 
-        textureInt1 = j / 2;
-        textureInt2 = k / 2;
+        Texture.originViewX = j / 2;
+        Texture.originViewY = k / 2;
     }
 
     public static void method366()
     {
-        anIntArrayArray1478 = null;
+        Texture.anIntArrayArray1478 = null;
         for(int j = 0; j < 50; j++)
-            anIntArrayArray1479[j] = null;
+            Texture.anIntArrayArray1479[j] = null;
 
     }
 
     public static void method367()
     {
-        if(anIntArrayArray1478 == null)
+        if(Texture.anIntArrayArray1478 == null)
         {
-            anInt1477 = 20;//was parameter
-            if(lowMem)
-                anIntArrayArray1478 = new int[anInt1477][16384];
+            Texture.anInt1477 = 20;//was parameter
+            if(Texture.lowMem)
+                Texture.anIntArrayArray1478 = new int[Texture.anInt1477][16384];
             else
-                anIntArrayArray1478 = new int[anInt1477][0x10000];
+                Texture.anIntArrayArray1478 = new int[Texture.anInt1477][0x10000];
             for(int k = 0; k < 50; k++)
-                anIntArrayArray1479[k] = null;
+                Texture.anIntArrayArray1479[k] = null;
 
         }
     }
 
     public static void method368(Archive archive)
     {
-        anInt1473 = 0;
+        Texture.anInt1473 = 0;
         for(int j = 0; j < 50; j++)
             try
             {
-                aBackgroundArray1474s[j] = new IndexedImage(archive, String.valueOf(j), 0);
-                if(lowMem && aBackgroundArray1474s[j].resizeWidth == 128)
-                    aBackgroundArray1474s[j].downscale();
+                Texture.aBackgroundArray1474s[j] = new IndexedImage(archive, String.valueOf(j), 0);
+                if(Texture.lowMem && Texture.aBackgroundArray1474s[j].resizeWidth == 128)
+                    Texture.aBackgroundArray1474s[j].downscale();
                 else
-                    aBackgroundArray1474s[j].resize();
-                anInt1473++;
+                    Texture.aBackgroundArray1474s[j].resize();
+                Texture.anInt1473++;
             }
             catch(Exception _ex) { }
 
@@ -88,70 +88,70 @@ public final class Texture extends DrawingArea {
 
     public static int method369(int i)
     {
-        if(anIntArray1476[i] != 0)
-            return anIntArray1476[i];
+        if(Texture.anIntArray1476[i] != 0)
+            return Texture.anIntArray1476[i];
         int k = 0;
         int l = 0;
         int i1 = 0;
-        int j1 = anIntArrayArray1483[i].length;
+        int j1 = Texture.anIntArrayArray1483[i].length;
         for(int k1 = 0; k1 < j1; k1++)
         {
-            k += anIntArrayArray1483[i][k1] >> 16 & 0xff;
-            l += anIntArrayArray1483[i][k1] >> 8 & 0xff;
-            i1 += anIntArrayArray1483[i][k1] & 0xff;
+            k += Texture.anIntArrayArray1483[i][k1] >> 16 & 0xff;
+            l += Texture.anIntArrayArray1483[i][k1] >> 8 & 0xff;
+            i1 += Texture.anIntArrayArray1483[i][k1] & 0xff;
         }
 
         int l1 = (k / j1 << 16) + (l / j1 << 8) + i1 / j1;
-        l1 = method373(l1, 1.3999999999999999D);
+        l1 = Texture.method373(l1, 1.3999999999999999D);
         if(l1 == 0)
             l1 = 1;
-        anIntArray1476[i] = l1;
+        Texture.anIntArray1476[i] = l1;
         return l1;
     }
 
     public static void method370(int i)
     {
-        if(anIntArrayArray1479[i] == null)
+        if(Texture.anIntArrayArray1479[i] == null)
             return;
-        anIntArrayArray1478[anInt1477++] = anIntArrayArray1479[i];
-        anIntArrayArray1479[i] = null;
+        Texture.anIntArrayArray1478[Texture.anInt1477++] = Texture.anIntArrayArray1479[i];
+        Texture.anIntArrayArray1479[i] = null;
     }
 
     private static int[] method371(int i)
     {
-        anIntArray1480[i] = anInt1481++;
-        if(anIntArrayArray1479[i] != null)
-            return anIntArrayArray1479[i];
+        Texture.anIntArray1480[i] = Texture.anInt1481++;
+        if(Texture.anIntArrayArray1479[i] != null)
+            return Texture.anIntArrayArray1479[i];
         int ai[];
-        if(anInt1477 > 0)
+        if(Texture.anInt1477 > 0)
         {
-            ai = anIntArrayArray1478[--anInt1477];
-            anIntArrayArray1478[anInt1477] = null;
+            ai = Texture.anIntArrayArray1478[--Texture.anInt1477];
+            Texture.anIntArrayArray1478[Texture.anInt1477] = null;
         } else
         {
             int j = 0;
             int k = -1;
-            for(int l = 0; l < anInt1473; l++)
-                if(anIntArrayArray1479[l] != null && (anIntArray1480[l] < j || k == -1))
+            for(int l = 0; l < Texture.anInt1473; l++)
+                if(Texture.anIntArrayArray1479[l] != null && (Texture.anIntArray1480[l] < j || k == -1))
                 {
-                    j = anIntArray1480[l];
+                    j = Texture.anIntArray1480[l];
                     k = l;
                 }
 
-            ai = anIntArrayArray1479[k];
-            anIntArrayArray1479[k] = null;
+            ai = Texture.anIntArrayArray1479[k];
+            Texture.anIntArrayArray1479[k] = null;
         }
-        anIntArrayArray1479[i] = ai;
-        IndexedImage indexedImage = aBackgroundArray1474s[i];
-        int ai1[] = anIntArrayArray1483[i];
-        if(lowMem)
+        Texture.anIntArrayArray1479[i] = ai;
+        IndexedImage indexedImage = Texture.aBackgroundArray1474s[i];
+        int ai1[] = Texture.anIntArrayArray1483[i];
+        if(Texture.lowMem)
         {
-            aBooleanArray1475[i] = false;
+            Texture.aBooleanArray1475[i] = false;
             for(int i1 = 0; i1 < 4096; i1++)
             {
                 int i2 = ai[i1] = ai1[indexedImage.raster[i1]] & 0xf8f8ff;
                 if(i2 == 0)
-                    aBooleanArray1475[i] = true;
+                    Texture.aBooleanArray1475[i] = true;
                 ai[4096 + i1] = i2 - (i2 >>> 3) & 0xf8f8ff;
                 ai[8192 + i1] = i2 - (i2 >>> 2) & 0xf8f8ff;
                 ai[12288 + i1] = i2 - (i2 >>> 2) - (i2 >>> 3) & 0xf8f8ff;
@@ -174,13 +174,13 @@ public final class Texture extends DrawingArea {
                     ai[k1] = ai1[indexedImage.raster[k1]];
 
             }
-            aBooleanArray1475[i] = false;
+            Texture.aBooleanArray1475[i] = false;
             for(int l1 = 0; l1 < 16384; l1++)
             {
                 ai[l1] &= 0xf8f8ff;
                 int k2 = ai[l1];
                 if(k2 == 0)
-                    aBooleanArray1475[i] = true;
+                    Texture.aBooleanArray1475[i] = true;
                 ai[16384 + l1] = k2 - (k2 >>> 3) & 0xf8f8ff;
                 ai[32768 + l1] = k2 - (k2 >>> 2) & 0xf8f8ff;
                 ai[49152 + l1] = k2 - (k2 >>> 2) - (k2 >>> 3) & 0xf8f8ff;
@@ -196,11 +196,11 @@ public final class Texture extends DrawingArea {
         int j = 0;
         for(int k = 0; k < 512; k++)
         {
-            double d1 = (double)(k / 8) / 64D + 0.0078125D;
-            double d2 = (double)(k & 7) / 8D + 0.0625D;
+            double d1 = k / 8 / 64D + 0.0078125D;
+            double d2 = (k & 7) / 8D + 0.0625D;
             for(int k1 = 0; k1 < 128; k1++)
             {
-                double d3 = (double)k1 / 128D;
+                double d3 = k1 / 128D;
                 double d4 = d3;
                 double d5 = d3;
                 double d6 = d3;
@@ -254,38 +254,38 @@ public final class Texture extends DrawingArea {
                 int i2 = (int)(d5 * 256D);
                 int j2 = (int)(d6 * 256D);
                 int k2 = (l1 << 16) + (i2 << 8) + j2;
-                k2 = method373(k2, d);
+                k2 = Texture.method373(k2, d);
                 if(k2 == 0)
                     k2 = 1;
-                anIntArray1482[j++] = k2;
+                Texture.anIntArray1482[j++] = k2;
             }
 
         }
 
         for(int l = 0; l < 50; l++)
-            if(aBackgroundArray1474s[l] != null)
+            if(Texture.aBackgroundArray1474s[l] != null)
             {
-                int ai[] = aBackgroundArray1474s[l].palette;
-                anIntArrayArray1483[l] = new int[ai.length];
+                int ai[] = Texture.aBackgroundArray1474s[l].palette;
+                Texture.anIntArrayArray1483[l] = new int[ai.length];
                 for(int j1 = 0; j1 < ai.length; j1++)
                 {
-                    anIntArrayArray1483[l][j1] = method373(ai[j1], d);
-                    if((anIntArrayArray1483[l][j1] & 0xf8f8ff) == 0 && j1 != 0)
-                        anIntArrayArray1483[l][j1] = 1;
+                    Texture.anIntArrayArray1483[l][j1] = Texture.method373(ai[j1], d);
+                    if((Texture.anIntArrayArray1483[l][j1] & 0xf8f8ff) == 0 && j1 != 0)
+                        Texture.anIntArrayArray1483[l][j1] = 1;
                 }
 
             }
 
         for(int i1 = 0; i1 < 50; i1++)
-            method370(i1);
+            Texture.method370(i1);
 
     }
 
     private static int method373(int i, double d)
     {
-        double d1 = (double)(i >> 16) / 256D;
-        double d2 = (double)(i >> 8 & 0xff) / 256D;
-        double d3 = (double)(i & 0xff) / 256D;
+        double d1 = (i >> 16) / 256D;
+        double d2 = (i >> 8 & 0xff) / 256D;
+        double d3 = (i & 0xff) / 256D;
         d1 = Math.pow(d1, d);
         d2 = Math.pow(d2, d);
         d3 = Math.pow(d3, d);
@@ -351,9 +351,9 @@ public final class Texture extends DrawingArea {
                 {
                     k -= j;
                     j -= i;
-                    for(i = anIntArray1472[i]; --j >= 0; i += DrawingArea.width)
+                    for(i = Texture.anIntArray1472[i]; --j >= 0; i += DrawingArea.width)
                     {
-                        method375(DrawingArea.pixels, i, j1 >> 16, l >> 16, i2 >> 7, k1 >> 7);
+                        Texture.method375(DrawingArea.pixels, i, j1 >> 16, l >> 16, i2 >> 7, k1 >> 7);
                         j1 += j3;
                         l += j2;
                         i2 += k3;
@@ -362,7 +362,7 @@ public final class Texture extends DrawingArea {
 
                     while(--k >= 0) 
                     {
-                        method375(DrawingArea.pixels, i, j1 >> 16, i1 >> 16, i2 >> 7, l1 >> 7);
+                        Texture.method375(DrawingArea.pixels, i, j1 >> 16, i1 >> 16, i2 >> 7, l1 >> 7);
                         j1 += j3;
                         i1 += l2;
                         i2 += k3;
@@ -373,9 +373,9 @@ public final class Texture extends DrawingArea {
                 }
                 k -= j;
                 j -= i;
-                for(i = anIntArray1472[i]; --j >= 0; i += DrawingArea.width)
+                for(i = Texture.anIntArray1472[i]; --j >= 0; i += DrawingArea.width)
                 {
-                    method375(DrawingArea.pixels, i, l >> 16, j1 >> 16, k1 >> 7, i2 >> 7);
+                    Texture.method375(DrawingArea.pixels, i, l >> 16, j1 >> 16, k1 >> 7, i2 >> 7);
                     j1 += j3;
                     l += j2;
                     i2 += k3;
@@ -384,7 +384,7 @@ public final class Texture extends DrawingArea {
 
                 while(--k >= 0) 
                 {
-                    method375(DrawingArea.pixels, i, i1 >> 16, j1 >> 16, l1 >> 7, i2 >> 7);
+                    Texture.method375(DrawingArea.pixels, i, i1 >> 16, j1 >> 16, l1 >> 7, i2 >> 7);
                     j1 += j3;
                     i1 += l2;
                     i2 += k3;
@@ -415,9 +415,9 @@ public final class Texture extends DrawingArea {
             {
                 j -= k;
                 k -= i;
-                for(i = anIntArray1472[i]; --k >= 0; i += DrawingArea.width)
+                for(i = Texture.anIntArray1472[i]; --k >= 0; i += DrawingArea.width)
                 {
-                    method375(DrawingArea.pixels, i, i1 >> 16, l >> 16, l1 >> 7, k1 >> 7);
+                    Texture.method375(DrawingArea.pixels, i, i1 >> 16, l >> 16, l1 >> 7, k1 >> 7);
                     i1 += j3;
                     l += j2;
                     l1 += k3;
@@ -426,7 +426,7 @@ public final class Texture extends DrawingArea {
 
                 while(--j >= 0) 
                 {
-                    method375(DrawingArea.pixels, i, j1 >> 16, l >> 16, i2 >> 7, k1 >> 7);
+                    Texture.method375(DrawingArea.pixels, i, j1 >> 16, l >> 16, i2 >> 7, k1 >> 7);
                     j1 += l2;
                     l += j2;
                     i2 += i3;
@@ -437,9 +437,9 @@ public final class Texture extends DrawingArea {
             }
             j -= k;
             k -= i;
-            for(i = anIntArray1472[i]; --k >= 0; i += DrawingArea.width)
+            for(i = Texture.anIntArray1472[i]; --k >= 0; i += DrawingArea.width)
             {
-                method375(DrawingArea.pixels, i, l >> 16, i1 >> 16, k1 >> 7, l1 >> 7);
+                Texture.method375(DrawingArea.pixels, i, l >> 16, i1 >> 16, k1 >> 7, l1 >> 7);
                 i1 += j3;
                 l += j2;
                 l1 += k3;
@@ -448,7 +448,7 @@ public final class Texture extends DrawingArea {
 
             while(--j >= 0) 
             {
-                method375(DrawingArea.pixels, i, l >> 16, j1 >> 16, k1 >> 7, i2 >> 7);
+                Texture.method375(DrawingArea.pixels, i, l >> 16, j1 >> 16, k1 >> 7, i2 >> 7);
                 j1 += l2;
                 l += j2;
                 i2 += i3;
@@ -489,9 +489,9 @@ public final class Texture extends DrawingArea {
                 {
                     i -= k;
                     k -= j;
-                    for(j = anIntArray1472[j]; --k >= 0; j += DrawingArea.width)
+                    for(j = Texture.anIntArray1472[j]; --k >= 0; j += DrawingArea.width)
                     {
-                        method375(DrawingArea.pixels, j, l >> 16, i1 >> 16, k1 >> 7, l1 >> 7);
+                        Texture.method375(DrawingArea.pixels, j, l >> 16, i1 >> 16, k1 >> 7, l1 >> 7);
                         l += j2;
                         i1 += l2;
                         k1 += k2;
@@ -500,7 +500,7 @@ public final class Texture extends DrawingArea {
 
                     while(--i >= 0) 
                     {
-                        method375(DrawingArea.pixels, j, l >> 16, j1 >> 16, k1 >> 7, i2 >> 7);
+                        Texture.method375(DrawingArea.pixels, j, l >> 16, j1 >> 16, k1 >> 7, i2 >> 7);
                         l += j2;
                         j1 += j3;
                         k1 += k2;
@@ -511,9 +511,9 @@ public final class Texture extends DrawingArea {
                 }
                 i -= k;
                 k -= j;
-                for(j = anIntArray1472[j]; --k >= 0; j += DrawingArea.width)
+                for(j = Texture.anIntArray1472[j]; --k >= 0; j += DrawingArea.width)
                 {
-                    method375(DrawingArea.pixels, j, i1 >> 16, l >> 16, l1 >> 7, k1 >> 7);
+                    Texture.method375(DrawingArea.pixels, j, i1 >> 16, l >> 16, l1 >> 7, k1 >> 7);
                     l += j2;
                     i1 += l2;
                     k1 += k2;
@@ -522,7 +522,7 @@ public final class Texture extends DrawingArea {
 
                 while(--i >= 0) 
                 {
-                    method375(DrawingArea.pixels, j, j1 >> 16, l >> 16, i2 >> 7, k1 >> 7);
+                    Texture.method375(DrawingArea.pixels, j, j1 >> 16, l >> 16, i2 >> 7, k1 >> 7);
                     l += j2;
                     j1 += j3;
                     k1 += k2;
@@ -553,9 +553,9 @@ public final class Texture extends DrawingArea {
             {
                 k -= i;
                 i -= j;
-                for(j = anIntArray1472[j]; --i >= 0; j += DrawingArea.width)
+                for(j = Texture.anIntArray1472[j]; --i >= 0; j += DrawingArea.width)
                 {
-                    method375(DrawingArea.pixels, j, j1 >> 16, i1 >> 16, i2 >> 7, l1 >> 7);
+                    Texture.method375(DrawingArea.pixels, j, j1 >> 16, i1 >> 16, i2 >> 7, l1 >> 7);
                     j1 += j2;
                     i1 += l2;
                     i2 += k2;
@@ -564,7 +564,7 @@ public final class Texture extends DrawingArea {
 
                 while(--k >= 0) 
                 {
-                    method375(DrawingArea.pixels, j, l >> 16, i1 >> 16, k1 >> 7, l1 >> 7);
+                    Texture.method375(DrawingArea.pixels, j, l >> 16, i1 >> 16, k1 >> 7, l1 >> 7);
                     l += j3;
                     i1 += l2;
                     k1 += k3;
@@ -575,9 +575,9 @@ public final class Texture extends DrawingArea {
             }
             k -= i;
             i -= j;
-            for(j = anIntArray1472[j]; --i >= 0; j += DrawingArea.width)
+            for(j = Texture.anIntArray1472[j]; --i >= 0; j += DrawingArea.width)
             {
-                method375(DrawingArea.pixels, j, i1 >> 16, j1 >> 16, l1 >> 7, i2 >> 7);
+                Texture.method375(DrawingArea.pixels, j, i1 >> 16, j1 >> 16, l1 >> 7, i2 >> 7);
                 j1 += j2;
                 i1 += l2;
                 i2 += k2;
@@ -586,7 +586,7 @@ public final class Texture extends DrawingArea {
 
             while(--k >= 0) 
             {
-                method375(DrawingArea.pixels, j, i1 >> 16, l >> 16, l1 >> 7, k1 >> 7);
+                Texture.method375(DrawingArea.pixels, j, i1 >> 16, l >> 16, l1 >> 7, k1 >> 7);
                 l += j3;
                 i1 += l2;
                 k1 += k3;
@@ -625,9 +625,9 @@ public final class Texture extends DrawingArea {
             {
                 j -= i;
                 i -= k;
-                for(k = anIntArray1472[k]; --i >= 0; k += DrawingArea.width)
+                for(k = Texture.anIntArray1472[k]; --i >= 0; k += DrawingArea.width)
                 {
-                    method375(DrawingArea.pixels, k, i1 >> 16, j1 >> 16, l1 >> 7, i2 >> 7);
+                    Texture.method375(DrawingArea.pixels, k, i1 >> 16, j1 >> 16, l1 >> 7, i2 >> 7);
                     i1 += l2;
                     j1 += j3;
                     l1 += i3;
@@ -636,7 +636,7 @@ public final class Texture extends DrawingArea {
 
                 while(--j >= 0) 
                 {
-                    method375(DrawingArea.pixels, k, i1 >> 16, l >> 16, l1 >> 7, k1 >> 7);
+                    Texture.method375(DrawingArea.pixels, k, i1 >> 16, l >> 16, l1 >> 7, k1 >> 7);
                     i1 += l2;
                     l += j2;
                     l1 += i3;
@@ -647,9 +647,9 @@ public final class Texture extends DrawingArea {
             }
             j -= i;
             i -= k;
-            for(k = anIntArray1472[k]; --i >= 0; k += DrawingArea.width)
+            for(k = Texture.anIntArray1472[k]; --i >= 0; k += DrawingArea.width)
             {
-                method375(DrawingArea.pixels, k, j1 >> 16, i1 >> 16, i2 >> 7, l1 >> 7);
+                Texture.method375(DrawingArea.pixels, k, j1 >> 16, i1 >> 16, i2 >> 7, l1 >> 7);
                 i1 += l2;
                 j1 += j3;
                 l1 += i3;
@@ -658,7 +658,7 @@ public final class Texture extends DrawingArea {
 
             while(--j >= 0) 
             {
-                method375(DrawingArea.pixels, k, l >> 16, i1 >> 16, k1 >> 7, l1 >> 7);
+                Texture.method375(DrawingArea.pixels, k, l >> 16, i1 >> 16, k1 >> 7, l1 >> 7);
                 i1 += l2;
                 l += j2;
                 l1 += i3;
@@ -689,9 +689,9 @@ public final class Texture extends DrawingArea {
         {
             i -= j;
             j -= k;
-            for(k = anIntArray1472[k]; --j >= 0; k += DrawingArea.width)
+            for(k = Texture.anIntArray1472[k]; --j >= 0; k += DrawingArea.width)
             {
-                method375(DrawingArea.pixels, k, l >> 16, j1 >> 16, k1 >> 7, i2 >> 7);
+                Texture.method375(DrawingArea.pixels, k, l >> 16, j1 >> 16, k1 >> 7, i2 >> 7);
                 l += l2;
                 j1 += j3;
                 k1 += i3;
@@ -700,7 +700,7 @@ public final class Texture extends DrawingArea {
 
             while(--i >= 0) 
             {
-                method375(DrawingArea.pixels, k, i1 >> 16, j1 >> 16, l1 >> 7, i2 >> 7);
+                Texture.method375(DrawingArea.pixels, k, i1 >> 16, j1 >> 16, l1 >> 7, i2 >> 7);
                 i1 += j2;
                 j1 += j3;
                 l1 += k2;
@@ -711,9 +711,9 @@ public final class Texture extends DrawingArea {
         }
         i -= j;
         j -= k;
-        for(k = anIntArray1472[k]; --j >= 0; k += DrawingArea.width)
+        for(k = Texture.anIntArray1472[k]; --j >= 0; k += DrawingArea.width)
         {
-            method375(DrawingArea.pixels, k, j1 >> 16, l >> 16, i2 >> 7, k1 >> 7);
+            Texture.method375(DrawingArea.pixels, k, j1 >> 16, l >> 16, i2 >> 7, k1 >> 7);
             l += l2;
             j1 += j3;
             k1 += i3;
@@ -722,7 +722,7 @@ public final class Texture extends DrawingArea {
 
         while(--i >= 0) 
         {
-            method375(DrawingArea.pixels, k, j1 >> 16, i1 >> 16, i2 >> 7, l1 >> 7);
+            Texture.method375(DrawingArea.pixels, k, j1 >> 16, i1 >> 16, i2 >> 7, l1 >> 7);
             i1 += j2;
             j1 += j3;
             l1 += k2;
@@ -735,10 +735,10 @@ public final class Texture extends DrawingArea {
     {
         int j;//was parameter
         int k;//was parameter
-        if(aBoolean1464)
+        if(Texture.aBoolean1464)
         {
             int l1;
-            if(aBoolean1462)
+            if(Texture.aBoolean1462)
             {
                 if(i1 - l > 3)
                     l1 = (k1 - j1) / (i1 - l);
@@ -763,15 +763,15 @@ public final class Texture extends DrawingArea {
                 i += l;
                 k = i1 - l >> 2;
                 if(k > 0)
-                    l1 = (k1 - j1) * anIntArray1468[k] >> 15;
+                    l1 = (k1 - j1) * Texture.anIntArray1468[k] >> 15;
                 else
                     l1 = 0;
             }
-            if(anInt1465 == 0)
+            if(Texture.currentAlpha == 0)
             {
                 while(--k >= 0) 
                 {
-                    j = anIntArray1482[j1 >> 8];
+                    j = Texture.anIntArray1482[j1 >> 8];
                     j1 += l1;
                     ai[i++] = j;
                     ai[i++] = j;
@@ -781,7 +781,7 @@ public final class Texture extends DrawingArea {
                 k = i1 - l & 3;
                 if(k > 0)
                 {
-                    j = anIntArray1482[j1 >> 8];
+                    j = Texture.anIntArray1482[j1 >> 8];
                     do
                         ai[i++] = j;
                     while(--k > 0);
@@ -789,11 +789,11 @@ public final class Texture extends DrawingArea {
                 }
             } else
             {
-                int j2 = anInt1465;
-                int l2 = 256 - anInt1465;
+                int j2 = Texture.currentAlpha;
+                int l2 = 256 - Texture.currentAlpha;
                 while(--k >= 0) 
                 {
-                    j = anIntArray1482[j1 >> 8];
+                    j = Texture.anIntArray1482[j1 >> 8];
                     j1 += l1;
                     j = ((j & 0xff00ff) * l2 >> 8 & 0xff00ff) + ((j & 0xff00) * l2 >> 8 & 0xff00);
                     ai[i++] = j + ((ai[i] & 0xff00ff) * j2 >> 8 & 0xff00ff) + ((ai[i] & 0xff00) * j2 >> 8 & 0xff00);
@@ -804,7 +804,7 @@ public final class Texture extends DrawingArea {
                 k = i1 - l & 3;
                 if(k > 0)
                 {
-                    j = anIntArray1482[j1 >> 8];
+                    j = Texture.anIntArray1482[j1 >> 8];
                     j = ((j & 0xff00ff) * l2 >> 8 & 0xff00ff) + ((j & 0xff00) * l2 >> 8 & 0xff00);
                     do
                         ai[i++] = j + ((ai[i] & 0xff00ff) * j2 >> 8 & 0xff00ff) + ((ai[i] & 0xff00) * j2 >> 8 & 0xff00);
@@ -816,7 +816,7 @@ public final class Texture extends DrawingArea {
         if(l >= i1)
             return;
         int i2 = (k1 - j1) / (i1 - l);
-        if(aBoolean1462)
+        if(Texture.aBoolean1462)
         {
             if(i1 > DrawingArea.centerX)
                 i1 = DrawingArea.centerX;
@@ -830,20 +830,20 @@ public final class Texture extends DrawingArea {
         }
         i += l;
         k = i1 - l;
-        if(anInt1465 == 0)
+        if(Texture.currentAlpha == 0)
         {
             do
             {
-                ai[i++] = anIntArray1482[j1 >> 8];
+                ai[i++] = Texture.anIntArray1482[j1 >> 8];
                 j1 += i2;
             } while(--k > 0);
             return;
         }
-        int k2 = anInt1465;
-        int i3 = 256 - anInt1465;
+        int k2 = Texture.currentAlpha;
+        int i3 = 256 - Texture.currentAlpha;
         do
         {
-            j = anIntArray1482[j1 >> 8];
+            j = Texture.anIntArray1482[j1 >> 8];
             j1 += i2;
             j = ((j & 0xff00ff) * i3 >> 8 & 0xff00ff) + ((j & 0xff00) * i3 >> 8 & 0xff00);
             ai[i++] = j + ((ai[i] & 0xff00ff) * k2 >> 8 & 0xff00ff) + ((ai[i] & 0xff00) * k2 >> 8 & 0xff00);
@@ -888,16 +888,16 @@ public final class Texture extends DrawingArea {
                 {
                     k -= j;
                     j -= i;
-                    for(i = anIntArray1472[i]; --j >= 0; i += DrawingArea.width)
+                    for(i = Texture.anIntArray1472[i]; --j >= 0; i += DrawingArea.width)
                     {
-                        method377(DrawingArea.pixels, i, k1, j1 >> 16, l >> 16);
+                        Texture.method377(DrawingArea.pixels, i, k1, j1 >> 16, l >> 16);
                         j1 += j2;
                         l += l1;
                     }
 
                     while(--k >= 0) 
                     {
-                        method377(DrawingArea.pixels, i, k1, j1 >> 16, i1 >> 16);
+                        Texture.method377(DrawingArea.pixels, i, k1, j1 >> 16, i1 >> 16);
                         j1 += j2;
                         i1 += i2;
                         i += DrawingArea.width;
@@ -906,16 +906,16 @@ public final class Texture extends DrawingArea {
                 }
                 k -= j;
                 j -= i;
-                for(i = anIntArray1472[i]; --j >= 0; i += DrawingArea.width)
+                for(i = Texture.anIntArray1472[i]; --j >= 0; i += DrawingArea.width)
                 {
-                    method377(DrawingArea.pixels, i, k1, l >> 16, j1 >> 16);
+                    Texture.method377(DrawingArea.pixels, i, k1, l >> 16, j1 >> 16);
                     j1 += j2;
                     l += l1;
                 }
 
                 while(--k >= 0) 
                 {
-                    method377(DrawingArea.pixels, i, k1, i1 >> 16, j1 >> 16);
+                    Texture.method377(DrawingArea.pixels, i, k1, i1 >> 16, j1 >> 16);
                     j1 += j2;
                     i1 += i2;
                     i += DrawingArea.width;
@@ -939,16 +939,16 @@ public final class Texture extends DrawingArea {
             {
                 j -= k;
                 k -= i;
-                for(i = anIntArray1472[i]; --k >= 0; i += DrawingArea.width)
+                for(i = Texture.anIntArray1472[i]; --k >= 0; i += DrawingArea.width)
                 {
-                    method377(DrawingArea.pixels, i, k1, i1 >> 16, l >> 16);
+                    Texture.method377(DrawingArea.pixels, i, k1, i1 >> 16, l >> 16);
                     i1 += j2;
                     l += l1;
                 }
 
                 while(--j >= 0) 
                 {
-                    method377(DrawingArea.pixels, i, k1, j1 >> 16, l >> 16);
+                    Texture.method377(DrawingArea.pixels, i, k1, j1 >> 16, l >> 16);
                     j1 += i2;
                     l += l1;
                     i += DrawingArea.width;
@@ -957,16 +957,16 @@ public final class Texture extends DrawingArea {
             }
             j -= k;
             k -= i;
-            for(i = anIntArray1472[i]; --k >= 0; i += DrawingArea.width)
+            for(i = Texture.anIntArray1472[i]; --k >= 0; i += DrawingArea.width)
             {
-                method377(DrawingArea.pixels, i, k1, l >> 16, i1 >> 16);
+                Texture.method377(DrawingArea.pixels, i, k1, l >> 16, i1 >> 16);
                 i1 += j2;
                 l += l1;
             }
 
             while(--j >= 0) 
             {
-                method377(DrawingArea.pixels, i, k1, l >> 16, j1 >> 16);
+                Texture.method377(DrawingArea.pixels, i, k1, l >> 16, j1 >> 16);
                 j1 += i2;
                 l += l1;
                 i += DrawingArea.width;
@@ -1000,16 +1000,16 @@ public final class Texture extends DrawingArea {
                 {
                     i -= k;
                     k -= j;
-                    for(j = anIntArray1472[j]; --k >= 0; j += DrawingArea.width)
+                    for(j = Texture.anIntArray1472[j]; --k >= 0; j += DrawingArea.width)
                     {
-                        method377(DrawingArea.pixels, j, k1, l >> 16, i1 >> 16);
+                        Texture.method377(DrawingArea.pixels, j, k1, l >> 16, i1 >> 16);
                         l += l1;
                         i1 += i2;
                     }
 
                     while(--i >= 0) 
                     {
-                        method377(DrawingArea.pixels, j, k1, l >> 16, j1 >> 16);
+                        Texture.method377(DrawingArea.pixels, j, k1, l >> 16, j1 >> 16);
                         l += l1;
                         j1 += j2;
                         j += DrawingArea.width;
@@ -1018,16 +1018,16 @@ public final class Texture extends DrawingArea {
                 }
                 i -= k;
                 k -= j;
-                for(j = anIntArray1472[j]; --k >= 0; j += DrawingArea.width)
+                for(j = Texture.anIntArray1472[j]; --k >= 0; j += DrawingArea.width)
                 {
-                    method377(DrawingArea.pixels, j, k1, i1 >> 16, l >> 16);
+                    Texture.method377(DrawingArea.pixels, j, k1, i1 >> 16, l >> 16);
                     l += l1;
                     i1 += i2;
                 }
 
                 while(--i >= 0) 
                 {
-                    method377(DrawingArea.pixels, j, k1, j1 >> 16, l >> 16);
+                    Texture.method377(DrawingArea.pixels, j, k1, j1 >> 16, l >> 16);
                     l += l1;
                     j1 += j2;
                     j += DrawingArea.width;
@@ -1051,16 +1051,16 @@ public final class Texture extends DrawingArea {
             {
                 k -= i;
                 i -= j;
-                for(j = anIntArray1472[j]; --i >= 0; j += DrawingArea.width)
+                for(j = Texture.anIntArray1472[j]; --i >= 0; j += DrawingArea.width)
                 {
-                    method377(DrawingArea.pixels, j, k1, j1 >> 16, i1 >> 16);
+                    Texture.method377(DrawingArea.pixels, j, k1, j1 >> 16, i1 >> 16);
                     j1 += l1;
                     i1 += i2;
                 }
 
                 while(--k >= 0) 
                 {
-                    method377(DrawingArea.pixels, j, k1, l >> 16, i1 >> 16);
+                    Texture.method377(DrawingArea.pixels, j, k1, l >> 16, i1 >> 16);
                     l += j2;
                     i1 += i2;
                     j += DrawingArea.width;
@@ -1069,16 +1069,16 @@ public final class Texture extends DrawingArea {
             }
             k -= i;
             i -= j;
-            for(j = anIntArray1472[j]; --i >= 0; j += DrawingArea.width)
+            for(j = Texture.anIntArray1472[j]; --i >= 0; j += DrawingArea.width)
             {
-                method377(DrawingArea.pixels, j, k1, i1 >> 16, j1 >> 16);
+                Texture.method377(DrawingArea.pixels, j, k1, i1 >> 16, j1 >> 16);
                 j1 += l1;
                 i1 += i2;
             }
 
             while(--k >= 0) 
             {
-                method377(DrawingArea.pixels, j, k1, i1 >> 16, l >> 16);
+                Texture.method377(DrawingArea.pixels, j, k1, i1 >> 16, l >> 16);
                 l += j2;
                 i1 += i2;
                 j += DrawingArea.width;
@@ -1110,16 +1110,16 @@ public final class Texture extends DrawingArea {
             {
                 j -= i;
                 i -= k;
-                for(k = anIntArray1472[k]; --i >= 0; k += DrawingArea.width)
+                for(k = Texture.anIntArray1472[k]; --i >= 0; k += DrawingArea.width)
                 {
-                    method377(DrawingArea.pixels, k, k1, i1 >> 16, j1 >> 16);
+                    Texture.method377(DrawingArea.pixels, k, k1, i1 >> 16, j1 >> 16);
                     i1 += i2;
                     j1 += j2;
                 }
 
                 while(--j >= 0) 
                 {
-                    method377(DrawingArea.pixels, k, k1, i1 >> 16, l >> 16);
+                    Texture.method377(DrawingArea.pixels, k, k1, i1 >> 16, l >> 16);
                     i1 += i2;
                     l += l1;
                     k += DrawingArea.width;
@@ -1128,16 +1128,16 @@ public final class Texture extends DrawingArea {
             }
             j -= i;
             i -= k;
-            for(k = anIntArray1472[k]; --i >= 0; k += DrawingArea.width)
+            for(k = Texture.anIntArray1472[k]; --i >= 0; k += DrawingArea.width)
             {
-                method377(DrawingArea.pixels, k, k1, j1 >> 16, i1 >> 16);
+                Texture.method377(DrawingArea.pixels, k, k1, j1 >> 16, i1 >> 16);
                 i1 += i2;
                 j1 += j2;
             }
 
             while(--j >= 0) 
             {
-                method377(DrawingArea.pixels, k, k1, l >> 16, i1 >> 16);
+                Texture.method377(DrawingArea.pixels, k, k1, l >> 16, i1 >> 16);
                 i1 += i2;
                 l += l1;
                 k += DrawingArea.width;
@@ -1161,16 +1161,16 @@ public final class Texture extends DrawingArea {
         {
             i -= j;
             j -= k;
-            for(k = anIntArray1472[k]; --j >= 0; k += DrawingArea.width)
+            for(k = Texture.anIntArray1472[k]; --j >= 0; k += DrawingArea.width)
             {
-                method377(DrawingArea.pixels, k, k1, l >> 16, j1 >> 16);
+                Texture.method377(DrawingArea.pixels, k, k1, l >> 16, j1 >> 16);
                 l += i2;
                 j1 += j2;
             }
 
             while(--i >= 0) 
             {
-                method377(DrawingArea.pixels, k, k1, i1 >> 16, j1 >> 16);
+                Texture.method377(DrawingArea.pixels, k, k1, i1 >> 16, j1 >> 16);
                 i1 += l1;
                 j1 += j2;
                 k += DrawingArea.width;
@@ -1179,16 +1179,16 @@ public final class Texture extends DrawingArea {
         }
         i -= j;
         j -= k;
-        for(k = anIntArray1472[k]; --j >= 0; k += DrawingArea.width)
+        for(k = Texture.anIntArray1472[k]; --j >= 0; k += DrawingArea.width)
         {
-            method377(DrawingArea.pixels, k, k1, j1 >> 16, l >> 16);
+            Texture.method377(DrawingArea.pixels, k, k1, j1 >> 16, l >> 16);
             l += i2;
             j1 += j2;
         }
 
         while(--i >= 0) 
         {
-            method377(DrawingArea.pixels, k, k1, j1 >> 16, i1 >> 16);
+            Texture.method377(DrawingArea.pixels, k, k1, j1 >> 16, i1 >> 16);
             i1 += l1;
             j1 += j2;
             k += DrawingArea.width;
@@ -1198,7 +1198,7 @@ public final class Texture extends DrawingArea {
     private static void method377(int ai[], int i, int j, int l, int i1)
     {
         int k;//was parameter
-        if(aBoolean1462)
+        if(Texture.aBoolean1462)
         {
             if(i1 > DrawingArea.centerX)
                 i1 = DrawingArea.centerX;
@@ -1209,7 +1209,7 @@ public final class Texture extends DrawingArea {
             return;
         i += l;
         k = i1 - l >> 2;
-        if(anInt1465 == 0)
+        if(Texture.currentAlpha == 0)
         {
             while(--k >= 0) 
             {
@@ -1223,8 +1223,8 @@ public final class Texture extends DrawingArea {
 
             return;
         }
-        int j1 = anInt1465;
-        int k1 = 256 - anInt1465;
+        int j1 = Texture.currentAlpha;
+        int k1 = 256 - Texture.currentAlpha;
         j = ((j & 0xff00ff) * k1 >> 8 & 0xff00ff) + ((j & 0xff00) * k1 >> 8 & 0xff00);
         while(--k >= 0) 
         {
@@ -1242,8 +1242,8 @@ public final class Texture extends DrawingArea {
             int i2, int j2, int k2, int l2, int i3, int j3, int k3, 
             int l3, int i4, int j4, int k4)
     {
-        int ai[] = method371(k4);
-        aBoolean1463 = !aBooleanArray1475[k4];
+        int ai[] = Texture.method371(k4);
+        Texture.aBoolean1463 = !Texture.aBooleanArray1475[k4];
         k2 = j2 - k2;
         j3 = i3 - j3;
         i4 = l3 - i4;
@@ -1308,7 +1308,7 @@ public final class Texture extends DrawingArea {
                     l1 -= l7 * j;
                     j = 0;
                 }
-                int k8 = i - textureInt2;
+                int k8 = i - Texture.originViewY;
                 l4 += j5 * k8;
                 k5 += i6 * k8;
                 j6 += l6 * k8;
@@ -1316,10 +1316,10 @@ public final class Texture extends DrawingArea {
                 {
                     k -= j;
                     j -= i;
-                    i = anIntArray1472[i];
+                    i = Texture.anIntArray1472[i];
                     while(--j >= 0) 
                     {
-                        method379(DrawingArea.pixels, ai, i, j1 >> 16, l >> 16, i2 >> 8, k1 >> 8, l4, k5, j6, i5, l5, k6);
+                        Texture.method379(DrawingArea.pixels, ai, i, j1 >> 16, l >> 16, i2 >> 8, k1 >> 8, l4, k5, j6, i5, l5, k6);
                         j1 += i8;
                         l += i7;
                         i2 += j8;
@@ -1331,7 +1331,7 @@ public final class Texture extends DrawingArea {
                     }
                     while(--k >= 0) 
                     {
-                        method379(DrawingArea.pixels, ai, i, j1 >> 16, i1 >> 16, i2 >> 8, l1 >> 8, l4, k5, j6, i5, l5, k6);
+                        Texture.method379(DrawingArea.pixels, ai, i, j1 >> 16, i1 >> 16, i2 >> 8, l1 >> 8, l4, k5, j6, i5, l5, k6);
                         j1 += i8;
                         i1 += k7;
                         i2 += j8;
@@ -1345,10 +1345,10 @@ public final class Texture extends DrawingArea {
                 }
                 k -= j;
                 j -= i;
-                i = anIntArray1472[i];
+                i = Texture.anIntArray1472[i];
                 while(--j >= 0) 
                 {
-                    method379(DrawingArea.pixels, ai, i, l >> 16, j1 >> 16, k1 >> 8, i2 >> 8, l4, k5, j6, i5, l5, k6);
+                    Texture.method379(DrawingArea.pixels, ai, i, l >> 16, j1 >> 16, k1 >> 8, i2 >> 8, l4, k5, j6, i5, l5, k6);
                     j1 += i8;
                     l += i7;
                     i2 += j8;
@@ -1360,7 +1360,7 @@ public final class Texture extends DrawingArea {
                 }
                 while(--k >= 0) 
                 {
-                    method379(DrawingArea.pixels, ai, i, i1 >> 16, j1 >> 16, l1 >> 8, i2 >> 8, l4, k5, j6, i5, l5, k6);
+                    Texture.method379(DrawingArea.pixels, ai, i, i1 >> 16, j1 >> 16, l1 >> 8, i2 >> 8, l4, k5, j6, i5, l5, k6);
                     j1 += i8;
                     i1 += k7;
                     i2 += j8;
@@ -1390,7 +1390,7 @@ public final class Texture extends DrawingArea {
                 i2 -= l7 * k;
                 k = 0;
             }
-            int l8 = i - textureInt2;
+            int l8 = i - Texture.originViewY;
             l4 += j5 * l8;
             k5 += i6 * l8;
             j6 += l6 * l8;
@@ -1398,10 +1398,10 @@ public final class Texture extends DrawingArea {
             {
                 j -= k;
                 k -= i;
-                i = anIntArray1472[i];
+                i = Texture.anIntArray1472[i];
                 while(--k >= 0) 
                 {
-                    method379(DrawingArea.pixels, ai, i, i1 >> 16, l >> 16, l1 >> 8, k1 >> 8, l4, k5, j6, i5, l5, k6);
+                    Texture.method379(DrawingArea.pixels, ai, i, i1 >> 16, l >> 16, l1 >> 8, k1 >> 8, l4, k5, j6, i5, l5, k6);
                     i1 += i8;
                     l += i7;
                     l1 += j8;
@@ -1413,7 +1413,7 @@ public final class Texture extends DrawingArea {
                 }
                 while(--j >= 0) 
                 {
-                    method379(DrawingArea.pixels, ai, i, j1 >> 16, l >> 16, i2 >> 8, k1 >> 8, l4, k5, j6, i5, l5, k6);
+                    Texture.method379(DrawingArea.pixels, ai, i, j1 >> 16, l >> 16, i2 >> 8, k1 >> 8, l4, k5, j6, i5, l5, k6);
                     j1 += k7;
                     l += i7;
                     i2 += l7;
@@ -1427,10 +1427,10 @@ public final class Texture extends DrawingArea {
             }
             j -= k;
             k -= i;
-            i = anIntArray1472[i];
+            i = Texture.anIntArray1472[i];
             while(--k >= 0) 
             {
-                method379(DrawingArea.pixels, ai, i, l >> 16, i1 >> 16, k1 >> 8, l1 >> 8, l4, k5, j6, i5, l5, k6);
+                Texture.method379(DrawingArea.pixels, ai, i, l >> 16, i1 >> 16, k1 >> 8, l1 >> 8, l4, k5, j6, i5, l5, k6);
                 i1 += i8;
                 l += i7;
                 l1 += j8;
@@ -1442,7 +1442,7 @@ public final class Texture extends DrawingArea {
             }
             while(--j >= 0) 
             {
-                method379(DrawingArea.pixels, ai, i, l >> 16, j1 >> 16, k1 >> 8, i2 >> 8, l4, k5, j6, i5, l5, k6);
+                Texture.method379(DrawingArea.pixels, ai, i, l >> 16, j1 >> 16, k1 >> 8, i2 >> 8, l4, k5, j6, i5, l5, k6);
                 j1 += k7;
                 l += i7;
                 i2 += l7;
@@ -1482,7 +1482,7 @@ public final class Texture extends DrawingArea {
                     i2 -= j8 * k;
                     k = 0;
                 }
-                int i9 = j - textureInt2;
+                int i9 = j - Texture.originViewY;
                 l4 += j5 * i9;
                 k5 += i6 * i9;
                 j6 += l6 * i9;
@@ -1490,10 +1490,10 @@ public final class Texture extends DrawingArea {
                 {
                     i -= k;
                     k -= j;
-                    j = anIntArray1472[j];
+                    j = Texture.anIntArray1472[j];
                     while(--k >= 0) 
                     {
-                        method379(DrawingArea.pixels, ai, j, l >> 16, i1 >> 16, k1 >> 8, l1 >> 8, l4, k5, j6, i5, l5, k6);
+                        Texture.method379(DrawingArea.pixels, ai, j, l >> 16, i1 >> 16, k1 >> 8, l1 >> 8, l4, k5, j6, i5, l5, k6);
                         l += i7;
                         i1 += k7;
                         k1 += j7;
@@ -1505,7 +1505,7 @@ public final class Texture extends DrawingArea {
                     }
                     while(--i >= 0) 
                     {
-                        method379(DrawingArea.pixels, ai, j, l >> 16, j1 >> 16, k1 >> 8, i2 >> 8, l4, k5, j6, i5, l5, k6);
+                        Texture.method379(DrawingArea.pixels, ai, j, l >> 16, j1 >> 16, k1 >> 8, i2 >> 8, l4, k5, j6, i5, l5, k6);
                         l += i7;
                         j1 += i8;
                         k1 += j7;
@@ -1519,10 +1519,10 @@ public final class Texture extends DrawingArea {
                 }
                 i -= k;
                 k -= j;
-                j = anIntArray1472[j];
+                j = Texture.anIntArray1472[j];
                 while(--k >= 0) 
                 {
-                    method379(DrawingArea.pixels, ai, j, i1 >> 16, l >> 16, l1 >> 8, k1 >> 8, l4, k5, j6, i5, l5, k6);
+                    Texture.method379(DrawingArea.pixels, ai, j, i1 >> 16, l >> 16, l1 >> 8, k1 >> 8, l4, k5, j6, i5, l5, k6);
                     l += i7;
                     i1 += k7;
                     k1 += j7;
@@ -1534,7 +1534,7 @@ public final class Texture extends DrawingArea {
                 }
                 while(--i >= 0) 
                 {
-                    method379(DrawingArea.pixels, ai, j, j1 >> 16, l >> 16, i2 >> 8, k1 >> 8, l4, k5, j6, i5, l5, k6);
+                    Texture.method379(DrawingArea.pixels, ai, j, j1 >> 16, l >> 16, i2 >> 8, k1 >> 8, l4, k5, j6, i5, l5, k6);
                     l += i7;
                     j1 += i8;
                     k1 += j7;
@@ -1564,7 +1564,7 @@ public final class Texture extends DrawingArea {
                 k1 -= j8 * i;
                 i = 0;
             }
-            int j9 = j - textureInt2;
+            int j9 = j - Texture.originViewY;
             l4 += j5 * j9;
             k5 += i6 * j9;
             j6 += l6 * j9;
@@ -1572,10 +1572,10 @@ public final class Texture extends DrawingArea {
             {
                 k -= i;
                 i -= j;
-                j = anIntArray1472[j];
+                j = Texture.anIntArray1472[j];
                 while(--i >= 0) 
                 {
-                    method379(DrawingArea.pixels, ai, j, j1 >> 16, i1 >> 16, i2 >> 8, l1 >> 8, l4, k5, j6, i5, l5, k6);
+                    Texture.method379(DrawingArea.pixels, ai, j, j1 >> 16, i1 >> 16, i2 >> 8, l1 >> 8, l4, k5, j6, i5, l5, k6);
                     j1 += i7;
                     i1 += k7;
                     i2 += j7;
@@ -1587,7 +1587,7 @@ public final class Texture extends DrawingArea {
                 }
                 while(--k >= 0) 
                 {
-                    method379(DrawingArea.pixels, ai, j, l >> 16, i1 >> 16, k1 >> 8, l1 >> 8, l4, k5, j6, i5, l5, k6);
+                    Texture.method379(DrawingArea.pixels, ai, j, l >> 16, i1 >> 16, k1 >> 8, l1 >> 8, l4, k5, j6, i5, l5, k6);
                     l += i8;
                     i1 += k7;
                     k1 += j8;
@@ -1601,10 +1601,10 @@ public final class Texture extends DrawingArea {
             }
             k -= i;
             i -= j;
-            j = anIntArray1472[j];
+            j = Texture.anIntArray1472[j];
             while(--i >= 0) 
             {
-                method379(DrawingArea.pixels, ai, j, i1 >> 16, j1 >> 16, l1 >> 8, i2 >> 8, l4, k5, j6, i5, l5, k6);
+                Texture.method379(DrawingArea.pixels, ai, j, i1 >> 16, j1 >> 16, l1 >> 8, i2 >> 8, l4, k5, j6, i5, l5, k6);
                 j1 += i7;
                 i1 += k7;
                 i2 += j7;
@@ -1616,7 +1616,7 @@ public final class Texture extends DrawingArea {
             }
             while(--k >= 0) 
             {
-                method379(DrawingArea.pixels, ai, j, i1 >> 16, l >> 16, l1 >> 8, k1 >> 8, l4, k5, j6, i5, l5, k6);
+                Texture.method379(DrawingArea.pixels, ai, j, i1 >> 16, l >> 16, l1 >> 8, k1 >> 8, l4, k5, j6, i5, l5, k6);
                 l += i8;
                 i1 += k7;
                 k1 += j8;
@@ -1654,7 +1654,7 @@ public final class Texture extends DrawingArea {
                 k1 -= j7 * i;
                 i = 0;
             }
-            int k9 = k - textureInt2;
+            int k9 = k - Texture.originViewY;
             l4 += j5 * k9;
             k5 += i6 * k9;
             j6 += l6 * k9;
@@ -1662,10 +1662,10 @@ public final class Texture extends DrawingArea {
             {
                 j -= i;
                 i -= k;
-                k = anIntArray1472[k];
+                k = Texture.anIntArray1472[k];
                 while(--i >= 0) 
                 {
-                    method379(DrawingArea.pixels, ai, k, i1 >> 16, j1 >> 16, l1 >> 8, i2 >> 8, l4, k5, j6, i5, l5, k6);
+                    Texture.method379(DrawingArea.pixels, ai, k, i1 >> 16, j1 >> 16, l1 >> 8, i2 >> 8, l4, k5, j6, i5, l5, k6);
                     i1 += k7;
                     j1 += i8;
                     l1 += l7;
@@ -1677,7 +1677,7 @@ public final class Texture extends DrawingArea {
                 }
                 while(--j >= 0) 
                 {
-                    method379(DrawingArea.pixels, ai, k, i1 >> 16, l >> 16, l1 >> 8, k1 >> 8, l4, k5, j6, i5, l5, k6);
+                    Texture.method379(DrawingArea.pixels, ai, k, i1 >> 16, l >> 16, l1 >> 8, k1 >> 8, l4, k5, j6, i5, l5, k6);
                     i1 += k7;
                     l += i7;
                     l1 += l7;
@@ -1691,10 +1691,10 @@ public final class Texture extends DrawingArea {
             }
             j -= i;
             i -= k;
-            k = anIntArray1472[k];
+            k = Texture.anIntArray1472[k];
             while(--i >= 0) 
             {
-                method379(DrawingArea.pixels, ai, k, j1 >> 16, i1 >> 16, i2 >> 8, l1 >> 8, l4, k5, j6, i5, l5, k6);
+                Texture.method379(DrawingArea.pixels, ai, k, j1 >> 16, i1 >> 16, i2 >> 8, l1 >> 8, l4, k5, j6, i5, l5, k6);
                 i1 += k7;
                 j1 += i8;
                 l1 += l7;
@@ -1706,7 +1706,7 @@ public final class Texture extends DrawingArea {
             }
             while(--j >= 0) 
             {
-                method379(DrawingArea.pixels, ai, k, l >> 16, i1 >> 16, k1 >> 8, l1 >> 8, l4, k5, j6, i5, l5, k6);
+                Texture.method379(DrawingArea.pixels, ai, k, l >> 16, i1 >> 16, k1 >> 8, l1 >> 8, l4, k5, j6, i5, l5, k6);
                 i1 += k7;
                 l += i7;
                 l1 += l7;
@@ -1736,7 +1736,7 @@ public final class Texture extends DrawingArea {
             l1 -= j7 * j;
             j = 0;
         }
-        int l9 = k - textureInt2;
+        int l9 = k - Texture.originViewY;
         l4 += j5 * l9;
         k5 += i6 * l9;
         j6 += l6 * l9;
@@ -1744,10 +1744,10 @@ public final class Texture extends DrawingArea {
         {
             i -= j;
             j -= k;
-            k = anIntArray1472[k];
+            k = Texture.anIntArray1472[k];
             while(--j >= 0) 
             {
-                method379(DrawingArea.pixels, ai, k, l >> 16, j1 >> 16, k1 >> 8, i2 >> 8, l4, k5, j6, i5, l5, k6);
+                Texture.method379(DrawingArea.pixels, ai, k, l >> 16, j1 >> 16, k1 >> 8, i2 >> 8, l4, k5, j6, i5, l5, k6);
                 l += k7;
                 j1 += i8;
                 k1 += l7;
@@ -1759,7 +1759,7 @@ public final class Texture extends DrawingArea {
             }
             while(--i >= 0) 
             {
-                method379(DrawingArea.pixels, ai, k, i1 >> 16, j1 >> 16, l1 >> 8, i2 >> 8, l4, k5, j6, i5, l5, k6);
+                Texture.method379(DrawingArea.pixels, ai, k, i1 >> 16, j1 >> 16, l1 >> 8, i2 >> 8, l4, k5, j6, i5, l5, k6);
                 i1 += i7;
                 j1 += i8;
                 l1 += j7;
@@ -1773,10 +1773,10 @@ public final class Texture extends DrawingArea {
         }
         i -= j;
         j -= k;
-        k = anIntArray1472[k];
+        k = Texture.anIntArray1472[k];
         while(--j >= 0) 
         {
-            method379(DrawingArea.pixels, ai, k, j1 >> 16, l >> 16, i2 >> 8, k1 >> 8, l4, k5, j6, i5, l5, k6);
+            Texture.method379(DrawingArea.pixels, ai, k, j1 >> 16, l >> 16, i2 >> 8, k1 >> 8, l4, k5, j6, i5, l5, k6);
             l += k7;
             j1 += i8;
             k1 += l7;
@@ -1788,7 +1788,7 @@ public final class Texture extends DrawingArea {
         }
         while(--i >= 0) 
         {
-            method379(DrawingArea.pixels, ai, k, j1 >> 16, i1 >> 16, i2 >> 8, l1 >> 8, l4, k5, j6, i5, l5, k6);
+            Texture.method379(DrawingArea.pixels, ai, k, j1 >> 16, i1 >> 16, i2 >> 8, l1 >> 8, l4, k5, j6, i5, l5, k6);
             i1 += i7;
             j1 += i8;
             l1 += j7;
@@ -1809,7 +1809,7 @@ public final class Texture extends DrawingArea {
             return;
         int j3;
         int k3;
-        if(aBoolean1462)
+        if(Texture.aBoolean1462)
         {
             j3 = (k1 - j1) / (i1 - l);
             if(i1 > DrawingArea.centerX)
@@ -1829,7 +1829,7 @@ public final class Texture extends DrawingArea {
             if(i1 - l > 7)
             {
                 k3 = i1 - l >> 3;
-                j3 = (k1 - j1) * anIntArray1468[k3] >> 6;
+                j3 = (k1 - j1) * Texture.anIntArray1468[k3] >> 6;
             } else
             {
                 k3 = 0;
@@ -1838,11 +1838,11 @@ public final class Texture extends DrawingArea {
             j1 <<= 9;
         }
         k += l;
-        if(lowMem)
+        if(Texture.lowMem)
         {
             int i4 = 0;
             int k4 = 0;
-            int k6 = l - textureInt1;
+            int k6 = l - Texture.originViewX;
             l1 += (k2 >> 3) * k6;
             i2 += (l2 >> 3) * k6;
             j2 += (i3 >> 3) * k6;
@@ -1875,7 +1875,7 @@ public final class Texture extends DrawingArea {
             int k7 = k4 - j >> 3;
             i += (j1 & 0x600000) >> 3;
             int i8 = j1 >> 23;
-            if(aBoolean1463)
+            if(Texture.aBoolean1463)
             {
                 while(k3-- > 0) 
                 {
@@ -2009,7 +2009,7 @@ public final class Texture extends DrawingArea {
         }
         int j4 = 0;
         int l4 = 0;
-        int l6 = l - textureInt1;
+        int l6 = l - Texture.originViewX;
         l1 += (k2 >> 3) * l6;
         i2 += (l2 >> 3) * l6;
         j2 += (i3 >> 3) * l6;
@@ -2042,7 +2042,7 @@ public final class Texture extends DrawingArea {
         int l7 = l4 - j >> 3;
         i += j1 & 0x600000;
         int j8 = j1 >> 23;
-        if(aBoolean1463)
+        if(Texture.aBoolean1463)
         {
             while(k3-- > 0) 
             {
@@ -2179,9 +2179,9 @@ public final class Texture extends DrawingArea {
     public static boolean aBoolean1462;
     private static boolean aBoolean1463;
     public static boolean aBoolean1464 = true;
-    public static int anInt1465;
-    public static int textureInt1;
-    public static int textureInt2;
+    public static int currentAlpha;
+    public static int originViewX;
+    public static int originViewY;
     private static int[] anIntArray1468;
     public static final int[] anIntArray1469;
     public static int anIntArray1470[];
@@ -2201,20 +2201,20 @@ public final class Texture extends DrawingArea {
 
     static 
     {
-        anIntArray1468 = new int[512];
+        Texture.anIntArray1468 = new int[512];
         anIntArray1469 = new int[2048];
-        anIntArray1470 = new int[2048];
-        anIntArray1471 = new int[2048];
+        Texture.anIntArray1470 = new int[2048];
+        Texture.anIntArray1471 = new int[2048];
         for(int i = 1; i < 512; i++)
-            anIntArray1468[i] = 32768 / i;
+            Texture.anIntArray1468[i] = 32768 / i;
 
         for(int j = 1; j < 2048; j++)
-            anIntArray1469[j] = 0x10000 / j;
+            Texture.anIntArray1469[j] = 0x10000 / j;
 
         for(int k = 0; k < 2048; k++)
         {
-            anIntArray1470[k] = (int)(65536D * Math.sin((double)k * 0.0030679614999999999D));
-            anIntArray1471[k] = (int)(65536D * Math.cos((double)k * 0.0030679614999999999D));
+            Texture.anIntArray1470[k] = (int)(65536D * Math.sin(k * 0.0030679614999999999D));
+            Texture.anIntArray1471[k] = (int)(65536D * Math.cos(k * 0.0030679614999999999D));
         }
 
     }

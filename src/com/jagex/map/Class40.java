@@ -1,10 +1,6 @@
 package com.jagex.map;
-// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) 
 
-import com.jagex.sign.signlink;
-
+//Was class40
 final class Class40
 {
 
@@ -12,20 +8,20 @@ final class Class40
                    int l1, int i2, int j2, int k2, int l2, int i3, int j3,
                    int k3, int l3, int i4, int k4, int l4)
     {
-        aBoolean683 = !(i3 != l2 || i3 != l || i3 != k2);
-        anInt684 = j3;
-        anInt685 = k1;
-        anInt686 = i2;
-        anInt687 = l4;
+        this.isFlat = !(i3 != l2 || i3 != l || i3 != k2);
+        this.anInt684 = j3;
+        this.anInt685 = k1;
+        this.anInt686 = i2;
+        this.anInt687 = l4;
         char c = '\200';
         int i5 = c / 2;
         int j5 = c / 4;
         int k5 = (c * 3) / 4;
-        int ai[] = anIntArrayArray696[j3];
+        int ai[] = Class40.SHAPE_VERTICES[j3];
         int l5 = ai.length;
-        anIntArray673 = new int[l5];
-        anIntArray674 = new int[l5];
-        anIntArray675 = new int[l5];
+        this.vertexX = new int[l5];
+        this.vertexY = new int[l5];
+        this.vertexZ = new int[l5];
         int ai1[] = new int[l5];
         int ai2[] = new int[l5];
         int i6 = k4 * c;
@@ -171,23 +167,23 @@ final class Class40
                 k8 = k;
                 j9 = k3;
             }
-            anIntArray673[k6] = i7;
-            anIntArray674[k6] = i8;
-            anIntArray675[k6] = k7;
+            this.vertexX[k6] = i7;
+            this.vertexY[k6] = i8;
+            this.vertexZ[k6] = k7;
             ai1[k6] = k8;
             ai2[k6] = j9;
         }
 
-        int ai3[] = anIntArrayArray697[j3];
+        int ai3[] = Class40.SHAPE_PATHS[j3];
         int j7 = ai3.length / 4;
-        anIntArray679 = new int[j7];
-        anIntArray680 = new int[j7];
-        anIntArray681 = new int[j7];
-        anIntArray676 = new int[j7];
-        anIntArray677 = new int[j7];
-        anIntArray678 = new int[j7];
+        this.triangleVertexA = new int[j7];
+        this.triangleVertexB = new int[j7];
+        this.triangleVertexC = new int[j7];
+        this.triangleColorA = new int[j7];
+        this.triangleColorB = new int[j7];
+        this.triangleColorC = new int[j7];
         if(i1 != -1)
-            anIntArray682 = new int[j7];
+            this.triangleTextureIndex = new int[j7];
         int l7 = 0;
         for(int j8 = 0; j8 < j7; j8++)
         {
@@ -202,23 +198,23 @@ final class Class40
                 i10 = i10 - k1 & 3;
             if(k10 < 4)
                 k10 = k10 - k1 & 3;
-            anIntArray679[j8] = k9;
-            anIntArray680[j8] = i10;
-            anIntArray681[j8] = k10;
+            this.triangleVertexA[j8] = k9;
+            this.triangleVertexB[j8] = i10;
+            this.triangleVertexC[j8] = k10;
             if(l8 == 0)
             {
-                anIntArray676[j8] = ai1[k9];
-                anIntArray677[j8] = ai1[i10];
-                anIntArray678[j8] = ai1[k10];
-                if(anIntArray682 != null)
-                    anIntArray682[j8] = -1;
+                this.triangleColorA[j8] = ai1[k9];
+                this.triangleColorB[j8] = ai1[i10];
+                this.triangleColorC[j8] = ai1[k10];
+                if(this.triangleTextureIndex != null)
+                    this.triangleTextureIndex[j8] = -1;
             } else
             {
-                anIntArray676[j8] = ai2[k9];
-                anIntArray677[j8] = ai2[i10];
-                anIntArray678[j8] = ai2[k10];
-                if(anIntArray682 != null)
-                    anIntArray682[j8] = i1;
+                this.triangleColorA[j8] = ai2[k9];
+                this.triangleColorB[j8] = ai2[i10];
+                this.triangleColorC[j8] = ai2[k10];
+                if(this.triangleTextureIndex != null)
+                    this.triangleTextureIndex[j8] = i1;
             }
         }
 
@@ -240,36 +236,28 @@ final class Class40
         l9 /= 14;
     }
 
-    final int[] anIntArray673;
-    final int[] anIntArray674;
-    final int[] anIntArray675;
-    final int[] anIntArray676;
-    final int[] anIntArray677;
-    final int[] anIntArray678;
-    final int[] anIntArray679;
-    final int[] anIntArray680;
-    final int[] anIntArray681;
-    int anIntArray682[];
-    final boolean aBoolean683;
+    final int[] vertexX;
+    final int[] vertexY;
+    final int[] vertexZ;
+    final int[] triangleColorA;
+    final int[] triangleColorB;
+    final int[] triangleColorC;
+    final int[] triangleVertexA;
+    final int[] triangleVertexB;
+    final int[] triangleVertexC;
+    int triangleTextureIndex[];
+    final boolean isFlat;
     final int anInt684;
     final int anInt685;
     final int anInt686;
     final int anInt687;
-    static final int[] anIntArray688 = new int[6];
-    static final int[] anIntArray689 = new int[6];
-    static final int[] anIntArray690 = new int[6];
-    static final int[] anIntArray691 = new int[6];
-    static final int[] anIntArray692 = new int[6];
-    static final int[] anIntArray693 = {
-        1, 0
-    };
-    static final int[] anIntArray694 = {
-        2, 1
-    };
-    static final int[] anIntArray695 = {
-        3, 3
-    };
-    private static final int[][] anIntArrayArray696 = {
+    static final int[] tmpScreenX = new int[6];
+    static final int[] tmpScreenY = new int[6];
+    static final int[] vertexSceneX = new int[6];
+    static final int[] vertexSceneY = new int[6];
+    static final int[] vertexSceneZ = new int[6];
+
+    private static final int[][] SHAPE_VERTICES = {
         {
             1, 3, 5, 7
         }, {
@@ -298,7 +286,7 @@ final class Class40
             1, 3, 5, 7, 13, 14
         }
     };
-    private static final int[][] anIntArrayArray697 = {
+    private static final int[][] SHAPE_PATHS = {
         {
             0, 1, 2, 3, 0, 0, 1, 3
         }, {

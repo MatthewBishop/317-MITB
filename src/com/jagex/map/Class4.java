@@ -3,8 +3,6 @@ package com.jagex.map;
 // Jad home page: http://www.kpdus.com/jad.html
 // Decompiler options: packimports(3) 
 
-import com.jagex.sign.signlink;
-
 final class Class4
 {
 

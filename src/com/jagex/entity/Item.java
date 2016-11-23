@@ -1,25 +1,15 @@
 package com.jagex.entity;
-// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) 
 
 import com.jagex.cache.def.ItemDef;
 import com.jagex.entity.model.Model;
 
 public final class Item extends Animable {
 
-    public final Model getRotatedModel()
-    {
-        ItemDef itemDef = ItemDef.forID(ID);
-            return itemDef.method201(anInt1559);
-    }
+	@Override
+	public final Model getModel() {
+		return ItemDef.forID(this.id).asGroundStack(this.amount);
+	}
 
-    public Item()
-    {
-    }
-
-    public int ID;
-    public int x;
-	public int y;
-	public int anInt1559;
+	public int id;
+	public int amount;
 }

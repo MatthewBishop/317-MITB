@@ -1,12 +1,10 @@
 package com.jagex.window;
 
 import java.applet.Applet;
-import java.applet.AppletContext;
 import java.awt.*;
 import java.awt.event.*;
 import java.net.URL;
 
-import com.jagex.Client;
 import com.jagex.Utils;
 
 public class RSApplet extends Applet
@@ -16,75 +14,81 @@ public class RSApplet extends Applet
 
 	private RSBase client;
 
-	public RSApplet(Client client) {
+	public RSApplet(RSBase client) {
 		this.client = client;
 	}
 
+	@Override
+	public void init() {
+		this.client.init();
+	}
+	
 	public final void initClientFrame(int i, int j, boolean applet) {
-		isApplet = applet;
+		this.isApplet = applet;
 		if (!applet) {
-			gameFrame = new RSFrame(this, j, i, Client.frameMode == Client.ScreenMode.RESIZABLE,
-					Client.frameMode == Client.ScreenMode.FULLSCREEN);
-			gameFrame.setFocusTraversalKeysEnabled(false);
+			this.gameFrame = new RSFrame(this, j, i, RSBase.frameMode == RSBase.ScreenMode.RESIZABLE,
+					RSBase.frameMode == RSBase.ScreenMode.FULLSCREEN);
+			this.gameFrame.setFocusTraversalKeysEnabled(false);
 		}
-		graphics = getGameComponent().getGraphics();
+		this.graphics = this.getGameComponent().getGraphics();
 		Utils.startRunnable(this, 1);
 	}
 
 	public void refreshFrameSize(boolean undecorated, int width, int height, boolean resizable, boolean full) {
-		boolean createdByApplet = (isApplet && !full);
-		if (gameFrame != null) {
-			gameFrame.dispose();
+		boolean createdByApplet = (this.isApplet && !full);
+		if (this.gameFrame != null) {
+			this.gameFrame.dispose();
 		}
 		if (!createdByApplet) {
-			gameFrame = new RSFrame(this, width, height, resizable, undecorated);
-			gameFrame.addWindowListener(this);
+			this.gameFrame = new RSFrame(this, width, height, resizable, undecorated);
+			this.gameFrame.addWindowListener(this);
 		}
-		graphics = (createdByApplet ? this : gameFrame).getGraphics();
+		this.graphics = (createdByApplet ? this : this.gameFrame).getGraphics();
 		if (!createdByApplet) {
 			// getGameComponent().addMouseWheelListener(this);
-			getGameComponent().addMouseListener(this);
-			getGameComponent().addMouseMotionListener(this);
-			getGameComponent().addKeyListener(this);
-			getGameComponent().addFocusListener(this);
+			this.getGameComponent().addMouseListener(this);
+			this.getGameComponent().addMouseMotionListener(this);
+			this.getGameComponent().addKeyListener(this);
+			this.getGameComponent().addFocusListener(this);
 		}
 	}
 
 	public boolean appletClient() {
-		return gameFrame == null && isApplet == true;
+		return this.gameFrame == null && this.isApplet == true;
 	}
 
 	private int getW() {
-		return (appletClient() ? getGameComponent().getWidth() : gameFrame.getFrameWidth());
+		return (this.appletClient() ? this.getGameComponent().getWidth() : this.gameFrame.getFrameWidth());
 	}
 
 	private int getH() {
-		return (appletClient() ? getGameComponent().getHeight() : gameFrame.getFrameHeight());
+		return (this.appletClient() ? this.getGameComponent().getHeight() : this.gameFrame.getFrameHeight());
 	}
 
+	@Override
 	public void run() {
-		getGameComponent().addMouseListener(this);
-		getGameComponent().addMouseMotionListener(this);
-		getGameComponent().addKeyListener(this);
-		getGameComponent().addFocusListener(this);
-		if (gameFrame != null)
-			gameFrame.addWindowListener(this);
-		drawLoadingText(0, "Loading...");
-		client.startUp();
+		this.getGameComponent().addMouseListener(this);
+		this.getGameComponent().addMouseMotionListener(this);
+		this.getGameComponent().addKeyListener(this);
+		this.getGameComponent().addFocusListener(this);
+		if (this.gameFrame != null)
+			this.gameFrame.addWindowListener(this);
+		this.drawLoadingText(0, "Loading...");
+		this.client.startUp();
 		int i = 0;
 		int j = 256;
 		int k = 1;
 		int i1 = 0;
 		int j1 = 0;
 		for (int k1 = 0; k1 < 10; k1++)
-			aLongArray7[k1] = System.currentTimeMillis();
+			this.aLongArray7[k1] = System.currentTimeMillis();
 
 		long l = System.currentTimeMillis();
-		while (anInt4 >= 0) {
-			if (anInt4 > 0) {
-				anInt4--;
-				if (anInt4 == 0) {
-					exit();
+		while (this.anInt4 >= 0) {
+			if (this.anInt4 > 0) {
+				this.anInt4--;
+				if (this.anInt4 == 0) {
+					this.exit();
 					return;
 				}
 			}
@@ -93,64 +97,64 @@ public class RSApplet extends Applet
 			j = 300;
 			k = 1;
 			long l1 = System.currentTimeMillis();
-			if (aLongArray7[i] == 0L) {
+			if (this.aLongArray7[i] == 0L) {
 				j = i2;
 				k = j2;
-			} else if (l1 > aLongArray7[i])
-				j = (int) ((long) (2560 * delayTime) / (l1 - aLongArray7[i]));
+			} else if (l1 > this.aLongArray7[i])
+				j = (int) (2560 * this.delayTime / (l1 - this.aLongArray7[i]));
 			if (j < 25)
 				j = 25;
 			if (j > 256) {
 				j = 256;
-				k = (int) ((long) delayTime - (l1 - aLongArray7[i]) / 10L);
+				k = (int) (this.delayTime - (l1 - this.aLongArray7[i]) / 10L);
 			}
-			if (k > delayTime)
-				k = delayTime;
-			aLongArray7[i] = l1;
+			if (k > this.delayTime)
+				k = this.delayTime;
+			this.aLongArray7[i] = l1;
 			i = (i + 1) % 10;
 			if (k > 1) {
 				for (int k2 = 0; k2 < 10; k2++)
-					if (aLongArray7[k2] != 0L)
-						aLongArray7[k2] += k;
+					if (this.aLongArray7[k2] != 0L)
+						this.aLongArray7[k2] += k;
 
 			}
-			if (k < minDelay)
-				k = minDelay;
+			if (k < this.minDelay)
+				k = this.minDelay;
 			try {
 				Thread.sleep(k);
 			} catch (InterruptedException _ex) {
 				j1++;
 			}
 			for (; i1 < 256; i1 += j) {
-				clickMode3 = clickMode1;
-				saveClickX = clickX;
-				saveClickY = clickY;
-				aLong29 = clickTime;
-				clickMode1 = 0;
-				client.processGameLoop();
-				readIndex = writeIndex;
+				this.clickMode3 = this.clickMode1;
+				this.saveClickX = this.clickX;
+				this.saveClickY = this.clickY;
+				this.aLong29 = this.clickTime;
+				this.clickMode1 = 0;
+				this.client.processGameLoop();
+				this.readIndex = this.writeIndex;
 			}
 
 			i1 &= 0xff;
-			if (delayTime > 0)
-				fps = (1000 * j) / (delayTime * 256);
-			client.processDrawing();
-			if (shouldDebug) {
+			if (this.delayTime > 0)
+				this.fps = (1000 * j) / (this.delayTime * 256);
+			this.client.processDrawing();
+			if (this.shouldDebug) {
 				System.out.println("ntime:" + l1);
 				for (int l2 = 0; l2 < 10; l2++) {
 					int i3 = ((i - l2 - 1) + 20) % 10;
-					System.out.println("otim" + i3 + ":" + aLongArray7[i3]);
+					System.out.println("otim" + i3 + ":" + this.aLongArray7[i3]);
 				}
 
-				System.out.println("fps:" + fps + " ratio:" + j + " count:" + i1);
-				System.out.println("del:" + k + " deltime:" + delayTime + " mindel:" + minDelay);
+				System.out.println("fps:" + this.fps + " ratio:" + j + " count:" + i1);
+				System.out.println("del:" + k + " deltime:" + this.delayTime + " mindel:" + this.minDelay);
 				System.out.println("intex:" + j1 + " opos:" + i);
-				shouldDebug = false;
+				this.shouldDebug = false;
 				j1 = 0;
 			}
 		}
-		if (anInt4 == -1)
-			exit();
+		if (this.anInt4 == -1)
+			this.exit();
 	}
 
 	public String aString1049;
@@ -158,9 +162,9 @@ public class RSApplet extends Applet
 	public int anInt1079;
 
 	private void exit() {
-		anInt4 = -2;
-		client.cleanUpForQuit();
-		if (gameFrame != null) {
+		this.anInt4 = -2;
+		this.client.cleanUpForQuit();
+		if (this.gameFrame != null) {
 			try {
 				Thread.sleep(1000L);
 			} catch (Exception _ex) {
@@ -173,106 +177,119 @@ public class RSApplet extends Applet
 	}
 
 	public final void method4(int i) {
-		delayTime = 1000 / i;
+		this.delayTime = 1000 / i;
 	}
 
+	@Override
 	public final void start() {
-		if (anInt4 >= 0)
-			anInt4 = 0;
+		if (this.anInt4 >= 0)
+			this.anInt4 = 0;
 	}
 
+	@Override
 	public final void stop() {
-		if (anInt4 >= 0)
-			anInt4 = 4000 / delayTime;
+		if (this.anInt4 >= 0)
+			this.anInt4 = 4000 / this.delayTime;
 	}
 
+	@Override
 	public final void destroy() {
-		anInt4 = -1;
+		this.anInt4 = -1;
 		try {
 			Thread.sleep(5000L);
 		} catch (Exception _ex) {
 		}
-		if (anInt4 == -1)
-			exit();
+		if (this.anInt4 == -1)
+			this.exit();
 	}
 
+	@Override
 	public final void update(Graphics g) {
-		if (graphics == null)
-			graphics = g;
-		shouldClearScreen = true;
-		client.raiseWelcomeScreen();
+		if (this.graphics == null)
+			this.graphics = g;
+		this.shouldClearScreen = true;
+		this.client.raiseWelcomeScreen();
 	}
 
+	@Override
 	public final void paint(Graphics g) {
-		if (graphics == null)
-			graphics = g;
-		shouldClearScreen = true;
-		client.raiseWelcomeScreen();
+		if (this.graphics == null)
+			this.graphics = g;
+		this.shouldClearScreen = true;
+		this.client.raiseWelcomeScreen();
 	}
 
+	@Override
 	public final void mousePressed(MouseEvent mouseevent) {
 		int i = mouseevent.getX();
 		int j = mouseevent.getY();
-		if (gameFrame != null) {
+		if (this.gameFrame != null) {
 			i -= 4;
 			j -= 22;
 		}
-		idleTime = 0;
-		clickX = i;
-		clickY = j;
-		clickTime = System.currentTimeMillis();
+		this.idleTime = 0;
+		this.clickX = i;
+		this.clickY = j;
+		this.clickTime = System.currentTimeMillis();
 		if (mouseevent.isMetaDown()) {
-			clickMode1 = 2;
-			clickMode2 = 2;
+			this.clickMode1 = 2;
+			this.clickMode2 = 2;
 		} else {
-			clickMode1 = 1;
-			clickMode2 = 1;
+			this.clickMode1 = 1;
+			this.clickMode2 = 1;
 		}
 	}
 
+	@Override
 	public final void mouseReleased(MouseEvent mouseevent) {
-		idleTime = 0;
-		clickMode2 = 0;
+		this.idleTime = 0;
+		this.clickMode2 = 0;
 	}
 
+	@Override
 	public final void mouseClicked(MouseEvent mouseevent) {
 	}
 
+	@Override
 	public final void mouseEntered(MouseEvent mouseevent) {
 	}
 
+	@Override
 	public final void mouseExited(MouseEvent mouseevent) {
-		idleTime = 0;
-		mouseX = -1;
-		mouseY = -1;
+		this.idleTime = 0;
+		this.mouseX = -1;
+		this.mouseY = -1;
 	}
 
+	@Override
 	public final void mouseDragged(MouseEvent mouseevent) {
 		int i = mouseevent.getX();
 		int j = mouseevent.getY();
-		if (gameFrame != null) {
+		if (this.gameFrame != null) {
 			i -= 4;
 			j -= 22;
 		}
-		idleTime = 0;
-		mouseX = i;
-		mouseY = j;
+		this.idleTime = 0;
+		this.mouseX = i;
+		this.mouseY = j;
 	}
 
+	@Override
 	public final void mouseMoved(MouseEvent mouseevent) {
 		int i = mouseevent.getX();
 		int j = mouseevent.getY();
-		if (gameFrame != null) {
+		if (this.gameFrame != null) {
 			i -= 4;
 			j -= 22;
 		}
-		idleTime = 0;
-		mouseX = i;
-		mouseY = j;
+		this.idleTime = 0;
+		this.mouseX = i;
+		this.mouseY = j;
 	}
 
+	@Override
 	public final void keyPressed(KeyEvent keyevent) {
-		idleTime = 0;
+		this.idleTime = 0;
 		int i = keyevent.getKeyCode();
 		int j = keyevent.getKeyChar();
 		if (j < 30)
@@ -306,15 +323,16 @@ public class RSApplet extends Applet
 		if (i == 34)
 			j = 1003;
 		if (j > 0 && j < 128)
-			keyArray[j] = 1;
+			this.keyArray[j] = 1;
 		if (j > 4) {
-			charQueue[writeIndex] = j;
-			writeIndex = writeIndex + 1 & 0x7f;
+			this.charQueue[this.writeIndex] = j;
+			this.writeIndex = this.writeIndex + 1 & 0x7f;
 		}
 	}
 
+	@Override
 	public final void keyReleased(KeyEvent keyevent) {
-		idleTime = 0;
+		this.idleTime = 0;
 		int i = keyevent.getKeyCode();
 		char c = keyevent.getKeyChar();
 		if (c < '\036')
@@ -338,9 +356,10 @@ public class RSApplet extends Applet
 		if (i == 10)
 			c = '\n';
 		if (c > 0 && c < '\200')
-			keyArray[c] = 0;
+			this.keyArray[c] = 0;
 	}
 
+	@Override
 	public final void keyTyped(KeyEvent keyevent) {
 	}
 
@@ -350,51 +369,60 @@ public class RSApplet extends Applet
 				;
 		}
 		int k = -1;
-		if (writeIndex != readIndex) {
-			k = charQueue[readIndex];
-			readIndex = readIndex + 1 & 0x7f;
+		if (this.writeIndex != this.readIndex) {
+			k = this.charQueue[this.readIndex];
+			this.readIndex = this.readIndex + 1 & 0x7f;
 		}
 		return k;
 	}
 
+	@Override
 	public final void focusGained(FocusEvent focusevent) {
-		awtFocus = true;
-		shouldClearScreen = true;
-		client.raiseWelcomeScreen();
+		this.awtFocus = true;
+		this.shouldClearScreen = true;
+		this.client.raiseWelcomeScreen();
 	}
 
+	@Override
 	public final void focusLost(FocusEvent focusevent) {
-		awtFocus = false;
+		this.awtFocus = false;
 		for (int i = 0; i < 128; i++)
-			keyArray[i] = 0;
+			this.keyArray[i] = 0;
 
 	}
 
+	@Override
 	public final void windowActivated(WindowEvent windowevent) {
 	}
 
+	@Override
 	public final void windowClosed(WindowEvent windowevent) {
 	}
 
+	@Override
 	public final void windowClosing(WindowEvent windowevent) {
-		destroy();
+		this.destroy();
 	}
 
+	@Override
 	public final void windowDeactivated(WindowEvent windowevent) {
 	}
 
+	@Override
 	public final void windowDeiconified(WindowEvent windowevent) {
 	}
 
+	@Override
 	public final void windowIconified(WindowEvent windowevent) {
 	}
 
+	@Override
 	public final void windowOpened(WindowEvent windowevent) {
 	}
 
 	public Component getGameComponent() {
-		if (gameFrame != null)
-			return gameFrame;
+		if (this.gameFrame != null)
+			return this.gameFrame;
 		else
 			return this;
 	}
@@ -402,7 +430,7 @@ public class RSApplet extends Applet
 	@Override
 	public URL getCodeBase() {
 		try {
-			if (gameFrame != null)
+			if (this.gameFrame != null)
 				return new URL("http://127.0.0.1:" + (80 + RSBase.portOff));
 		} catch (Exception _ex) {
 		}
@@ -413,7 +441,7 @@ public class RSApplet extends Applet
 		String s = "ondemand";// was a constant parameter
 		System.out.println(s);
 		try {
-			getAppletContext().showDocument(new URL(getCodeBase(), "loaderror_" + s + ".html"));
+			this.getAppletContext().showDocument(new URL(this.getCodeBase(), "loaderror_" + s + ".html"));
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
@@ -426,12 +454,12 @@ public class RSApplet extends Applet
 	}
 
 	public void drawLoadingText(int i, String s) {
-		anInt1079 = i;
-		aString1049 = s;
-		while (graphics == null) {
-			graphics = getGameComponent().getGraphics();
+		this.anInt1079 = i;
+		this.aString1049 = s;
+		while (this.graphics == null) {
+			this.graphics = this.getGameComponent().getGraphics();
 			try {
-				getGameComponent().repaint();
+				this.getGameComponent().repaint();
 			} catch (Exception _ex) {
 			}
 			try {
@@ -439,27 +467,27 @@ public class RSApplet extends Applet
 			} catch (Exception _ex) {
 			}
 		}
-		int myWidth = getW();
-		int myHeight = getH();
+		int myWidth = this.getW();
+		int myHeight = this.getH();
 		Font font = new Font("Helvetica", 1, 13);
-		FontMetrics fontmetrics = getGameComponent().getFontMetrics(font);
+		FontMetrics fontmetrics = this.getGameComponent().getFontMetrics(font);
 		Font font1 = new Font("Helvetica", 0, 13);
-		getGameComponent().getFontMetrics(font1);
-		if (shouldClearScreen) {
-			graphics.setColor(Color.black);
-			graphics.fillRect(0, 0, myWidth, myHeight);
-			shouldClearScreen = false;
+		this.getGameComponent().getFontMetrics(font1);
+		if (this.shouldClearScreen) {
+			this.graphics.setColor(Color.black);
+			this.graphics.fillRect(0, 0, myWidth, myHeight);
+			this.shouldClearScreen = false;
 		}
 		Color color = new Color(140, 17, 17);
 		int j = myHeight / 2 - 18;
-		graphics.setColor(color);
-		graphics.drawRect(myWidth / 2 - 152, j, 304, 34);
-		graphics.fillRect(myWidth / 2 - 150, j + 2, i * 3, 30);
-		graphics.setColor(Color.black);
-		graphics.fillRect((myWidth / 2 - 150) + i * 3, j + 2, 300 - i * 3, 30);
-		graphics.setFont(font);
-		graphics.setColor(Color.white);
-		graphics.drawString(s, (myWidth - fontmetrics.stringWidth(s)) / 2, j + 22);
+		this.graphics.setColor(color);
+		this.graphics.drawRect(myWidth / 2 - 152, j, 304, 34);
+		this.graphics.fillRect(myWidth / 2 - 150, j + 2, i * 3, 30);
+		this.graphics.setColor(Color.black);
+		this.graphics.fillRect((myWidth / 2 - 150) + i * 3, j + 2, 300 - i * 3, 30);
+		this.graphics.setFont(font);
+		this.graphics.setColor(Color.white);
+		this.graphics.drawString(s, (myWidth - fontmetrics.stringWidth(s)) / 2, j + 22);
 	}
 
 	private int anInt4;

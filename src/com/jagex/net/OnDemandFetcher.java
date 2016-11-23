@@ -26,9 +26,9 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
             return false;
         int k = abyte0.length - 2;
         int l = ((abyte0[k] & 0xff) << 8) + (abyte0[k + 1] & 0xff);
-        crc32.reset();
-        crc32.update(abyte0, 0, k);
-        int i1 = (int) crc32.getValue();
+        this.crc32.reset();
+        this.crc32.update(abyte0, 0, k);
+        int i1 = (int) this.crc32.getValue();
         return l == i && i1 == j;
     }
 
@@ -36,94 +36,94 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
     {
         try
         {
-            int j = inputStream.available();
-            if(expectedSize == 0 && j >= 6)
+            int j = this.inputStream.available();
+            if(this.expectedSize == 0 && j >= 6)
             {
-                waiting = true;
-                for(int k = 0; k < 6; k += inputStream.read(ioBuffer, k, 6 - k));
-                int l = ioBuffer[0] & 0xff;
-                int j1 = ((ioBuffer[1] & 0xff) << 8) + (ioBuffer[2] & 0xff);
-                int l1 = ((ioBuffer[3] & 0xff) << 8) + (ioBuffer[4] & 0xff);
-                int i2 = ioBuffer[5] & 0xff;
-                current = null;
-                for(OnDemandData onDemandData = (OnDemandData) requested.getFront(); onDemandData != null; onDemandData = (OnDemandData) requested.getNext())
+                this.waiting = true;
+                for(int k = 0; k < 6; k += this.inputStream.read(this.ioBuffer, k, 6 - k));
+                int l = this.ioBuffer[0] & 0xff;
+                int j1 = ((this.ioBuffer[1] & 0xff) << 8) + (this.ioBuffer[2] & 0xff);
+                int l1 = ((this.ioBuffer[3] & 0xff) << 8) + (this.ioBuffer[4] & 0xff);
+                int i2 = this.ioBuffer[5] & 0xff;
+                this.current = null;
+                for(OnDemandData onDemandData = (OnDemandData) this.requested.getFront(); onDemandData != null; onDemandData = (OnDemandData) this.requested.getNext())
                 {
                     if(onDemandData.dataType == l && onDemandData.ID == j1)
-                        current = onDemandData;
-                    if(current != null)
+                        this.current = onDemandData;
+                    if(this.current != null)
                         onDemandData.loopCycle = 0;
                 }
 
-                if(current != null)
+                if(this.current != null)
                 {
-                    loopCycle = 0;
+                    this.loopCycle = 0;
                     if(l1 == 0)
                     {
                         Utils.reporterror("Rej: " + l + "," + j1);
-                        current.buffer = null;
-                        if(current.incomplete)
-                            synchronized(aClass19_1358)
+                        this.current.buffer = null;
+                        if(this.current.incomplete)
+                            synchronized(this.aClass19_1358)
                             {
-                                aClass19_1358.pushBack(current);
+                                this.aClass19_1358.pushBack(this.current);
                             }
                         else
-                            current.unlink();
-                        current = null;
+                            this.current.unlink();
+                        this.current = null;
                     } else
                     {
-                        if(current.buffer == null && i2 == 0)
-                            current.buffer = new byte[l1];
-                        if(current.buffer == null && i2 != 0)
+                        if(this.current.buffer == null && i2 == 0)
+                            this.current.buffer = new byte[l1];
+                        if(this.current.buffer == null && i2 != 0)
                             throw new IOException("missing start of file");
                     }
                 }
-                completedSize = i2 * 500;
-                expectedSize = 500;
-                if(expectedSize > l1 - i2 * 500)
-                    expectedSize = l1 - i2 * 500;
+                this.completedSize = i2 * 500;
+                this.expectedSize = 500;
+                if(this.expectedSize > l1 - i2 * 500)
+                    this.expectedSize = l1 - i2 * 500;
             }
-            if(expectedSize > 0 && j >= expectedSize)
+            if(this.expectedSize > 0 && j >= this.expectedSize)
             {
-                waiting = true;
-                byte abyte0[] = ioBuffer;
+                this.waiting = true;
+                byte abyte0[] = this.ioBuffer;
                 int i1 = 0;
-                if(current != null)
+                if(this.current != null)
                 {
-                    abyte0 = current.buffer;
-                    i1 = completedSize;
+                    abyte0 = this.current.buffer;
+                    i1 = this.completedSize;
                 }
-                for(int k1 = 0; k1 < expectedSize; k1 += inputStream.read(abyte0, k1 + i1, expectedSize - k1));
-                if(expectedSize + completedSize >= abyte0.length && current != null)
+                for(int k1 = 0; k1 < this.expectedSize; k1 += this.inputStream.read(abyte0, k1 + i1, this.expectedSize - k1));
+                if(this.expectedSize + this.completedSize >= abyte0.length && this.current != null)
                 {
-                    if(clientInstance.indexs[0] != null)
-                        clientInstance.indexs[current.dataType + 1].put(abyte0.length, abyte0, current.ID);
-                    if(!current.incomplete && current.dataType == 3)
+                    if(this.clientInstance.indexs[0] != null)
+                        this.clientInstance.indexs[this.current.dataType + 1].put(abyte0.length, abyte0, this.current.ID);
+                    if(!this.current.incomplete && this.current.dataType == 3)
                     {
-                        current.incomplete = true;
-                        current.dataType = 93;
+                        this.current.incomplete = true;
+                        this.current.dataType = 93;
                     }
-                    if(current.incomplete)
-                        synchronized(aClass19_1358)
+                    if(this.current.incomplete)
+                        synchronized(this.aClass19_1358)
                         {
-                            aClass19_1358.pushBack(current);
+                            this.aClass19_1358.pushBack(this.current);
                         }
                     else
-                        current.unlink();
+                        this.current.unlink();
                 }
-                expectedSize = 0;
+                this.expectedSize = 0;
             }
         }
         catch(IOException ioexception)
         {
             try
             {
-                socket.close();
+                this.socket.close();
             }
             catch(Exception _ex) { }
-            socket = null;
-            inputStream = null;
-            outputStream = null;
-            expectedSize = 0;
+            this.socket = null;
+            this.inputStream = null;
+            this.outputStream = null;
+            this.expectedSize = 0;
         }
     }
 
@@ -137,10 +137,10 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
             byte abyte0[] = archive.getEntry(as[i]);
             int j = abyte0.length / 2;
             Buffer buffer = new Buffer(abyte0);
-            versions[i] = new int[j];
-            fileStatus[i] = new byte[j];
+            this.versions[i] = new int[j];
+            this.fileStatus[i] = new byte[j];
             for(int l = 0; l < j; l++)
-                versions[i][l] = buffer.readUShort();
+                this.versions[i][l] = buffer.readUShort();
 
         }
 
@@ -152,146 +152,146 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
             byte abyte1[] = archive.getEntry(as1[k]);
             int i1 = abyte1.length / 4;
             Buffer buffer_1 = new Buffer(abyte1);
-            crcs[k] = new int[i1];
+            this.crcs[k] = new int[i1];
             for(int l1 = 0; l1 < i1; l1++)
-                crcs[k][l1] = buffer_1.readInt();
+                this.crcs[k][l1] = buffer_1.readInt();
 
         }
 
         byte abyte2[] = archive.getEntry("model_index");
-        int j1 = versions[0].length;
-        modelIndices = new byte[j1];
+        int j1 = this.versions[0].length;
+        this.modelIndices = new byte[j1];
         for(int k1 = 0; k1 < j1; k1++)
             if(k1 < abyte2.length)
-                modelIndices[k1] = abyte2[k1];
+                this.modelIndices[k1] = abyte2[k1];
             else
-                modelIndices[k1] = 0;
+                this.modelIndices[k1] = 0;
 
         abyte2 = archive.getEntry("map_index");
         Buffer buffer2 = new Buffer(abyte2);
         j1 = abyte2.length / 7;
-        mapIndices1 = new int[j1];
-        mapIndices2 = new int[j1];
-        mapIndices3 = new int[j1];
-        mapIndices4 = new int[j1];
+        this.mapIndices1 = new int[j1];
+        this.mapIndices2 = new int[j1];
+        this.mapIndices3 = new int[j1];
+        this.mapIndices4 = new int[j1];
         for(int i2 = 0; i2 < j1; i2++)
         {
-            mapIndices1[i2] = buffer2.readUShort();
-            mapIndices2[i2] = buffer2.readUShort();
-            mapIndices3[i2] = buffer2.readUShort();
-            mapIndices4[i2] = buffer2.readUByte();
+            this.mapIndices1[i2] = buffer2.readUShort();
+            this.mapIndices2[i2] = buffer2.readUShort();
+            this.mapIndices3[i2] = buffer2.readUShort();
+            this.mapIndices4[i2] = buffer2.readUByte();
         }
 
         abyte2 = archive.getEntry("anim_index");
         buffer2 = new Buffer(abyte2);
         j1 = abyte2.length / 2;
-        anIntArray1360 = new int[j1];
+        this.anIntArray1360 = new int[j1];
         for(int j2 = 0; j2 < j1; j2++)
-            anIntArray1360[j2] = buffer2.readUShort();
+            this.anIntArray1360[j2] = buffer2.readUShort();
 
         abyte2 = archive.getEntry("midi_index");
         buffer2 = new Buffer(abyte2);
         j1 = abyte2.length;
-        anIntArray1348 = new int[j1];
+        this.anIntArray1348 = new int[j1];
         for(int k2 = 0; k2 < j1; k2++)
-            anIntArray1348[k2] = buffer2.readUByte();
+            this.anIntArray1348[k2] = buffer2.readUByte();
 
-        clientInstance = client1;
-        running = true;
+        this.clientInstance = client1;
+        this.running = true;
         Utils.startRunnable(this, 2);
     }
 
     public int getNodeCount()
     {
-        synchronized(queue)
+        synchronized(this.queue)
         {
-            return queue.size();
+            return this.queue.size();
         }
     }
 
     public void disable()
     {
-        running = false;
+        this.running = false;
     }
 
     public void method554(boolean flag)
     {
-        int j = mapIndices1.length;
+        int j = this.mapIndices1.length;
         for(int k = 0; k < j; k++)
-            if(flag || mapIndices4[k] != 0)
+            if(flag || this.mapIndices4[k] != 0)
             {
-                method563((byte)2, 3, mapIndices3[k]);
-                method563((byte)2, 3, mapIndices2[k]);
+                this.method563((byte)2, 3, this.mapIndices3[k]);
+                this.method563((byte)2, 3, this.mapIndices2[k]);
             }
 
     }
 
     public int getVersionCount(int j)
     {
-        return versions[j].length;
+        return this.versions[j].length;
     }
 
     private void closeRequest(OnDemandData onDemandData)
     {
         try
         {
-            if(socket == null)
+            if(this.socket == null)
             {
                 long l = System.currentTimeMillis();
-                if(l - openSocketTime < 4000L)
+                if(l - this.openSocketTime < 4000L)
                     return;
-                openSocketTime = l;
-                socket = clientInstance.openSocket(43594 + RSBase.portOff);
-                inputStream = socket.getInputStream();
-                outputStream = socket.getOutputStream();
-                outputStream.write(15);
+                this.openSocketTime = l;
+                this.socket = this.clientInstance.openSocket(43594 + RSBase.portOff);
+                this.inputStream = this.socket.getInputStream();
+                this.outputStream = this.socket.getOutputStream();
+                this.outputStream.write(15);
                 for(int j = 0; j < 8; j++)
-                    inputStream.read();
+                    this.inputStream.read();
 
-                loopCycle = 0;
+                this.loopCycle = 0;
             }
-            ioBuffer[0] = (byte)onDemandData.dataType;
-            ioBuffer[1] = (byte)(onDemandData.ID >> 8);
-            ioBuffer[2] = (byte)onDemandData.ID;
+            this.ioBuffer[0] = (byte)onDemandData.dataType;
+            this.ioBuffer[1] = (byte)(onDemandData.ID >> 8);
+            this.ioBuffer[2] = (byte)onDemandData.ID;
             if(onDemandData.incomplete)
-                ioBuffer[3] = 2;
+                this.ioBuffer[3] = 2;
             else
-            if(!clientInstance.loggedIn)
-                ioBuffer[3] = 1;
+            if(!this.clientInstance.loggedIn)
+                this.ioBuffer[3] = 1;
             else
-                ioBuffer[3] = 0;
-            outputStream.write(ioBuffer, 0, 4);
-            writeLoopCycle = 0;
-            anInt1349 = -10000;
+                this.ioBuffer[3] = 0;
+            this.outputStream.write(this.ioBuffer, 0, 4);
+            this.writeLoopCycle = 0;
+            this.anInt1349 = -10000;
             return;
         }
         catch(IOException ioexception) { }
         try
         {
-            socket.close();
+            this.socket.close();
         }
         catch(Exception _ex) { }
-        socket = null;
-        inputStream = null;
-        outputStream = null;
-        expectedSize = 0;
-        anInt1349++;
+        this.socket = null;
+        this.inputStream = null;
+        this.outputStream = null;
+        this.expectedSize = 0;
+        this.anInt1349++;
     }
 
     public int getAnimCount()
     {
-        return anIntArray1360.length;
+        return this.anIntArray1360.length;
     }
 
     public void method558(int i, int j)
     {
-        if(i < 0 || i > versions.length || j < 0 || j > versions[i].length)
+        if(i < 0 || i > this.versions.length || j < 0 || j > this.versions[i].length)
             return;
-        if(versions[i][j] == 0)
+        if(this.versions[i][j] == 0)
             return;
-        synchronized(queue)
+        synchronized(this.queue)
         {
-            for(OnDemandData onDemandData = (OnDemandData) queue.peek(); onDemandData != null; onDemandData = (OnDemandData) queue.getNext())
+            for(OnDemandData onDemandData = (OnDemandData) this.queue.peek(); onDemandData != null; onDemandData = (OnDemandData) this.queue.getNext())
                 if(onDemandData.dataType == i && onDemandData.ID == j)
                     return;
 
@@ -299,51 +299,52 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
             onDemandData_1.dataType = i;
             onDemandData_1.ID = j;
             onDemandData_1.incomplete = true;
-            synchronized(aClass19_1370)
+            synchronized(this.aClass19_1370)
             {
-                aClass19_1370.pushBack(onDemandData_1);
+                this.aClass19_1370.pushBack(onDemandData_1);
             }
-            queue.push(onDemandData_1);
+            this.queue.push(onDemandData_1);
         }
     }
 
     public int getModelIndex(int i)
     {
-        return modelIndices[i] & 0xff;
+        return this.modelIndices[i] & 0xff;
     }
 
-    public void run()
+    @Override
+	public void run()
     {
         try
         {
-            while(running)
+            while(this.running)
             {
-                onDemandCycle++;
+                this.onDemandCycle++;
                 int i = 20;
-                if(anInt1332 == 0 && clientInstance.indexs[0] != null)
+                if(this.anInt1332 == 0 && this.clientInstance.indexs[0] != null)
                     i = 50;
                 try
                 {
                     Thread.sleep(i);
                 }
                 catch(Exception _ex) { }
-                waiting = true;
+                this.waiting = true;
                 for(int j = 0; j < 100; j++)
                 {
-                    if(!waiting)
+                    if(!this.waiting)
                         break;
-                    waiting = false;
-                    checkReceived();
-                    handleFailed();
-                    if(uncompletedCount == 0 && j >= 5)
+                    this.waiting = false;
+                    this.checkReceived();
+                    this.handleFailed();
+                    if(this.uncompletedCount == 0 && j >= 5)
                         break;
-                    method568();
-                    if(inputStream != null)
-                        readData();
+                    this.method568();
+                    if(this.inputStream != null)
+                        this.readData();
                 }
 
                 boolean flag = false;
-                for(OnDemandData onDemandData = (OnDemandData) requested.getFront(); onDemandData != null; onDemandData = (OnDemandData) requested.getNext())
+                for(OnDemandData onDemandData = (OnDemandData) this.requested.getFront(); onDemandData != null; onDemandData = (OnDemandData) this.requested.getNext())
                     if(onDemandData.incomplete)
                     {
                         flag = true;
@@ -351,61 +352,61 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
                         if(onDemandData.loopCycle > 50)
                         {
                             onDemandData.loopCycle = 0;
-                            closeRequest(onDemandData);
+                            this.closeRequest(onDemandData);
                         }
                     }
 
                 if(!flag)
                 {
-                    for(OnDemandData onDemandData_1 = (OnDemandData) requested.getFront(); onDemandData_1 != null; onDemandData_1 = (OnDemandData) requested.getNext())
+                    for(OnDemandData onDemandData_1 = (OnDemandData) this.requested.getFront(); onDemandData_1 != null; onDemandData_1 = (OnDemandData) this.requested.getNext())
                     {
                         flag = true;
                         onDemandData_1.loopCycle++;
                         if(onDemandData_1.loopCycle > 50)
                         {
                             onDemandData_1.loopCycle = 0;
-                            closeRequest(onDemandData_1);
+                            this.closeRequest(onDemandData_1);
                         }
                     }
 
                 }
                 if(flag)
                 {
-                    loopCycle++;
-                    if(loopCycle > 750)
+                    this.loopCycle++;
+                    if(this.loopCycle > 750)
                     {
                         try
                         {
-                            socket.close();
+                            this.socket.close();
                         }
                         catch(Exception _ex) { }
-                        socket = null;
-                        inputStream = null;
-                        outputStream = null;
-                        expectedSize = 0;
+                        this.socket = null;
+                        this.inputStream = null;
+                        this.outputStream = null;
+                        this.expectedSize = 0;
                     }
                 } else
                 {
-                    loopCycle = 0;
-                    statusString = "";
+                    this.loopCycle = 0;
+                    this.statusString = "";
                 }
-                if(clientInstance.loggedIn && socket != null && outputStream != null && (anInt1332 > 0 || clientInstance.indexs[0] == null))
+                if(this.clientInstance.loggedIn && this.socket != null && this.outputStream != null && (this.anInt1332 > 0 || this.clientInstance.indexs[0] == null))
                 {
-                    writeLoopCycle++;
-                    if(writeLoopCycle > 500)
+                    this.writeLoopCycle++;
+                    if(this.writeLoopCycle > 500)
                     {
-                        writeLoopCycle = 0;
-                        ioBuffer[0] = 0;
-                        ioBuffer[1] = 0;
-                        ioBuffer[2] = 0;
-                        ioBuffer[3] = 10;
+                        this.writeLoopCycle = 0;
+                        this.ioBuffer[0] = 0;
+                        this.ioBuffer[1] = 0;
+                        this.ioBuffer[2] = 0;
+                        this.ioBuffer[3] = 10;
                         try
                         {
-                            outputStream.write(ioBuffer, 0, 4);
+                            this.outputStream.write(this.ioBuffer, 0, 4);
                         }
                         catch(IOException _ex)
                         {
-                            loopCycle = 5000;
+                            this.loopCycle = 5000;
                         }
                     }
                 }
@@ -419,34 +420,34 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
 
     public void method560(int i, int j)
     {
-        if(clientInstance.indexs[0] == null)
+        if(this.clientInstance.indexs[0] == null)
             return;
-        if(versions[j][i] == 0)
+        if(this.versions[j][i] == 0)
             return;
-        if(fileStatus[j][i] == 0)
+        if(this.fileStatus[j][i] == 0)
             return;
-        if(anInt1332 == 0)
+        if(this.anInt1332 == 0)
             return;
         OnDemandData onDemandData = new OnDemandData();
         onDemandData.dataType = j;
         onDemandData.ID = i;
         onDemandData.incomplete = false;
-        synchronized(aClass19_1344)
+        synchronized(this.aClass19_1344)
         {
-            aClass19_1344.pushBack(onDemandData);
+            this.aClass19_1344.pushBack(onDemandData);
         }
     }
 
     public OnDemandData getNextNode()
     {
         OnDemandData onDemandData;
-        synchronized(aClass19_1358)
+        synchronized(this.aClass19_1358)
         {
-            onDemandData = (OnDemandData)aClass19_1358.popFront();
+            onDemandData = (OnDemandData)this.aClass19_1358.popFront();
         }
         if(onDemandData == null)
             return null;
-        synchronized(queue)
+        synchronized(this.queue)
         {
             onDemandData.unlinkCacheable();
         }
@@ -458,9 +459,9 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
             GZIPInputStream gzipinputstream = new GZIPInputStream(new ByteArrayInputStream(onDemandData.buffer));
             do
             {
-                if(i == gzipInputBuffer.length)
+                if(i == this.gzipInputBuffer.length)
                     throw new RuntimeException("buffer overflow!");
-                int k = gzipinputstream.read(gzipInputBuffer, i, gzipInputBuffer.length - i);
+                int k = gzipinputstream.read(this.gzipInputBuffer, i, this.gzipInputBuffer.length - i);
                 if(k == -1)
                     break;
                 i += k;
@@ -471,7 +472,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
             throw new RuntimeException("error unzipping");
         }
         onDemandData.buffer = new byte[i];
-        System.arraycopy(gzipInputBuffer, 0, onDemandData.buffer, 0, i);
+        System.arraycopy(this.gzipInputBuffer, 0, onDemandData.buffer, 0, i);
 
         return onDemandData;
     }
@@ -479,191 +480,192 @@ public final class OnDemandFetcher extends OnDemandFetcherParent
     public int method562(int i, int k, int l)
     {
         int i1 = (l << 8) + k;
-        for(int j1 = 0; j1 < mapIndices1.length; j1++)
-            if(mapIndices1[j1] == i1)
+        for(int j1 = 0; j1 < this.mapIndices1.length; j1++)
+            if(this.mapIndices1[j1] == i1)
                 if(i == 0)
-                    return mapIndices2[j1];
+                    return this.mapIndices2[j1];
                 else
-                    return mapIndices3[j1];
+                    return this.mapIndices3[j1];
         return -1;
     }
 
-    public void method548(int i)
+    @Override
+	public void method548(int i)
     {
-        method558(0, i);
+        this.method558(0, i);
     }
 
     public void method563(byte byte0, int i, int j)
     {
-        if(clientInstance.indexs[0] == null)
+        if(this.clientInstance.indexs[0] == null)
             return;
-        if(versions[i][j] == 0)
+        if(this.versions[i][j] == 0)
             return;
-        byte abyte0[] = clientInstance.indexs[i + 1].get(j);
-        if(crcMatches(versions[i][j], crcs[i][j], abyte0))
+        byte abyte0[] = this.clientInstance.indexs[i + 1].get(j);
+        if(this.crcMatches(this.versions[i][j], this.crcs[i][j], abyte0))
             return;
-        fileStatus[i][j] = byte0;
-        if(byte0 > anInt1332)
-            anInt1332 = byte0;
-        totalFiles++;
+        this.fileStatus[i][j] = byte0;
+        if(byte0 > this.anInt1332)
+            this.anInt1332 = byte0;
+        this.totalFiles++;
     }
 
     public boolean method564(int i)
     {
-        for(int k = 0; k < mapIndices1.length; k++)
-            if(mapIndices3[k] == i)
+        for(int k = 0; k < this.mapIndices1.length; k++)
+            if(this.mapIndices3[k] == i)
                 return true;
         return false;
     }
 
     private void handleFailed()
     {
-        uncompletedCount = 0;
-        completedCount = 0;
-        for(OnDemandData onDemandData = (OnDemandData) requested.getFront(); onDemandData != null; onDemandData = (OnDemandData) requested.getNext())
+        this.uncompletedCount = 0;
+        this.completedCount = 0;
+        for(OnDemandData onDemandData = (OnDemandData) this.requested.getFront(); onDemandData != null; onDemandData = (OnDemandData) this.requested.getNext())
             if(onDemandData.incomplete)
-                uncompletedCount++;
+                this.uncompletedCount++;
             else
-                completedCount++;
+                this.completedCount++;
 
-        while(uncompletedCount < 10)
+        while(this.uncompletedCount < 10)
         {
-            OnDemandData onDemandData_1 = (OnDemandData)aClass19_1368.popFront();
+            OnDemandData onDemandData_1 = (OnDemandData)this.aClass19_1368.popFront();
             if(onDemandData_1 == null)
                 break;
-            if(fileStatus[onDemandData_1.dataType][onDemandData_1.ID] != 0)
-                filesLoaded++;
-            fileStatus[onDemandData_1.dataType][onDemandData_1.ID] = 0;
-            requested.pushBack(onDemandData_1);
-            uncompletedCount++;
-            closeRequest(onDemandData_1);
-            waiting = true;
+            if(this.fileStatus[onDemandData_1.dataType][onDemandData_1.ID] != 0)
+                this.filesLoaded++;
+            this.fileStatus[onDemandData_1.dataType][onDemandData_1.ID] = 0;
+            this.requested.pushBack(onDemandData_1);
+            this.uncompletedCount++;
+            this.closeRequest(onDemandData_1);
+            this.waiting = true;
         }
     }
 
     public void method566()
     {
-        synchronized(aClass19_1344)
+        synchronized(this.aClass19_1344)
         {
-            aClass19_1344.clear();
+            this.aClass19_1344.clear();
         }
     }
 
     private void checkReceived()
     {
         OnDemandData onDemandData;
-        synchronized(aClass19_1370)
+        synchronized(this.aClass19_1370)
         {
-            onDemandData = (OnDemandData)aClass19_1370.popFront();
+            onDemandData = (OnDemandData)this.aClass19_1370.popFront();
         }
         while(onDemandData != null)
         {
-            waiting = true;
+            this.waiting = true;
             byte abyte0[] = null;
-            if(clientInstance.indexs[0] != null)
-                abyte0 = clientInstance.indexs[onDemandData.dataType + 1].get(onDemandData.ID);
-            if(!crcMatches(versions[onDemandData.dataType][onDemandData.ID], crcs[onDemandData.dataType][onDemandData.ID], abyte0))
+            if(this.clientInstance.indexs[0] != null)
+                abyte0 = this.clientInstance.indexs[onDemandData.dataType + 1].get(onDemandData.ID);
+            if(!this.crcMatches(this.versions[onDemandData.dataType][onDemandData.ID], this.crcs[onDemandData.dataType][onDemandData.ID], abyte0))
                 abyte0 = null;
-            synchronized(aClass19_1370)
+            synchronized(this.aClass19_1370)
             {
                 if(abyte0 == null)
                 {
-                    aClass19_1368.pushBack(onDemandData);
+                    this.aClass19_1368.pushBack(onDemandData);
                 } else
                 {
                     onDemandData.buffer = abyte0;
-                    synchronized(aClass19_1358)
+                    synchronized(this.aClass19_1358)
                     {
-                        aClass19_1358.pushBack(onDemandData);
+                        this.aClass19_1358.pushBack(onDemandData);
                     }
                 }
-                onDemandData = (OnDemandData)aClass19_1370.popFront();
+                onDemandData = (OnDemandData)this.aClass19_1370.popFront();
             }
         }
     }
 
     private void method568()
     {
-        while(uncompletedCount == 0 && completedCount < 10)
+        while(this.uncompletedCount == 0 && this.completedCount < 10)
         {
-            if(anInt1332 == 0)
+            if(this.anInt1332 == 0)
                 break;
             OnDemandData onDemandData;
-            synchronized(aClass19_1344)
+            synchronized(this.aClass19_1344)
             {
-                onDemandData = (OnDemandData)aClass19_1344.popFront();
+                onDemandData = (OnDemandData)this.aClass19_1344.popFront();
             }
             while(onDemandData != null)
             {
-                if(fileStatus[onDemandData.dataType][onDemandData.ID] != 0)
+                if(this.fileStatus[onDemandData.dataType][onDemandData.ID] != 0)
                 {
-                    fileStatus[onDemandData.dataType][onDemandData.ID] = 0;
-                    requested.pushBack(onDemandData);
-                    closeRequest(onDemandData);
-                    waiting = true;
-                    if(filesLoaded < totalFiles)
-                        filesLoaded++;
-                    statusString = "Loading extra files - " + (filesLoaded * 100) / totalFiles + "%";
-                    completedCount++;
-                    if(completedCount == 10)
+                    this.fileStatus[onDemandData.dataType][onDemandData.ID] = 0;
+                    this.requested.pushBack(onDemandData);
+                    this.closeRequest(onDemandData);
+                    this.waiting = true;
+                    if(this.filesLoaded < this.totalFiles)
+                        this.filesLoaded++;
+                    this.statusString = "Loading extra files - " + (this.filesLoaded * 100) / this.totalFiles + "%";
+                    this.completedCount++;
+                    if(this.completedCount == 10)
                         return;
                 }
-                synchronized(aClass19_1344)
+                synchronized(this.aClass19_1344)
                 {
-                    onDemandData = (OnDemandData)aClass19_1344.popFront();
+                    onDemandData = (OnDemandData)this.aClass19_1344.popFront();
                 }
             }
             for(int j = 0; j < 4; j++)
             {
-                byte abyte0[] = fileStatus[j];
+                byte abyte0[] = this.fileStatus[j];
                 int k = abyte0.length;
                 for(int l = 0; l < k; l++)
-                    if(abyte0[l] == anInt1332)
+                    if(abyte0[l] == this.anInt1332)
                     {
                         abyte0[l] = 0;
                         OnDemandData onDemandData_1 = new OnDemandData();
                         onDemandData_1.dataType = j;
                         onDemandData_1.ID = l;
                         onDemandData_1.incomplete = false;
-                        requested.pushBack(onDemandData_1);
-                        closeRequest(onDemandData_1);
-                        waiting = true;
-                        if(filesLoaded < totalFiles)
-                            filesLoaded++;
-                        statusString = "Loading extra files - " + (filesLoaded * 100) / totalFiles + "%";
-                        completedCount++;
-                        if(completedCount == 10)
+                        this.requested.pushBack(onDemandData_1);
+                        this.closeRequest(onDemandData_1);
+                        this.waiting = true;
+                        if(this.filesLoaded < this.totalFiles)
+                            this.filesLoaded++;
+                        this.statusString = "Loading extra files - " + (this.filesLoaded * 100) / this.totalFiles + "%";
+                        this.completedCount++;
+                        if(this.completedCount == 10)
                             return;
                     }
 
             }
 
-            anInt1332--;
+            this.anInt1332--;
         }
     }
 
     public boolean method569(int i)
     {
-        return anIntArray1348[i] == 1;
+        return this.anIntArray1348[i] == 1;
     }
 
     public OnDemandFetcher()
     {
-        requested = new Deque();
-        statusString = "";
-        crc32 = new CRC32();
-        ioBuffer = new byte[500];
-        fileStatus = new byte[4][];
-        aClass19_1344 = new Deque();
-        running = true;
-        waiting = false;
-        aClass19_1358 = new Deque();
-        gzipInputBuffer = new byte[65000];
-        queue = new Queue();
-        versions = new int[4][];
-        crcs = new int[4][];
-        aClass19_1368 = new Deque();
-        aClass19_1370 = new Deque();
+        this.requested = new Deque();
+        this.statusString = "";
+        this.crc32 = new CRC32();
+        this.ioBuffer = new byte[500];
+        this.fileStatus = new byte[4][];
+        this.aClass19_1344 = new Deque();
+        this.running = true;
+        this.waiting = false;
+        this.aClass19_1358 = new Deque();
+        this.gzipInputBuffer = new byte[65000];
+        this.queue = new Queue();
+        this.versions = new int[4][];
+        this.crcs = new int[4][];
+        this.aClass19_1368 = new Deque();
+        this.aClass19_1370 = new Deque();
     }
 
     private int totalFiles;

@@ -9,60 +9,60 @@ public class Entity extends Animable {
 
     public final void setPos(int i, int j, boolean flag)
     {
-        if(anim != -1 && Animation.animations[anim].anInt364 == 1)
-            anim = -1;
+        if(this.anim != -1 && Animation.animations[this.anim].walkingPrecedence == 1)
+            this.anim = -1;
         if(!flag)
         {
-            int k = i - smallX[0];
-            int l = j - smallY[0];
+            int k = i - this.smallX[0];
+            int l = j - this.smallY[0];
             if(k >= -8 && k <= 8 && l >= -8 && l <= 8)
             {
-                if(smallXYIndex < 9)
-                    smallXYIndex++;
-                for(int i1 = smallXYIndex; i1 > 0; i1--)
+                if(this.smallXYIndex < 9)
+                    this.smallXYIndex++;
+                for(int i1 = this.smallXYIndex; i1 > 0; i1--)
                 {
-                    smallX[i1] = smallX[i1 - 1];
-                    smallY[i1] = smallY[i1 - 1];
-                    aBooleanArray1553[i1] = aBooleanArray1553[i1 - 1];
+                    this.smallX[i1] = this.smallX[i1 - 1];
+                    this.smallY[i1] = this.smallY[i1 - 1];
+                    this.aBooleanArray1553[i1] = this.aBooleanArray1553[i1 - 1];
                 }
 
-                smallX[0] = i;
-                smallY[0] = j;
-                aBooleanArray1553[0] = false;
+                this.smallX[0] = i;
+                this.smallY[0] = j;
+                this.aBooleanArray1553[0] = false;
                 return;
             }
         }
-        smallXYIndex = 0;
-        anInt1542 = 0;
-        anInt1503 = 0;
-        smallX[0] = i;
-        smallY[0] = j;
-        x = smallX[0] * 128 + anInt1540 * 64;
-        y = smallY[0] * 128 + anInt1540 * 64;
+        this.smallXYIndex = 0;
+        this.anInt1542 = 0;
+        this.anInt1503 = 0;
+        this.smallX[0] = i;
+        this.smallY[0] = j;
+        this.x = this.smallX[0] * 128 + this.anInt1540 * 64;
+        this.y = this.smallY[0] * 128 + this.anInt1540 * 64;
     }
 
     public final void method446()
     {
-        smallXYIndex = 0;
-        anInt1542 = 0;
+        this.smallXYIndex = 0;
+        this.anInt1542 = 0;
     }
 
     public final void updateHitData(int j, int k, int l)
     {
         for(int i1 = 0; i1 < 4; i1++)
-            if(hitsLoopCycle[i1] <= l)
+            if(this.hitsLoopCycle[i1] <= l)
             {
-                hitArray[i1] = k;
-                hitMarkTypes[i1] = j;
-                hitsLoopCycle[i1] = l + 70;
+                this.hitArray[i1] = k;
+                this.hitMarkTypes[i1] = j;
+                this.hitsLoopCycle[i1] = l + 70;
                 return;
             }
     }
 
     public final void moveInDir(boolean flag, int i)
     {
-        int j = smallX[0];
-        int k = smallY[0];
+        int j = this.smallX[0];
+        int k = this.smallY[0];
         if(i == 0)
         {
             j--;
@@ -91,19 +91,19 @@ public class Entity extends Animable {
             j++;
             k--;
         }
-        if(anim != -1 && Animation.animations[anim].anInt364 == 1)
-            anim = -1;
-        if(smallXYIndex < 9)
-            smallXYIndex++;
-        for(int l = smallXYIndex; l > 0; l--)
+        if(this.anim != -1 && Animation.animations[this.anim].walkingPrecedence == 1)
+            this.anim = -1;
+        if(this.smallXYIndex < 9)
+            this.smallXYIndex++;
+        for(int l = this.smallXYIndex; l > 0; l--)
         {
-            smallX[l] = smallX[l - 1];
-            smallY[l] = smallY[l - 1];
-            aBooleanArray1553[l] = aBooleanArray1553[l - 1];
+            this.smallX[l] = this.smallX[l - 1];
+            this.smallY[l] = this.smallY[l - 1];
+            this.aBooleanArray1553[l] = this.aBooleanArray1553[l - 1];
         }
-            smallX[0] = j;
-            smallY[0] = k;
-            aBooleanArray1553[0] = flag;
+            this.smallX[0] = j;
+            this.smallY[0] = k;
+            this.aBooleanArray1553[0] = flag;
     }
 
     public int entScreenX;
@@ -116,29 +116,29 @@ public class Entity extends Animable {
 
     Entity()
     {
-        smallX = new int[10];
-        smallY = new int[10];
-        interactingEntity = -1;
-        anInt1504 = 32;
-        anInt1505 = -1;
-        height = 200;
-        anInt1511 = -1;
-        anInt1512 = -1;
-        hitArray = new int[4];
-        hitMarkTypes = new int[4];
-        hitsLoopCycle = new int[4];
-        anInt1517 = -1;
-        anInt1520 = -1;
-        anim = -1;
-        loopCycleStatus = -1000;
-        textCycle = 100;
-        anInt1540 = 1;
-        aBoolean1541 = false;
-        aBooleanArray1553 = new boolean[10];
-        anInt1554 = -1;
-        anInt1555 = -1;
-        anInt1556 = -1;
-        anInt1557 = -1;
+        this.smallX = new int[10];
+        this.smallY = new int[10];
+        this.interactingEntity = -1;
+        this.anInt1504 = 32;
+        this.anInt1505 = -1;
+        this.height = 200;
+        this.anInt1511 = -1;
+        this.anInt1512 = -1;
+        this.hitArray = new int[4];
+        this.hitMarkTypes = new int[4];
+        this.hitsLoopCycle = new int[4];
+        this.anInt1517 = -1;
+        this.anInt1520 = -1;
+        this.anim = -1;
+        this.loopCycleStatus = -1000;
+        this.textCycle = 100;
+        this.anInt1540 = 1;
+        this.aBoolean1541 = false;
+        this.aBooleanArray1553 = new boolean[10];
+        this.anInt1554 = -1;
+        this.anInt1555 = -1;
+        this.anInt1556 = -1;
+        this.anInt1557 = -1;
     }
 
     public final int[] smallX;

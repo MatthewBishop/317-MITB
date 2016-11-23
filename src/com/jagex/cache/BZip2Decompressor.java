@@ -10,22 +10,22 @@ final class BZip2Decompressor {
 	private static BZip2DecompressionState state = new BZip2DecompressionState();
 
 	public static int decompress(byte[] output, int length, byte[] compressed, int decompressedLength, int minLen) {
-		synchronized (state) {
-			state.compressed = compressed;
-			state.nextIn = minLen;
-			state.decompressed = output;
-			state.nextOut = 0;
-			state.decompressedLength = decompressedLength;
-			state.length = length;
-			state.bsLive = 0;
-			state.bsBuff = 0;
-			state.totalInLo32 = 0;
-			state.totalInHi32 = 0;
-			state.totalOutLo32 = 0;
-			state.totalOutHigh32 = 0;
-			state.currentBlock = 0;
-			decompress(state);
-			length -= state.length;
+		synchronized (BZip2Decompressor.state) {
+			BZip2Decompressor.state.compressed = compressed;
+			BZip2Decompressor.state.nextIn = minLen;
+			BZip2Decompressor.state.decompressed = output;
+			BZip2Decompressor.state.nextOut = 0;
+			BZip2Decompressor.state.decompressedLength = decompressedLength;
+			BZip2Decompressor.state.length = length;
+			BZip2Decompressor.state.bsLive = 0;
+			BZip2Decompressor.state.bsBuff = 0;
+			BZip2Decompressor.state.totalInLo32 = 0;
+			BZip2Decompressor.state.totalInHi32 = 0;
+			BZip2Decompressor.state.totalOutLo32 = 0;
+			BZip2Decompressor.state.totalOutHigh32 = 0;
+			BZip2Decompressor.state.currentBlock = 0;
+			BZip2Decompressor.decompress(BZip2Decompressor.state);
+			length -= BZip2Decompressor.state.length;
 			return length;
 		}
 	}
@@ -85,21 +85,21 @@ final class BZip2Decompressor {
 
 		boolean flag19 = true;
 		while (flag19) {
-			byte uc = getUnsignedChar(state);
+			byte uc = BZip2Decompressor.getUnsignedChar(state);
 			if (uc == 23) {
 				return;
 			}
-			uc = getUnsignedChar(state);
-			uc = getUnsignedChar(state);
-			uc = getUnsignedChar(state);
-			uc = getUnsignedChar(state);
-			uc = getUnsignedChar(state);
+			uc = BZip2Decompressor.getUnsignedChar(state);
+			uc = BZip2Decompressor.getUnsignedChar(state);
+			uc = BZip2Decompressor.getUnsignedChar(state);
+			uc = BZip2Decompressor.getUnsignedChar(state);
+			uc = BZip2Decompressor.getUnsignedChar(state);
 			state.currentBlock++;
-			uc = getUnsignedChar(state);
-			uc = getUnsignedChar(state);
-			uc = getUnsignedChar(state);
-			uc = getUnsignedChar(state);
-			uc = getBit(state);
+			uc = BZip2Decompressor.getUnsignedChar(state);
+			uc = BZip2Decompressor.getUnsignedChar(state);
+			uc = BZip2Decompressor.getUnsignedChar(state);
+			uc = BZip2Decompressor.getUnsignedChar(state);
+			uc = BZip2Decompressor.getBit(state);
 
 			if (uc != 0) {
 				state.randomised = true;
@@ -112,17 +112,17 @@ final class BZip2Decompressor {
 			}
 
 			state.origPtr = 0;
-			uc = getUnsignedChar(state);
+			uc = BZip2Decompressor.getUnsignedChar(state);
 			state.origPtr = state.origPtr << 8 | uc & 0xff;
-			uc = getUnsignedChar(state);
+			uc = BZip2Decompressor.getUnsignedChar(state);
 			state.origPtr = state.origPtr << 8 | uc & 0xff;
-			uc = getUnsignedChar(state);
+			uc = BZip2Decompressor.getUnsignedChar(state);
 			state.origPtr = state.origPtr << 8 | uc & 0xff;
 
 			/*--- Receive the mapping table ---*/
 
 			for (int i = 0; i < 16; i++) {
-				byte bit = getBit(state);
+				byte bit = BZip2Decompressor.getBit(state);
 				if (bit == 1) {
 					state.inUse16[i] = true;
 				} else {
@@ -137,7 +137,7 @@ final class BZip2Decompressor {
 			for (int i = 0; i < 16; i++) {
 				if (state.inUse16[i]) {
 					for (int j = 0; j < 16; j++) {
-						byte bit = getBit(state);
+						byte bit = BZip2Decompressor.getBit(state);
 						if (bit == 1) {
 							state.inUse[i * 16 + j] = true;
 						}
@@ -145,24 +145,24 @@ final class BZip2Decompressor {
 				}
 			}
 
-			makeMaps(state);
+			BZip2Decompressor.makeMaps(state);
 			int alphabetSize = state.nInUse + 2;
 
 			/*
 			 * number of different Huffman tables in use
 			 */
-			int huffmanTableCount = getBits(3, state);
+			int huffmanTableCount = BZip2Decompressor.getBits(3, state);
 
 			/*
 			 * number of times that the Huffman tables are swapped (each 50 bytes)
 			 */
-			int swapCount = getBits(15, state);
+			int swapCount = BZip2Decompressor.getBits(15, state);
 
 			/*--- Now the selectors ---*/
 			for (int i = 0; i < swapCount; i++) {
 				int count = 0;
 				do {
-					byte terminator = getBit(state);
+					byte terminator = BZip2Decompressor.getBit(state);
 					if (terminator == 0) {
 						break;
 					}
@@ -196,14 +196,14 @@ final class BZip2Decompressor {
 			/*--- Now the coding tables ---*/
 
 			for (int t = 0; t < huffmanTableCount; t++) {
-				int read = getBits(5, state);
+				int read = BZip2Decompressor.getBits(5, state);
 				for (int i = 0; i < alphabetSize; i++) {
 					do {
-						byte bit = getBit(state);
+						byte bit = BZip2Decompressor.getBit(state);
 						if (bit == 0) {
 							break;
 						}
-						bit = getBit(state);
+						bit = BZip2Decompressor.getBit(state);
 						if (bit == 0) {
 							read++;
 						} else {
@@ -228,7 +228,7 @@ final class BZip2Decompressor {
 					}
 				}
 
-				createDecodeTables(state.limit[t], state.base[t], state.perm[t], state.len[t], minLen, maxLen, alphabetSize);
+				BZip2Decompressor.createDecodeTables(state.limit[t], state.base[t], state.perm[t], state.len[t], minLen, maxLen, alphabetSize);
 				state.minLens[t] = minLen;
 			}
 
@@ -270,9 +270,9 @@ final class BZip2Decompressor {
 			int zn = gMinLen;
 			int zvec;
 			byte zj;
-			for (zvec = getBits(zn, state); zvec > gLimit[zn]; zvec = zvec << 1 | zj) {
+			for (zvec = BZip2Decompressor.getBits(zn, state); zvec > gLimit[zn]; zvec = zvec << 1 | zj) {
 				zn++;
-				zj = getBit(state);
+				zj = BZip2Decompressor.getBit(state);
 			}
 			for (int nextSym = gPerm[zvec - gBase[zn]]; nextSym != eob;) {
 
@@ -301,9 +301,9 @@ final class BZip2Decompressor {
 						int zn_ = gMinLen;
 						int zvec_;
 						byte byte10;
-						for (zvec_ = getBits(zn_, state); zvec_ > gLimit[zn_]; zvec_ = zvec_ << 1 | byte10) {
+						for (zvec_ = BZip2Decompressor.getBits(zn_, state); zvec_ > gLimit[zn_]; zvec_ = zvec_ << 1 | byte10) {
 							zn_++;
-							byte10 = getBit(state);
+							byte10 = BZip2Decompressor.getBit(state);
 						}
 
 						nextSym = gPerm[zvec_ - gBase[zn_]];
@@ -384,9 +384,9 @@ final class BZip2Decompressor {
 					int zn_ = gMinLen;
 					int zvec_;
 					byte byte11;
-					for (zvec_ = getBits(zn_, state); zvec_ > gLimit[zn_]; zvec_ = zvec_ << 1 | byte11) {
+					for (zvec_ = BZip2Decompressor.getBits(zn_, state); zvec_ > gLimit[zn_]; zvec_ = zvec_ << 1 | byte11) {
 						zn_++;
-						byte11 = getBit(state);
+						byte11 = BZip2Decompressor.getBit(state);
 					}
 
 					nextSym = gPerm[zvec_ - gBase[zn_]];
@@ -422,7 +422,7 @@ final class BZip2Decompressor {
 			state.tPos >>= 8;
 			state.usedBlocks++;
 			state.count = nblock;
-			finish(state);
+			BZip2Decompressor.finish(state);
 
 			if (state.usedBlocks == state.count + 1 && state.stateOutLen == 0) {
 				flag19 = true;
@@ -579,7 +579,7 @@ final class BZip2Decompressor {
 	}
 
 	private static byte getBit(BZip2DecompressionState state) {
-		return (byte) getBits(1, state);
+		return (byte) BZip2Decompressor.getBits(1, state);
 	}
 
 	private static int getBits(int amount, BZip2DecompressionState state) {
@@ -604,7 +604,7 @@ final class BZip2Decompressor {
 	}
 
 	private static byte getUnsignedChar(BZip2DecompressionState state) {
-		return (byte) getBits(8, state);
+		return (byte) BZip2Decompressor.getBits(8, state);
 	}
 
 	private static void makeMaps(BZip2DecompressionState state) {

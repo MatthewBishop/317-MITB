@@ -4,10 +4,10 @@ final class HashTable {
 
 	HashTable() {
 		int i = 1024;// was parameter
-		size = i;
-		cache = new Linkable[i];
+		this.size = i;
+		this.cache = new Linkable[i];
 		for (int k = 0; k < i; k++) {
-			Linkable linkable = cache[k] = new Linkable();
+			Linkable linkable = this.cache[k] = new Linkable();
 			linkable.next = linkable;
 			linkable.previous = linkable;
 		}
@@ -15,7 +15,7 @@ final class HashTable {
 	}
 
 	Linkable get(long l) {
-		Linkable linkable = cache[(int) (l & (long) (size - 1))];
+		Linkable linkable = this.cache[(int) (l & this.size - 1)];
 		for (Linkable node_1 = linkable.next; node_1 != linkable; node_1 = node_1.next)
 			if (node_1.key == l)
 				return node_1;
@@ -26,7 +26,7 @@ final class HashTable {
 	void put(long l, Linkable linkable) {
 		if (linkable.previous != null)
 			linkable.unlink();
-		Linkable node_1 = cache[(int) (l & (long) (size - 1))];
+		Linkable node_1 = this.cache[(int) (l & this.size - 1)];
 		linkable.previous = node_1.previous;
 		linkable.next = node_1;
 		linkable.previous.next = linkable;

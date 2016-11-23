@@ -10,11 +10,11 @@ public final class VariableBits {
 	private static int BIT_MASKS[];
 	
 	static {
-        BIT_MASKS = new int[32];
+        VariableBits.BIT_MASKS = new int[32];
         int i = 2;
         for(int k = 0; k < 32; k++)
         {
-            BIT_MASKS[k] = i - 1;
+            VariableBits.BIT_MASKS[k] = i - 1;
             i += i;
         }
 	}
@@ -31,12 +31,12 @@ public final class VariableBits {
 	public static void unpackConfig(Archive archive) {
 		Buffer buffer = new Buffer(archive.getEntry("varbit.dat"));
 		int cacheSize = buffer.readUShort();
-		if (bits == null)
-			bits = new VariableBits[cacheSize];
+		if (VariableBits.bits == null)
+			VariableBits.bits = new VariableBits[cacheSize];
 		for (int j = 0; j < cacheSize; j++) {
-			if (bits[j] == null)
-				bits[j] = new VariableBits();
-			bits[j].readValues(buffer);
+			if (VariableBits.bits[j] == null)
+				VariableBits.bits[j] = new VariableBits();
+			VariableBits.bits[j].readValues(buffer);
 		}
 
 		if (buffer.position != buffer.payload.length)
@@ -53,9 +53,9 @@ public final class VariableBits {
 			if (j == 0)
 				return;
 			if (j == 1) {
-				setting = buffer.readUShort();
-				low = buffer.readUByte();
-				high = buffer.readUByte();
+				this.setting = buffer.readUShort();
+				this.low = buffer.readUByte();
+				this.high = buffer.readUByte();
 			} else if (j == 10)
 				buffer.readString();
 			else if (j == 3 || j == 4)

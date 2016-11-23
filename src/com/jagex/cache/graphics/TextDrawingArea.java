@@ -14,14 +14,14 @@ public final class TextDrawingArea extends Cacheable {
 
     public TextDrawingArea(boolean flag, String s, Archive archive)
     {
-        aByteArrayArray1491 = new byte[256][];
-        anIntArray1492 = new int[256];
-        anIntArray1493 = new int[256];
-        anIntArray1494 = new int[256];
-        anIntArray1495 = new int[256];
-        anIntArray1496 = new int[256];
-        aRandom1498 = new Random();
-        aBoolean1499 = false;
+        this.aByteArrayArray1491 = new byte[256][];
+        this.anIntArray1492 = new int[256];
+        this.anIntArray1493 = new int[256];
+        this.anIntArray1494 = new int[256];
+        this.anIntArray1495 = new int[256];
+        this.anIntArray1496 = new int[256];
+        this.aRandom1498 = new Random();
+        this.aBoolean1499 = false;
         Buffer buffer = new Buffer(archive.getEntry(s + ".dat"));
         Buffer buffer_1 = new Buffer(archive.getEntry("index.dat"));
         buffer_1.position = buffer.readUShort() + 4;
@@ -30,17 +30,17 @@ public final class TextDrawingArea extends Cacheable {
             buffer_1.position += 3 * (k - 1);
         for(int l = 0; l < 256; l++)
         {
-            anIntArray1494[l] = buffer_1.readUByte();
-            anIntArray1495[l] = buffer_1.readUByte();
-            int i1 = anIntArray1492[l] = buffer_1.readUShort();
-            int j1 = anIntArray1493[l] = buffer_1.readUShort();
+            this.anIntArray1494[l] = buffer_1.readUByte();
+            this.anIntArray1495[l] = buffer_1.readUByte();
+            int i1 = this.anIntArray1492[l] = buffer_1.readUShort();
+            int j1 = this.anIntArray1493[l] = buffer_1.readUShort();
             int k1 = buffer_1.readUByte();
             int l1 = i1 * j1;
-            aByteArrayArray1491[l] = new byte[l1];
+            this.aByteArrayArray1491[l] = new byte[l1];
             if(k1 == 0)
             {
                 for(int i2 = 0; i2 < l1; i2++)
-                    aByteArrayArray1491[l][i2] = buffer.readByte();
+                    this.aByteArrayArray1491[l][i2] = buffer.readByte();
 
             } else
             if(k1 == 1)
@@ -48,54 +48,54 @@ public final class TextDrawingArea extends Cacheable {
                 for(int j2 = 0; j2 < i1; j2++)
                 {
                     for(int l2 = 0; l2 < j1; l2++)
-                        aByteArrayArray1491[l][j2 + l2 * i1] = buffer.readByte();
+                        this.aByteArrayArray1491[l][j2 + l2 * i1] = buffer.readByte();
 
                 }
 
             }
-            if(j1 > anInt1497 && l < 128)
-                anInt1497 = j1;
-            anIntArray1494[l] = 1;
-            anIntArray1496[l] = i1 + 2;
+            if(j1 > this.anInt1497 && l < 128)
+                this.anInt1497 = j1;
+            this.anIntArray1494[l] = 1;
+            this.anIntArray1496[l] = i1 + 2;
             int k2 = 0;
             for(int i3 = j1 / 7; i3 < j1; i3++)
-                k2 += aByteArrayArray1491[l][i3 * i1];
+                k2 += this.aByteArrayArray1491[l][i3 * i1];
 
             if(k2 <= j1 / 7)
             {
-                anIntArray1496[l]--;
-                anIntArray1494[l] = 0;
+                this.anIntArray1496[l]--;
+                this.anIntArray1494[l] = 0;
             }
             k2 = 0;
             for(int j3 = j1 / 7; j3 < j1; j3++)
-                k2 += aByteArrayArray1491[l][(i1 - 1) + j3 * i1];
+                k2 += this.aByteArrayArray1491[l][(i1 - 1) + j3 * i1];
 
             if(k2 <= j1 / 7)
-                anIntArray1496[l]--;
+                this.anIntArray1496[l]--;
         }
 
         if(flag)
         {
-            anIntArray1496[32] = anIntArray1496[73];
+            this.anIntArray1496[32] = this.anIntArray1496[73];
         } else
         {
-            anIntArray1496[32] = anIntArray1496[105];
+            this.anIntArray1496[32] = this.anIntArray1496[105];
         }
     }
 
     public void method380(String s, int i, int j, int k)
     {
-        method385(j, s, k, i - method384(s));
+        this.method385(j, s, k, i - this.method384(s));
     }
 
     public void drawText(int i, String s, int k, int l)
     {
-        method385(i, s, k, l - method384(s) / 2);
+        this.method385(i, s, k, l - this.method384(s) / 2);
     }
 
     public void method382(int i, int j, String s, int l, boolean flag)
     {
-        method389(flag, j - getTextWidth(s) / 2, i, s, l);
+        this.method389(flag, j - this.getTextWidth(s) / 2, i, s, l);
     }
 
     public int getTextWidth(String s)
@@ -107,7 +107,7 @@ public final class TextDrawingArea extends Cacheable {
             if(s.charAt(k) == '@' && k + 4 < s.length() && s.charAt(k + 4) == '@')
                 k += 4;
             else
-                j += anIntArray1496[s.charAt(k)];
+                j += this.anIntArray1496[s.charAt(k)];
 
         return j;
     }
@@ -118,7 +118,7 @@ public final class TextDrawingArea extends Cacheable {
             return 0;
         int j = 0;
         for(int k = 0; k < s.length(); k++)
-            j += anIntArray1496[s.charAt(k)];
+            j += this.anIntArray1496[s.charAt(k)];
         return j;
     }
 
@@ -126,13 +126,13 @@ public final class TextDrawingArea extends Cacheable {
     {
         if(s == null)
             return;
-        j -= anInt1497;
+        j -= this.anInt1497;
         for(int i1 = 0; i1 < s.length(); i1++)
         {
             char c = s.charAt(i1);
             if(c != ' ')
-                method392(aByteArrayArray1491[c], l + anIntArray1494[c], j + anIntArray1495[c], anIntArray1492[c], anIntArray1493[c], i);
-            l += anIntArray1496[c];
+                this.method392(this.aByteArrayArray1491[c], l + this.anIntArray1494[c], j + this.anIntArray1495[c], this.anIntArray1492[c], this.anIntArray1493[c], i);
+            l += this.anIntArray1496[c];
         }
     }
 
@@ -140,14 +140,14 @@ public final class TextDrawingArea extends Cacheable {
     {
         if(s == null)
             return;
-        j -= method384(s) / 2;
-        l -= anInt1497;
+        j -= this.method384(s) / 2;
+        l -= this.anInt1497;
         for(int i1 = 0; i1 < s.length(); i1++)
         {
             char c = s.charAt(i1);
             if(c != ' ')
-                method392(aByteArrayArray1491[c], j + anIntArray1494[c], l + anIntArray1495[c] + (int)(Math.sin((double)i1 / 2D + (double)k / 5D) * 5D), anIntArray1492[c], anIntArray1493[c], i);
-            j += anIntArray1496[c];
+                this.method392(this.aByteArrayArray1491[c], j + this.anIntArray1494[c], l + this.anIntArray1495[c] + (int)(Math.sin(i1 / 2D + k / 5D) * 5D), this.anIntArray1492[c], this.anIntArray1493[c], i);
+            j += this.anIntArray1496[c];
         }
 
     }
@@ -156,14 +156,14 @@ public final class TextDrawingArea extends Cacheable {
     {
         if(s == null)
             return;
-        i -= method384(s) / 2;
-        k -= anInt1497;
+        i -= this.method384(s) / 2;
+        k -= this.anInt1497;
         for(int i1 = 0; i1 < s.length(); i1++)
         {
             char c = s.charAt(i1);
             if(c != ' ')
-                method392(aByteArrayArray1491[c], i + anIntArray1494[c] + (int)(Math.sin((double)i1 / 5D + (double)j / 5D) * 5D), k + anIntArray1495[c] + (int)(Math.sin((double)i1 / 3D + (double)j / 5D) * 5D), anIntArray1492[c], anIntArray1493[c], l);
-            i += anIntArray1496[c];
+                this.method392(this.aByteArrayArray1491[c], i + this.anIntArray1494[c] + (int)(Math.sin(i1 / 5D + j / 5D) * 5D), k + this.anIntArray1495[c] + (int)(Math.sin(i1 / 3D + j / 5D) * 5D), this.anIntArray1492[c], this.anIntArray1493[c], l);
+            i += this.anIntArray1496[c];
         }
 
     }
@@ -172,32 +172,32 @@ public final class TextDrawingArea extends Cacheable {
     {
         if(s == null)
             return;
-        double d = 7D - (double)i / 8D;
+        double d = 7D - i / 8D;
         if(d < 0.0D)
             d = 0.0D;
-        l -= method384(s) / 2;
-        k -= anInt1497;
+        l -= this.method384(s) / 2;
+        k -= this.anInt1497;
         for(int k1 = 0; k1 < s.length(); k1++)
         {
             char c = s.charAt(k1);
             if(c != ' ')
-                method392(aByteArrayArray1491[c], l + anIntArray1494[c], k + anIntArray1495[c] + (int)(Math.sin((double)k1 / 1.5D + (double)j) * d), anIntArray1492[c], anIntArray1493[c], i1);
-            l += anIntArray1496[c];
+                this.method392(this.aByteArrayArray1491[c], l + this.anIntArray1494[c], k + this.anIntArray1495[c] + (int)(Math.sin(k1 / 1.5D + j) * d), this.anIntArray1492[c], this.anIntArray1493[c], i1);
+            l += this.anIntArray1496[c];
         }
 
     }
 
     public void method389(boolean flag1, int i, int j, String s, int k)
     {
-        aBoolean1499 = false;
+        this.aBoolean1499 = false;
         int l = i;
         if(s == null)
             return;
-        k -= anInt1497;
+        k -= this.anInt1497;
         for(int i1 = 0; i1 < s.length(); i1++)
             if(s.charAt(i1) == '@' && i1 + 4 < s.length() && s.charAt(i1 + 4) == '@')
             {
-                int j1 = getColorByName(s.substring(i1 + 1, i1 + 4));
+                int j1 = this.getColorByName(s.substring(i1 + 1, i1 + 4));
                 if(j1 != -1)
                     j = j1;
                 i1 += 4;
@@ -207,26 +207,26 @@ public final class TextDrawingArea extends Cacheable {
                 if(c != ' ')
                 {
                     if(flag1)
-                        method392(aByteArrayArray1491[c], i + anIntArray1494[c] + 1, k + anIntArray1495[c] + 1, anIntArray1492[c], anIntArray1493[c], 0);
-                    method392(aByteArrayArray1491[c], i + anIntArray1494[c], k + anIntArray1495[c], anIntArray1492[c], anIntArray1493[c], j);
+                        this.method392(this.aByteArrayArray1491[c], i + this.anIntArray1494[c] + 1, k + this.anIntArray1495[c] + 1, this.anIntArray1492[c], this.anIntArray1493[c], 0);
+                    this.method392(this.aByteArrayArray1491[c], i + this.anIntArray1494[c], k + this.anIntArray1495[c], this.anIntArray1492[c], this.anIntArray1493[c], j);
                 }
-                i += anIntArray1496[c];
+                i += this.anIntArray1496[c];
             }
-        if(aBoolean1499)
-            DrawingArea.method339(k + (int)((double)anInt1497 * 0.69999999999999996D), 0x800000, i - l, l);
+        if(this.aBoolean1499)
+            DrawingArea.method339(k + (int)(this.anInt1497 * 0.69999999999999996D), 0x800000, i - l, l);
     }
 
     public void method390(int i, int j, String s, int k, int i1)
     {
         if(s == null)
             return;
-        aRandom1498.setSeed(k);
-        int j1 = 192 + (aRandom1498.nextInt() & 0x1f);
-        i1 -= anInt1497;
+        this.aRandom1498.setSeed(k);
+        int j1 = 192 + (this.aRandom1498.nextInt() & 0x1f);
+        i1 -= this.anInt1497;
         for(int k1 = 0; k1 < s.length(); k1++)
             if(s.charAt(k1) == '@' && k1 + 4 < s.length() && s.charAt(k1 + 4) == '@')
             {
-                int l1 = getColorByName(s.substring(k1 + 1, k1 + 4));
+                int l1 = this.getColorByName(s.substring(k1 + 1, k1 + 4));
                 if(l1 != -1)
                     j = l1;
                 k1 += 4;
@@ -235,11 +235,11 @@ public final class TextDrawingArea extends Cacheable {
                 char c = s.charAt(k1);
                 if(c != ' ')
                 {
-                        method394(192, i + anIntArray1494[c] + 1, aByteArrayArray1491[c], anIntArray1492[c], i1 + anIntArray1495[c] + 1, anIntArray1493[c], 0);
-                    method394(j1, i + anIntArray1494[c], aByteArrayArray1491[c], anIntArray1492[c], i1 + anIntArray1495[c], anIntArray1493[c], j);
+                        this.method394(192, i + this.anIntArray1494[c] + 1, this.aByteArrayArray1491[c], this.anIntArray1492[c], i1 + this.anIntArray1495[c] + 1, this.anIntArray1493[c], 0);
+                    this.method394(j1, i + this.anIntArray1494[c], this.aByteArrayArray1491[c], this.anIntArray1492[c], i1 + this.anIntArray1495[c], this.anIntArray1493[c], j);
                 }
-                i += anIntArray1496[c];
-                if((aRandom1498.nextInt() & 3) == 0)
+                i += this.anIntArray1496[c];
+                if((this.aRandom1498.nextInt() & 3) == 0)
                     i++;
             }
 
@@ -282,9 +282,9 @@ public final class TextDrawingArea extends Cacheable {
         if(s.equals("gr3"))
             return 0x40ff00;
         if(s.equals("str"))
-            aBoolean1499 = true;
+            this.aBoolean1499 = true;
         if(s.equals("end"))
-            aBoolean1499 = false;
+            this.aBoolean1499 = false;
         return -1;
     }
 
@@ -323,7 +323,7 @@ public final class TextDrawingArea extends Cacheable {
         }
         if(!(k <= 0 || l <= 0))
         {
-            method393(DrawingArea.pixels, abyte0, i1, i2, j1, k, l, k1, l1);
+            this.method393(DrawingArea.pixels, abyte0, i1, i2, j1, k, l, k1, l1);
         }
     }
 
@@ -402,7 +402,7 @@ public final class TextDrawingArea extends Cacheable {
         }
         if(k <= 0 || i1 <= 0)
             return;
-        method395(abyte0, i1, k1, DrawingArea.pixels, j2, k, i2, l1, j1, i);
+        this.method395(abyte0, i1, k1, DrawingArea.pixels, j2, k, i2, l1, j1, i);
     }
 
     private void method395(byte abyte0[], int i, int j, int ai[], int l, int i1,

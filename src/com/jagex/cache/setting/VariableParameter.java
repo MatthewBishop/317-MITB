@@ -12,24 +12,26 @@ public final class  VariableParameter {
         Buffer buffer = new Buffer(archive.getEntry("varp.dat"));
         int cacheSize = buffer.readUShort();
         System.out.println(cacheSize);
-        if(parameters == null)
-            parameters = new VariableParameter[cacheSize];
+        if(VariableParameter.parameters == null)
+            VariableParameter.parameters = new VariableParameter[cacheSize];
         for(int j = 0; j < cacheSize; j++)
         {
-            if(parameters[j] == null)
-                parameters[j] = new VariableParameter();
-            parameters[j].readValues(buffer, j);
+            if(VariableParameter.parameters[j] == null)
+                VariableParameter.parameters[j] = new VariableParameter();
+            VariableParameter.parameters[j].readValues(buffer, j);
+            if(VariableParameter.parameters[j].parameter != 0)
+            	System.err.println(j + "-"+VariableParameter.parameters[j].parameter);
         }
         if(buffer.position != buffer.payload.length)
             System.out.println("varptype load mismatch");
     }
 
     public static int get(int index) {
-    	return parameters[index].parameter;
+    	return VariableParameter.parameters[index].parameter;
     }
    
 	public static void destroy() {
-    	parameters = null;
+    	VariableParameter.parameters = null;
     }
 	
     public int parameter;
@@ -42,7 +44,7 @@ public final class  VariableParameter {
 			if (j == 1 || j == 2)
 				buffer.readUByte();
 			else if (j == 5)
-				parameter = buffer.readUShort();
+				this.parameter = buffer.readUShort();
 			else if (j == 7 || j == 12)
 				buffer.readInt();
 			else if (j == 10)

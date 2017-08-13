@@ -3,7 +3,6 @@ package com.jagex.entity;
 // Jad home page: http://www.kpdus.com/jad.html
 // Decompiler options: packimports(3) 
 
-import com.jagex.cache.anim.Frame;
 import com.jagex.cache.anim.Graphic;
 import com.jagex.entity.model.Model;
 
@@ -32,33 +31,15 @@ public final class Projectile extends Animable {
     @Override
 	public Model getModel()
     {
-        Model model = SpotAnimModel.getModel(this.graphic);
-        if(model == null)
-            return null;
-        int j = -1;
-        if(this.graphic.animation != null)
-            j = this.graphic.animation.primaryFrames[this.frameIndex];
-        Model model_1 = new Model(true, Frame.isInvalid(j), false, model);
-        if(j != -1)
-        {
-            model_1.method469();
-            model_1.method470(j);
-            model_1.anIntArrayArray1658 = null;
-            model_1.anIntArrayArray1657 = null;
-        }
-        if(this.graphic.breadthScale != 128 || this.graphic.depthScale != 128)
-            model_1.method478(this.graphic.breadthScale, this.graphic.breadthScale, this.graphic.depthScale);
-        model_1.method474(this.pitch);
-        model_1.method479(64 + this.graphic.ambience, 850 + this.graphic.modelShadow, -30, -50, -30, true);
-            return model_1;
+        return AnimableRenderer.getModel(this);
     }
 
-    public Projectile(int i, int j, int l, int i1, int j1, int k1,
+	public Projectile(int i, int j, int l, int i1, int j1, int k1,
                          int l1, int i2, int j2, int k2, int l2)
     {
         this.mobile = false;
         this.graphic = Graphic.graphics[l2];
-        this.anInt1597 = k1;
+        this.level = k1;
         this.sourceX = j2;
         this.sourceY = i2;
         this.sourceElevation = l1;
@@ -109,10 +90,10 @@ public final class Projectile extends Animable {
     private final int elevationPitch;
     private final int leapScale;
     public final int target;
-    private final Graphic graphic;
-    private int frameIndex;
+    final Graphic graphic;
+    int frameIndex;
     private int elapsed;
     public int yaw;
-    private int pitch;
-    public final int anInt1597;
+    int pitch;
+    public final int level;
 }

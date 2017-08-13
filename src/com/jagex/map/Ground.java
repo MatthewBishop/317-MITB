@@ -9,7 +9,7 @@ public final class Ground extends Linkable {
 
     public Ground(int i, int j, int k)
     {
-        this.locs = new Object5[5];
+        this.locs = new GameObject[5];
         this.locFlags = new int[5];
         this.renderLevel = this.level = i;
         this.anInt1308 = j;
@@ -26,10 +26,10 @@ public final class Ground extends Linkable {
     public Object2 obj2;
     public Object3 obj3;
     public Object4 obj4;
-    int anInt1317;
-    public final Object5[] locs;
+    int objectCount;
+    public final GameObject[] locs;
     final int[] locFlags;
-    int anInt1320;
+    int attributes;
     int anInt1321;
     boolean aBoolean1322;
     boolean aBoolean1323;

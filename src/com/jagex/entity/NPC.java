@@ -4,15 +4,13 @@ package com.jagex.entity;
 // Decompiler options: packimports(3) 
 
 import com.jagex.cache.anim.Animation;
-import com.jagex.cache.anim.Frame;
-import com.jagex.cache.anim.Graphic;
 import com.jagex.cache.def.EntityDef;
 import com.jagex.entity.model.Model;
 
 public final class NPC extends Entity
 {
 
-    private Model method450()
+    Model method450()
     {
         if(super.anim >= 0 && super.anInt1529 == 0)
         {
@@ -31,40 +29,10 @@ public final class NPC extends Entity
     @Override
 	public Model getModel()
     {
-        if(this.desc == null)
-            return null;
-        Model model = this.method450();
-        if(model == null)
-            return null;
-        super.height = model.modelHeight;
-        if(super.anInt1520 != -1 && super.anInt1521 != -1)
-        {
-            Graphic graphic = Graphic.graphics[super.anInt1520];
-            Model model_1 = SpotAnimModel.getModel(graphic);
-            if(model_1 != null)
-            {
-                int j = graphic.animation.primaryFrames[super.anInt1521];
-                Model model_2 = new Model(true, Frame.isInvalid(j), false, model_1);
-                model_2.method475(0, -super.anInt1524, 0);
-                model_2.method469();
-                model_2.method470(j);
-                model_2.anIntArrayArray1658 = null;
-                model_2.anIntArrayArray1657 = null;
-                if(graphic.breadthScale != 128 || graphic.depthScale != 128)
-                    model_2.method478(graphic.breadthScale, graphic.breadthScale, graphic.depthScale);
-                model_2.method479(64 + graphic.ambience, 850 + graphic.modelShadow, -30, -50, -30, true);
-                Model aModel[] = {
-                        model, model_2
-                };
-                model = new Model(aModel);
-            }
-        }
-        if(this.desc.aByte68 == 1)
-            model.aBoolean1659 = true;
-        return model;
+        return AnimableRenderer.getModel(this);
     }
 
-    @Override
+	@Override
 	public boolean isVisible()
     {
         return this.desc != null;

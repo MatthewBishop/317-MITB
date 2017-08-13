@@ -27,6 +27,7 @@ public abstract class Animable extends Cacheable {
 		return null;
 	}
 
+	//abstract void lol();
 	public Class33 aClass33Array1425[];
 	public int modelHeight = 1000;
 

@@ -22,7 +22,7 @@ public final class Texture extends DrawingArea {
         Texture.anIntArrayArray1478 = null;
         Texture.anIntArrayArray1479 = null;
         Texture.anIntArray1480 = null;
-        Texture.anIntArray1482 = null;
+        Texture.palette = null;
         Texture.anIntArrayArray1483 = null;
     }
 
@@ -257,7 +257,7 @@ public final class Texture extends DrawingArea {
                 k2 = Texture.method373(k2, d);
                 if(k2 == 0)
                     k2 = 1;
-                Texture.anIntArray1482[j++] = k2;
+                Texture.palette[j++] = k2;
             }
 
         }
@@ -771,7 +771,7 @@ public final class Texture extends DrawingArea {
             {
                 while(--k >= 0) 
                 {
-                    j = Texture.anIntArray1482[j1 >> 8];
+                    j = Texture.palette[j1 >> 8];
                     j1 += l1;
                     ai[i++] = j;
                     ai[i++] = j;
@@ -781,7 +781,7 @@ public final class Texture extends DrawingArea {
                 k = i1 - l & 3;
                 if(k > 0)
                 {
-                    j = Texture.anIntArray1482[j1 >> 8];
+                    j = Texture.palette[j1 >> 8];
                     do
                         ai[i++] = j;
                     while(--k > 0);
@@ -793,7 +793,7 @@ public final class Texture extends DrawingArea {
                 int l2 = 256 - Texture.currentAlpha;
                 while(--k >= 0) 
                 {
-                    j = Texture.anIntArray1482[j1 >> 8];
+                    j = Texture.palette[j1 >> 8];
                     j1 += l1;
                     j = ((j & 0xff00ff) * l2 >> 8 & 0xff00ff) + ((j & 0xff00) * l2 >> 8 & 0xff00);
                     ai[i++] = j + ((ai[i] & 0xff00ff) * j2 >> 8 & 0xff00ff) + ((ai[i] & 0xff00) * j2 >> 8 & 0xff00);
@@ -804,7 +804,7 @@ public final class Texture extends DrawingArea {
                 k = i1 - l & 3;
                 if(k > 0)
                 {
-                    j = Texture.anIntArray1482[j1 >> 8];
+                    j = Texture.palette[j1 >> 8];
                     j = ((j & 0xff00ff) * l2 >> 8 & 0xff00ff) + ((j & 0xff00) * l2 >> 8 & 0xff00);
                     do
                         ai[i++] = j + ((ai[i] & 0xff00ff) * j2 >> 8 & 0xff00ff) + ((ai[i] & 0xff00) * j2 >> 8 & 0xff00);
@@ -834,7 +834,7 @@ public final class Texture extends DrawingArea {
         {
             do
             {
-                ai[i++] = Texture.anIntArray1482[j1 >> 8];
+                ai[i++] = Texture.palette[j1 >> 8];
                 j1 += i2;
             } while(--k > 0);
             return;
@@ -843,7 +843,7 @@ public final class Texture extends DrawingArea {
         int i3 = 256 - Texture.currentAlpha;
         do
         {
-            j = Texture.anIntArray1482[j1 >> 8];
+            j = Texture.palette[j1 >> 8];
             j1 += i2;
             j = ((j & 0xff00ff) * i3 >> 8 & 0xff00ff) + ((j & 0xff00) * i3 >> 8 & 0xff00);
             ai[i++] = j + ((ai[i] & 0xff00ff) * k2 >> 8 & 0xff00ff) + ((ai[i] & 0xff00) * k2 >> 8 & 0xff00);
@@ -2196,7 +2196,7 @@ public final class Texture extends DrawingArea {
     private static int[][] anIntArrayArray1479 = new int[50][];
     public static int anIntArray1480[] = new int[50];
     public static int anInt1481;
-    public static int anIntArray1482[] = new int[0x10000];
+    public static int palette[] = new int[0x10000];
     private static int[][] anIntArrayArray1483 = new int[50][];
 
     static 

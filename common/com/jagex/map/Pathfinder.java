@@ -12,21 +12,21 @@ public class Pathfinder {
 	public int anInt1264;
 
 	public Pathfinder() {
-        this.waypointX = new int[4000];
-        this.waypointY = new int[4000];
+		this.waypointX = new int[4000];
+		this.waypointY = new int[4000];
 		this.anIntArrayArray901 = new int[104][104];
-
 		this.pathDistance = new int[104][104];
 	}
 
 	public void kill() {
-        this.waypointX = null;
-        this.waypointY = null;
+		this.waypointX = null;
+		this.waypointY = null;
 		this.anIntArrayArray901 = null;
 		this.pathDistance = null;
 	}
 
-	public boolean doWalkTo(RSBase base, int i, int rotation, int height, int type, int initialY, int width, int l1, int finalY, int initialX, boolean flag, int finalX, CollisionMap map) {
+	public boolean doWalkTo(int surroundings, RSBase base, int movementType, int rotation, int height, int type, int initialY, int width,
+			int finalY, int initialX, boolean flag, int finalX, CollisionMap map) {
 		byte mapWidth = 104;
 		byte mapLength = 104;
 		for (int l2 = 0; l2 < mapWidth; l2++) {
@@ -57,7 +57,8 @@ public class Pathfinder {
 				break;
 			}
 			if (type != 0) {
-				if ((type < 5 || type == 10) && map.reachedWall(currentX, currentY, finalX, finalY, rotation, type - 1)) {
+				if ((type < 5 || type == 10)
+						&& map.reachedWall(currentX, currentY, finalX, finalY, rotation, type - 1)) {
 					reached = true;
 					break;
 				}
@@ -66,33 +67,37 @@ public class Pathfinder {
 					break;
 				}
 			}
-			if (width != 0 && height != 0 && map.reachedObject(currentX, currentY, finalX, finalY, width, height, l1)) {
+			if (width != 0 && height != 0 && map.reachedObject(currentX, currentY, finalX, finalY, width, height, surroundings)) {
 				reached = true;
 				break;
 			}
 			int l4 = this.pathDistance[currentX][currentY] + 1;
-			if (currentX > 0 && this.anIntArrayArray901[currentX - 1][currentY] == 0 && (flags[currentX - 1][currentY] & 0x1280108) == 0) {
+			if (currentX > 0 && this.anIntArrayArray901[currentX - 1][currentY] == 0
+					&& (flags[currentX - 1][currentY] & 0x1280108) == 0) {
 				this.waypointX[nextIndex] = currentX - 1;
 				this.waypointY[nextIndex] = currentY;
 				nextIndex = (nextIndex + 1) % waypoints;
 				this.anIntArrayArray901[currentX - 1][currentY] = 2;
 				this.pathDistance[currentX - 1][currentY] = l4;
 			}
-			if (currentX < mapWidth - 1 && this.anIntArrayArray901[currentX + 1][currentY] == 0 && (flags[currentX + 1][currentY] & 0x1280180) == 0) {
+			if (currentX < mapWidth - 1 && this.anIntArrayArray901[currentX + 1][currentY] == 0
+					&& (flags[currentX + 1][currentY] & 0x1280180) == 0) {
 				this.waypointX[nextIndex] = currentX + 1;
 				this.waypointY[nextIndex] = currentY;
 				nextIndex = (nextIndex + 1) % waypoints;
 				this.anIntArrayArray901[currentX + 1][currentY] = 8;
 				this.pathDistance[currentX + 1][currentY] = l4;
 			}
-			if (currentY > 0 && this.anIntArrayArray901[currentX][currentY - 1] == 0 && (flags[currentX][currentY - 1] & 0x1280102) == 0) {
+			if (currentY > 0 && this.anIntArrayArray901[currentX][currentY - 1] == 0
+					&& (flags[currentX][currentY - 1] & 0x1280102) == 0) {
 				this.waypointX[nextIndex] = currentX;
 				this.waypointY[nextIndex] = currentY - 1;
 				nextIndex = (nextIndex + 1) % waypoints;
 				this.anIntArrayArray901[currentX][currentY - 1] = 1;
 				this.pathDistance[currentX][currentY - 1] = l4;
 			}
-			if (currentY < mapLength - 1 && this.anIntArrayArray901[currentX][currentY + 1] == 0 && (flags[currentX][currentY + 1] & 0x1280120) == 0) {
+			if (currentY < mapLength - 1 && this.anIntArrayArray901[currentX][currentY + 1] == 0
+					&& (flags[currentX][currentY + 1] & 0x1280120) == 0) {
 				this.waypointX[nextIndex] = currentX;
 				this.waypointY[nextIndex] = currentY + 1;
 				nextIndex = (nextIndex + 1) % waypoints;
@@ -100,7 +105,8 @@ public class Pathfinder {
 				this.pathDistance[currentX][currentY + 1] = l4;
 			}
 			if (currentX > 0 && currentY > 0 && this.anIntArrayArray901[currentX - 1][currentY - 1] == 0
-					&& (flags[currentX - 1][currentY - 1] & 0x128010e) == 0 && (flags[currentX - 1][currentY] & 0x1280108) == 0
+					&& (flags[currentX - 1][currentY - 1] & 0x128010e) == 0
+					&& (flags[currentX - 1][currentY] & 0x1280108) == 0
 					&& (flags[currentX][currentY - 1] & 0x1280102) == 0) {
 				this.waypointX[nextIndex] = currentX - 1;
 				this.waypointY[nextIndex] = currentY - 1;
@@ -109,7 +115,8 @@ public class Pathfinder {
 				this.pathDistance[currentX - 1][currentY - 1] = l4;
 			}
 			if (currentX < mapWidth - 1 && currentY > 0 && this.anIntArrayArray901[currentX + 1][currentY - 1] == 0
-					&& (flags[currentX + 1][currentY - 1] & 0x1280183) == 0 && (flags[currentX + 1][currentY] & 0x1280180) == 0
+					&& (flags[currentX + 1][currentY - 1] & 0x1280183) == 0
+					&& (flags[currentX + 1][currentY] & 0x1280180) == 0
 					&& (flags[currentX][currentY - 1] & 0x1280102) == 0) {
 				this.waypointX[nextIndex] = currentX + 1;
 				this.waypointY[nextIndex] = currentY - 1;
@@ -118,7 +125,8 @@ public class Pathfinder {
 				this.pathDistance[currentX + 1][currentY - 1] = l4;
 			}
 			if (currentX > 0 && currentY < mapLength - 1 && this.anIntArrayArray901[currentX - 1][currentY + 1] == 0
-					&& (flags[currentX - 1][currentY + 1] & 0x1280138) == 0 && (flags[currentX - 1][currentY] & 0x1280108) == 0
+					&& (flags[currentX - 1][currentY + 1] & 0x1280138) == 0
+					&& (flags[currentX - 1][currentY] & 0x1280108) == 0
 					&& (flags[currentX][currentY + 1] & 0x1280120) == 0) {
 				this.waypointX[nextIndex] = currentX - 1;
 				this.waypointY[nextIndex] = currentY + 1;
@@ -126,8 +134,10 @@ public class Pathfinder {
 				this.anIntArrayArray901[currentX - 1][currentY + 1] = 6;
 				this.pathDistance[currentX - 1][currentY + 1] = l4;
 			}
-			if (currentX < mapWidth - 1 && currentY < mapLength - 1 && this.anIntArrayArray901[currentX + 1][currentY + 1] == 0
-					&& (flags[currentX + 1][currentY + 1] & 0x12801e0) == 0 && (flags[currentX + 1][currentY] & 0x1280180) == 0
+			if (currentX < mapWidth - 1 && currentY < mapLength - 1
+					&& this.anIntArrayArray901[currentX + 1][currentY + 1] == 0
+					&& (flags[currentX + 1][currentY + 1] & 0x12801e0) == 0
+					&& (flags[currentX + 1][currentY] & 0x1280180) == 0
 					&& (flags[currentX][currentY + 1] & 0x1280120) == 0) {
 				this.waypointX[nextIndex] = currentX + 1;
 				this.waypointY[nextIndex] = currentY + 1;
@@ -185,9 +195,9 @@ public class Pathfinder {
 		// if(cancelWalk) { return i4 > 0; }
 
 		if (currentIndex > 0) {
-			base.writepath(currentIndex, i, waypointX, waypointY);
+			base.writepath(currentIndex, movementType, waypointX, waypointY);
 			return true;
 		}
-		return i != 1;
+		return movementType != 1;
 	}
 }

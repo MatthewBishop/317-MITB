@@ -58,7 +58,7 @@ public final class ObjectDef
         this.anInt748 = 128;
         this.anInt772 = 128;
         this.anInt740 = 128;
-        this.anInt768 = 0;
+        this.surroundings = 0;
         this.anInt738 = 0;
         this.anInt745 = 0;
         this.anInt783 = 0;
@@ -414,7 +414,7 @@ label0:
                     this.anInt758 = buffer.readUShort();
                 else
                 if(j == 69)
-                    this.anInt768 = buffer.readUByte();
+                    this.surroundings = buffer.readUByte();
                 else
                 if(j == 70)
                     this.anInt738 = buffer.readShort();
@@ -503,7 +503,7 @@ label0:
     public static Client clientInstance;
     private boolean aBoolean766;
     public boolean aBoolean767;
-    public int anInt768;
+    public int surroundings;
     private boolean aBoolean769;
     private static int cacheIndex;
     private int anInt772;

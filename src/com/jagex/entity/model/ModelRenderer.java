@@ -27,7 +27,7 @@ public class ModelRenderer {
 	}
 	
 	static {
-        modelIntArray3 = Texture.anIntArray1482;
+        modelIntArray3 = Texture.palette;
         modelIntArray4 = Texture.anIntArray1469;
 	}
 

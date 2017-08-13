@@ -7,10 +7,11 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import com.jagex.Utils;
+import com.jagex.cache.def.Flo;
 import com.jagex.cache.def.ObjectDef;
 import com.jagex.draw.Texture;
 import com.jagex.entity.Animable;
-import com.jagex.entity.Animable_Sub5;
+import com.jagex.entity.RenderableObject;
 import com.jagex.entity.model.Model;
 import com.jagex.io.Buffer;
 import com.jagex.net.OnDemandFetcher;
@@ -209,7 +210,7 @@ public final class ObjectManager {
 									i_68_ = 127;
 								}
 								final int i_69_ = (0xfc00 & i_66_) + (i_66_ & 0x380) + i_68_;
-								underlayMinimapColor = Texture.anIntArray1482[ObjectManager.light(i_69_, 96)];
+								underlayMinimapColor = Texture.palette[ObjectManager.light(i_69_, 96)];
 							}
 							final int i_73_ = tileLighting[x][z];
 							final int i_70_ = tileLighting[x + 1][z];
@@ -227,17 +228,17 @@ public final class ObjectManager {
 								//if (textureId >= 0 && !Rasterizer.anInterface5_973.method15(textureId)) {
 								//		textureId = -1;
 								//}
-								int overlayMinimapColor;
-								int i_85_;
+								int overlay_rgb;
+								int overlay_hsl;
 								if (textureId >= 0) {
-									i_85_ = -1;
-									overlayMinimapColor = Texture.anIntArray1482[ObjectManager.checkedLight550(Texture.method369(textureId), 96)];
+									overlay_hsl = -1;
+									overlay_rgb = Texture.palette[ObjectManager.checkedLight550(Texture.method369(textureId), 96)];
 								} else if (overlayType.hslColour == -1) {
-									overlayMinimapColor = 0;
-									i_85_ = -2;
+									overlay_rgb = 0;
+									overlay_hsl = -2;
 								} else {
-									i_85_ = overlayType.hslColour;
-									int i_86_ = (0x7f & i_85_);
+									overlay_hsl = overlayType.hslColour;
+									int i_86_ = (0x7f & overlay_hsl);
 									if (i_86_ >= 0) {
 										if (i_86_ > 127) {
 											i_86_ = 127;
@@ -245,12 +246,12 @@ public final class ObjectManager {
 									} else {
 										i_86_ = 0;
 									}
-									final int i_87_ = (0xfc00 & i_85_) + (0x380 & i_85_) + i_86_;
-									overlayMinimapColor = Texture.anIntArray1482[ObjectManager.checkedLight550(i_87_, 96)];
+									final int i_87_ = (0xfc00 & overlay_hsl) + (0x380 & overlay_hsl) + i_86_;
+									overlay_rgb = Texture.palette[ObjectManager.checkedLight550(i_87_, 96)];
 								}
-								if (overlayType.anInt1198 >= 0) {
-									final int i_88_ = overlayType.anInt1198;
-									int i_89_ = (0x7f & i_88_);
+								if (overlayType.unkn1 >= 0) {
+									final int color = overlayType.unkn1;
+									int i_89_ = (0x7f & color);
 									if (i_89_ >= 0) {
 										if (i_89_ > 127) {
 											i_89_ = 127;
@@ -258,10 +259,10 @@ public final class ObjectManager {
 									} else {
 										i_89_ = 0;
 									}
-									final int i_90_ = (0xfc00 & i_88_) + (0x380 & i_88_) + i_89_;
-									overlayMinimapColor = Texture.anIntArray1482[ObjectManager.checkedLight550(i_90_, 96)];
+									final int i_90_ = (0xfc00 & color) + (0x380 & color) + i_89_;
+									overlay_rgb = Texture.palette[ObjectManager.checkedLight550(i_90_, 96)];
 								}
-								worldController.addTile(level, x, z, overlayShape_, overlayRotation, textureId, tileHeight, tileHeightEast, tileHeightNorthEast, tileHeightNorth, ObjectManager.light(i_66_, i_73_), ObjectManager.light(i_66_, i_70_), ObjectManager.light(i_66_, i_71_), ObjectManager.light(i_66_, i_72_), ObjectManager.checkedLight550(i_85_, i_73_), ObjectManager.checkedLight550(i_85_, i_70_), ObjectManager.checkedLight550(i_85_, i_71_), ObjectManager.checkedLight550(i_85_, i_72_), underlayMinimapColor, overlayMinimapColor);
+								worldController.addTile(level, x, z, overlayShape_, overlayRotation, textureId, tileHeight, tileHeightEast, tileHeightNorthEast, tileHeightNorth, ObjectManager.light(i_66_, i_73_), ObjectManager.light(i_66_, i_70_), ObjectManager.light(i_66_, i_71_), ObjectManager.light(i_66_, i_72_), ObjectManager.checkedLight550(overlay_hsl, i_73_), ObjectManager.checkedLight550(overlay_hsl, i_70_), ObjectManager.checkedLight550(overlay_hsl, i_71_), ObjectManager.checkedLight550(overlay_hsl, i_72_), underlayMinimapColor, overlay_rgb);
 							}
 						}
 					}
@@ -446,7 +447,7 @@ public final class ObjectManager {
 								}
 								int i22 = 0;
 								if (underlay_hsl_real != -1)
-									i22 = Texture.anIntArray1482[ObjectManager.light(underlay_hsl, 96)];
+									i22 = Texture.palette[ObjectManager.light(underlay_hsl, 96)];
 								if (overlay == 0) {
 									worldController.addTile(z, centreX, centreY, 0, 0, -1, centreHeight, eastHeight,
 											northEastHeight, northHeight, ObjectManager.light(underlay_hsl_real, centreLight),
@@ -469,7 +470,7 @@ public final class ObjectManager {
 										overlay_texture = -1;
 									} else {
 										overlay_hsl = this.toHsl(flo_2.hue, flo_2.saturation, flo_2.luminance);
-										overlay_rgb = Texture.anIntArray1482[this.checkedLight(flo_2.hslColour, 96)];
+										overlay_rgb = Texture.palette[this.checkedLight(flo_2.hslColour, 96)];
 									}
 									worldController.addTile(z, centreX, centreY, shape, rotation, overlay_texture, centreHeight,
 											eastHeight, northEastHeight, northHeight,
@@ -669,7 +670,7 @@ public final class ObjectManager {
 								char c1 = '\360';
 								int k14 = this.tileHeights[k8][i4][k4] - c1;
 								int l15 = this.tileHeights[i7][i4][k4];
-								WorldController.method277(l2, i4 * 128, l15, i4 * 128, l5 * 128 + 128, k14, k4 * 128,
+								Occluders.add(l2, i4 * 128, l15, i4 * 128, l5 * 128 + 128, k14, k4 * 128,
 										1);
 								for (int l16 = i7; l16 <= k8; l16++) {
 									for (int l17 = k4; l17 <= l5; l17++)
@@ -707,7 +708,7 @@ public final class ObjectManager {
 								char c2 = '\360';
 								int l14 = this.tileHeights[l8][l4][k3] - c2;
 								int i16 = this.tileHeights[j7][l4][k3];
-								WorldController.method277(l2, l4 * 128, i16, i6 * 128 + 128, k3 * 128, l14, k3 * 128,
+								Occluders.add(l2, l4 * 128, i16, i6 * 128 + 128, k3 * 128, l14, k3 * 128,
 										2);
 								for (int i17 = j7; i17 <= l8; i17++) {
 									for (int i18 = l4; i18 <= i6; i18++)
@@ -742,7 +743,7 @@ public final class ObjectManager {
 
 							if (((j6 - i5) + 1) * ((i9 - k7) + 1) >= 4) {
 								int j12 = this.tileHeights[i3][i5][k7];
-								WorldController.method277(l2, i5 * 128, j12, j6 * 128 + 128, i9 * 128 + 128, j12,
+								Occluders.add(l2, i5 * 128, j12, j6 * 128 + 128, i9 * 128 + 128, j12,
 										k7 * 128, 4);
 								for (int k13 = i5; k13 <= j6; k13++) {
 									for (int i15 = k7; i15 <= i9; i15++)
@@ -848,7 +849,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj = class46.method578(22, j1, k1, l1, i2, j2, -1);
             else
-                obj = new Animable_Sub5(i1, j1, 22, l1, i2, k1, j2, class46.anInt781, true);
+                obj = new RenderableObject(i1, j1, 22, l1, i2, k1, j2, class46.anInt781, true);
             worldController.method280(k, k2, i, ((Animable) (obj)), byte0, l2, l);
             if(class46.aBoolean767 && class46.hasActions && class11 != null)
                 class11.block(l, i);
@@ -860,7 +861,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj1 = class46.method578(10, j1, k1, l1, i2, j2, -1);
             else
-                obj1 = new Animable_Sub5(i1, j1, 10, l1, i2, k1, j2, class46.anInt781, true);
+                obj1 = new RenderableObject(i1, j1, 10, l1, i2, k1, j2, class46.anInt781, true);
             if(obj1 != null)
             {
                 int i5 = 0;
@@ -912,7 +913,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj2 = class46.method578(j, j1, k1, l1, i2, j2, -1);
             else
-                obj2 = new Animable_Sub5(i1, j1, j, l1, i2, k1, j2, class46.anInt781, true);
+                obj2 = new RenderableObject(i1, j1, j, l1, i2, k1, j2, class46.anInt781, true);
             worldController.method284(l2, byte0, k2, 1, ((Animable) (obj2)), 1, k, 0, i, l);
             if(j >= 12 && j <= 17 && j != 13 && k > 0)
                 this.tile_culling_bitmap[k][l][i] |= 0x924;
@@ -926,7 +927,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj3 = class46.method578(0, j1, k1, l1, i2, j2, -1);
             else
-                obj3 = new Animable_Sub5(i1, j1, 0, l1, i2, k1, j2, class46.anInt781, true);
+                obj3 = new RenderableObject(i1, j1, 0, l1, i2, k1, j2, class46.anInt781, true);
             worldController.method282(ObjectManager.anIntArray152[j1], ((Animable) (obj3)), l2, i, byte0, l, null, k2, 0, k);
             if(j1 == 0)
             {
@@ -980,7 +981,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj4 = class46.method578(1, j1, k1, l1, i2, j2, -1);
             else
-                obj4 = new Animable_Sub5(i1, j1, 1, l1, i2, k1, j2, class46.anInt781, true);
+                obj4 = new RenderableObject(i1, j1, 1, l1, i2, k1, j2, class46.anInt781, true);
             worldController.method282(ObjectManager.anIntArray140[j1], ((Animable) (obj4)), l2, i, byte0, l, null, k2, 0, k);
             if(class46.aBoolean779)
                 if(j1 == 0)
@@ -1009,8 +1010,8 @@ label0:
                 obj12 = class46.method578(2, i3, k1, l1, i2, j2, -1);
             } else
             {
-                obj11 = new Animable_Sub5(i1, 4 + j1, 2, l1, i2, k1, j2, class46.anInt781, true);
-                obj12 = new Animable_Sub5(i1, i3, 2, l1, i2, k1, j2, class46.anInt781, true);
+                obj11 = new RenderableObject(i1, 4 + j1, 2, l1, i2, k1, j2, class46.anInt781, true);
+                obj12 = new RenderableObject(i1, i3, 2, l1, i2, k1, j2, class46.anInt781, true);
             }
             worldController.method282(ObjectManager.anIntArray152[j1], ((Animable) (obj11)), l2, i, byte0, l, ((Animable) (obj12)), k2, ObjectManager.anIntArray152[i3], k);
             if(class46.aBoolean764)
@@ -1046,7 +1047,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj5 = class46.method578(3, j1, k1, l1, i2, j2, -1);
             else
-                obj5 = new Animable_Sub5(i1, j1, 3, l1, i2, k1, j2, class46.anInt781, true);
+                obj5 = new RenderableObject(i1, j1, 3, l1, i2, k1, j2, class46.anInt781, true);
             worldController.method282(ObjectManager.anIntArray140[j1], ((Animable) (obj5)), l2, i, byte0, l, null, k2, 0, k);
             if(class46.aBoolean779)
                 if(j1 == 0)
@@ -1070,7 +1071,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj6 = class46.method578(j, j1, k1, l1, i2, j2, -1);
             else
-                obj6 = new Animable_Sub5(i1, j1, j, l1, i2, k1, j2, class46.anInt781, true);
+                obj6 = new RenderableObject(i1, j1, j, l1, i2, k1, j2, class46.anInt781, true);
             worldController.method284(l2, byte0, k2, 1, ((Animable) (obj6)), 1, k, 0, i, l);
             if(class46.aBoolean767 && class11 != null)
                 class11.setLoc(l, i, class46.anInt744, class46.anInt761, j1, class46.aBoolean757);
@@ -1108,7 +1109,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj7 = class46.method578(4, 0, k1, l1, i2, j2, -1);
             else
-                obj7 = new Animable_Sub5(i1, 0, 4, l1, i2, k1, j2, class46.anInt781, true);
+                obj7 = new RenderableObject(i1, 0, 4, l1, i2, k1, j2, class46.anInt781, true);
             worldController.method283(l2, i, j1 * 512, k, 0, k2, ((Animable) (obj7)), l, byte0, 0, ObjectManager.anIntArray152[j1]);
             return;
         }
@@ -1122,7 +1123,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj13 = class46.method578(4, 0, k1, l1, i2, j2, -1);
             else
-                obj13 = new Animable_Sub5(i1, 0, 4, l1, i2, k1, j2, class46.anInt781, true);
+                obj13 = new RenderableObject(i1, 0, 4, l1, i2, k1, j2, class46.anInt781, true);
             worldController.method283(l2, i, j1 * 512, k, ObjectManager.anIntArray137[j1] * i4, k2, ((Animable) (obj13)), l, byte0, ObjectManager.anIntArray144[j1] * i4, ObjectManager.anIntArray152[j1]);
             return;
         }
@@ -1132,7 +1133,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj8 = class46.method578(4, 0, k1, l1, i2, j2, -1);
             else
-                obj8 = new Animable_Sub5(i1, 0, 4, l1, i2, k1, j2, class46.anInt781, true);
+                obj8 = new RenderableObject(i1, 0, 4, l1, i2, k1, j2, class46.anInt781, true);
             worldController.method283(l2, i, j1, k, 0, k2, ((Animable) (obj8)), l, byte0, 0, 256);
             return;
         }
@@ -1142,7 +1143,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj9 = class46.method578(4, 0, k1, l1, i2, j2, -1);
             else
-                obj9 = new Animable_Sub5(i1, 0, 4, l1, i2, k1, j2, class46.anInt781, true);
+                obj9 = new RenderableObject(i1, 0, 4, l1, i2, k1, j2, class46.anInt781, true);
             worldController.method283(l2, i, j1, k, 0, k2, ((Animable) (obj9)), l, byte0, 0, 512);
             return;
         }
@@ -1152,7 +1153,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj10 = class46.method578(4, 0, k1, l1, i2, j2, -1);
             else
-                obj10 = new Animable_Sub5(i1, 0, 4, l1, i2, k1, j2, class46.anInt781, true);
+                obj10 = new RenderableObject(i1, 0, 4, l1, i2, k1, j2, class46.anInt781, true);
             worldController.method283(l2, i, j1, k, 0, k2, ((Animable) (obj10)), l, byte0, 0, 768);
         }
     }
@@ -1581,7 +1582,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj = class46.method578(22, i, l1, i2, j2, k2, -1);
             else
-                obj = new Animable_Sub5(j1, i, 22, i2, j2, l1, k2, class46.anInt781, true);
+                obj = new RenderableObject(j1, i, 22, i2, j2, l1, k2, class46.anInt781, true);
             worldController.method280(k1, l2, j, ((Animable) (obj)), byte1, i3, i1);
             if(class46.aBoolean767 && class46.hasActions)
                 class11.block(i1, j);
@@ -1593,7 +1594,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj1 = class46.method578(10, i, l1, i2, j2, k2, -1);
             else
-                obj1 = new Animable_Sub5(j1, i, 10, i2, j2, l1, k2, class46.anInt781, true);
+                obj1 = new RenderableObject(j1, i, 10, i2, j2, l1, k2, class46.anInt781, true);
             if(obj1 != null)
             {
                 int j5 = 0;
@@ -1622,7 +1623,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj2 = class46.method578(k, i, l1, i2, j2, k2, -1);
             else
-                obj2 = new Animable_Sub5(j1, i, k, i2, j2, l1, k2, class46.anInt781, true);
+                obj2 = new RenderableObject(j1, i, k, i2, j2, l1, k2, class46.anInt781, true);
             worldController.method284(i3, byte1, l2, 1, ((Animable) (obj2)), 1, k1, 0, j, i1);
             if(class46.aBoolean767)
                 class11.setLoc(i1, j, class46.anInt744, class46.anInt761, i, class46.aBoolean757);
@@ -1634,7 +1635,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj3 = class46.method578(0, i, l1, i2, j2, k2, -1);
             else
-                obj3 = new Animable_Sub5(j1, i, 0, i2, j2, l1, k2, class46.anInt781, true);
+                obj3 = new RenderableObject(j1, i, 0, i2, j2, l1, k2, class46.anInt781, true);
             worldController.method282(ObjectManager.anIntArray152[i], ((Animable) (obj3)), i3, j, byte1, i1, null, l2, 0, k1);
             if(class46.aBoolean767)
                 class11.setWall(i1, j, i, k, class46.aBoolean757);
@@ -1646,7 +1647,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj4 = class46.method578(1, i, l1, i2, j2, k2, -1);
             else
-                obj4 = new Animable_Sub5(j1, i, 1, i2, j2, l1, k2, class46.anInt781, true);
+                obj4 = new RenderableObject(j1, i, 1, i2, j2, l1, k2, class46.anInt781, true);
             worldController.method282(ObjectManager.anIntArray140[i], ((Animable) (obj4)), i3, j, byte1, i1, null, l2, 0, k1);
             if(class46.aBoolean767)
                 class11.setWall(i1, j, i, k, class46.aBoolean757);
@@ -1663,8 +1664,8 @@ label0:
                 obj12 = class46.method578(2, j3, l1, i2, j2, k2, -1);
             } else
             {
-                obj11 = new Animable_Sub5(j1, 4 + i, 2, i2, j2, l1, k2, class46.anInt781, true);
-                obj12 = new Animable_Sub5(j1, j3, 2, i2, j2, l1, k2, class46.anInt781, true);
+                obj11 = new RenderableObject(j1, 4 + i, 2, i2, j2, l1, k2, class46.anInt781, true);
+                obj12 = new RenderableObject(j1, j3, 2, i2, j2, l1, k2, class46.anInt781, true);
             }
             worldController.method282(ObjectManager.anIntArray152[i], ((Animable) (obj11)), i3, j, byte1, i1, ((Animable) (obj12)), l2, ObjectManager.anIntArray152[j3], k1);
             if(class46.aBoolean767)
@@ -1677,7 +1678,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj5 = class46.method578(3, i, l1, i2, j2, k2, -1);
             else
-                obj5 = new Animable_Sub5(j1, i, 3, i2, j2, l1, k2, class46.anInt781, true);
+                obj5 = new RenderableObject(j1, i, 3, i2, j2, l1, k2, class46.anInt781, true);
             worldController.method282(ObjectManager.anIntArray140[i], ((Animable) (obj5)), i3, j, byte1, i1, null, l2, 0, k1);
             if(class46.aBoolean767)
                 class11.setWall(i1, j, i, k, class46.aBoolean757);
@@ -1689,7 +1690,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj6 = class46.method578(k, i, l1, i2, j2, k2, -1);
             else
-                obj6 = new Animable_Sub5(j1, i, k, i2, j2, l1, k2, class46.anInt781, true);
+                obj6 = new RenderableObject(j1, i, k, i2, j2, l1, k2, class46.anInt781, true);
             worldController.method284(i3, byte1, l2, 1, ((Animable) (obj6)), 1, k1, 0, j, i1);
             if(class46.aBoolean767)
                 class11.setLoc(i1, j, class46.anInt744, class46.anInt761, i, class46.aBoolean757);
@@ -1727,7 +1728,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj7 = class46.method578(4, 0, l1, i2, j2, k2, -1);
             else
-                obj7 = new Animable_Sub5(j1, 0, 4, i2, j2, l1, k2, class46.anInt781, true);
+                obj7 = new RenderableObject(j1, 0, 4, i2, j2, l1, k2, class46.anInt781, true);
             worldController.method283(i3, j, i * 512, k1, 0, l2, ((Animable) (obj7)), i1, byte1, 0, ObjectManager.anIntArray152[i]);
             return;
         }
@@ -1741,7 +1742,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj13 = class46.method578(4, 0, l1, i2, j2, k2, -1);
             else
-                obj13 = new Animable_Sub5(j1, 0, 4, i2, j2, l1, k2, class46.anInt781, true);
+                obj13 = new RenderableObject(j1, 0, 4, i2, j2, l1, k2, class46.anInt781, true);
             worldController.method283(i3, j, i * 512, k1, ObjectManager.anIntArray137[i] * j4, l2, ((Animable) (obj13)), i1, byte1, ObjectManager.anIntArray144[i] * j4, ObjectManager.anIntArray152[i]);
             return;
         }
@@ -1751,7 +1752,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj8 = class46.method578(4, 0, l1, i2, j2, k2, -1);
             else
-                obj8 = new Animable_Sub5(j1, 0, 4, i2, j2, l1, k2, class46.anInt781, true);
+                obj8 = new RenderableObject(j1, 0, 4, i2, j2, l1, k2, class46.anInt781, true);
             worldController.method283(i3, j, i, k1, 0, l2, ((Animable) (obj8)), i1, byte1, 0, 256);
             return;
         }
@@ -1761,7 +1762,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj9 = class46.method578(4, 0, l1, i2, j2, k2, -1);
             else
-                obj9 = new Animable_Sub5(j1, 0, 4, i2, j2, l1, k2, class46.anInt781, true);
+                obj9 = new RenderableObject(j1, 0, 4, i2, j2, l1, k2, class46.anInt781, true);
             worldController.method283(i3, j, i, k1, 0, l2, ((Animable) (obj9)), i1, byte1, 0, 512);
             return;
         }
@@ -1771,7 +1772,7 @@ label0:
             if(class46.anInt781 == -1 && class46.childrenIDs == null)
                 obj10 = class46.method578(4, 0, l1, i2, j2, k2, -1);
             else
-                obj10 = new Animable_Sub5(j1, 0, 4, i2, j2, l1, k2, class46.anInt781, true);
+                obj10 = new RenderableObject(j1, 0, 4, i2, j2, l1, k2, class46.anInt781, true);
             worldController.method283(i3, j, i, k1, 0, l2, ((Animable) (obj10)), i1, byte1, 0, 768);
         }
     }

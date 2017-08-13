@@ -12,6 +12,7 @@ import com.jagex.cache.anim.Animation;
 import com.jagex.cache.anim.Frame;
 import com.jagex.cache.anim.Graphic;
 import com.jagex.cache.def.EntityDef;
+import com.jagex.cache.def.Flo;
 import com.jagex.cache.def.ItemDef;
 import com.jagex.cache.def.ObjectDef;
 import com.jagex.cache.graphics.IndexedImage;
@@ -26,14 +27,14 @@ import com.jagex.draw.Texture;
 import com.jagex.draw.render.IndexedImageRenderer;
 import com.jagex.draw.render.SpriteRenderer;
 import com.jagex.entity.Animable;
-import com.jagex.entity.Animable_Sub3;
+import com.jagex.entity.AnimableObject;
+import com.jagex.entity.AnimableRenderer;
 import com.jagex.entity.Projectile;
-import com.jagex.entity.Animable_Sub5;
+import com.jagex.entity.RenderableObject;
 import com.jagex.entity.Entity;
 import com.jagex.entity.Item;
 import com.jagex.entity.NPC;
 import com.jagex.entity.Player;
-import com.jagex.entity.SpotAnimModel;
 import com.jagex.entity.model.IDK;
 import com.jagex.entity.model.Model;
 import com.jagex.entity.model.ModelRenderer;
@@ -43,11 +44,10 @@ import com.jagex.io.Buffer;
 import com.jagex.link.Linkable;
 import com.jagex.link.Deque;
 import com.jagex.map.CollisionMap;
-import com.jagex.map.Flo;
 import com.jagex.map.Object1;
 import com.jagex.map.Object2;
 import com.jagex.map.Object3;
-import com.jagex.map.Object5;
+import com.jagex.map.GameObject;
 import com.jagex.map.ObjectManager;
 import com.jagex.map.Pathfinder;
 import com.jagex.map.SpawnedObject;
@@ -380,8 +380,8 @@ public final class Client extends RSBase {
                 this.anInt1211 = 78;
             this.method30(77, this.anInt1211 - this.anInt1089 - 77, 0, 463, this.anInt1211);
             String s;
-            if(Client.myPlayer != null && Client.myPlayer.name != null)
-                s = Client.myPlayer.name;
+            if(Client.localPlayer != null && Client.localPlayer.name != null)
+                s = Client.localPlayer.name;
             else
                 s = TextClass.fixName(this.myUsername);
             textDrawingArea.method385(0, s + ":", 90, 4);
@@ -533,7 +533,7 @@ public final class Client extends RSBase {
         {
             this.anInt985 = -1;
             this.aClass19_1056.clear();
-            this.aClass19_1013.clear();
+            this.projectiles.clear();
             Texture.method366();
             this.unlinkMRUNodes();
             this.worldController.initToNull();
@@ -754,7 +754,7 @@ public final class Client extends RSBase {
         ItemDef.mruNodes2.clear();
         ItemDef.mruNodes1.clear();
         Player.mruNodes.clear();
-        SpotAnimModel.spotanimcache.clear();
+        AnimableRenderer.spotanimcache.clear();
     }
 
     private void method24(int i)
@@ -1377,7 +1377,7 @@ public final class Client extends RSBase {
         {
             Object obj;
             if(j == -1)
-                obj = Client.myPlayer;
+                obj = Client.localPlayer;
             else
             if(j < this.playerCount)
                 obj = this.playerArray[this.playerIndices[j]];
@@ -1949,7 +1949,7 @@ public final class Client extends RSBase {
                     return;
                 }
 
-            if(s.equals(Client.myPlayer.name))
+            if(s.equals(Client.localPlayer.name))
             {
                 return;
             } else
@@ -2067,7 +2067,7 @@ public final class Client extends RSBase {
             npc.anInt1556 = npc.desc.anInt83;
             npc.anInt1557 = npc.desc.anInt55;
             npc.anInt1511 = npc.desc.anInt77;
-            npc.setPos(Client.myPlayer.smallX[0] + i1, Client.myPlayer.smallY[0] + l, j1 == 1);
+            npc.setPos(Client.localPlayer.smallX[0] + i1, Client.localPlayer.smallY[0] + l, j1 == 1);
         }
         buffer.disableBitAccess();
     }
@@ -2087,7 +2087,7 @@ public final class Client extends RSBase {
 
     private void method47(boolean flag)
     {
-        if(Client.myPlayer.x >> 7 == this.destX && Client.myPlayer.y >> 7 == this.destY)
+        if(Client.localPlayer.x >> 7 == this.destX && Client.localPlayer.y >> 7 == this.destY)
             this.destX = 0;
         int j = this.playerCount;
         if(flag)
@@ -2098,7 +2098,7 @@ public final class Client extends RSBase {
             int i1;
             if(flag)
             {
-                player = Client.myPlayer;
+                player = Client.localPlayer;
                 i1 = this.myPlayerIndex << 14;
             } else
             {
@@ -2530,33 +2530,33 @@ public final class Client extends RSBase {
         }
     }
 
-    private void method55()
+    private void updateSceneProjectiles()
     {
-        for(Projectile class30_sub2_sub4_sub4 = (Projectile)this.aClass19_1013.getFront(); class30_sub2_sub4_sub4 != null; class30_sub2_sub4_sub4 = (Projectile)this.aClass19_1013.getNext())
-            if(class30_sub2_sub4_sub4.anInt1597 != this.plane || Client.loopCycle > class30_sub2_sub4_sub4.startTick)
-                class30_sub2_sub4_sub4.unlink();
+        for(Projectile p = (Projectile)this.projectiles.getFront(); p != null; p = (Projectile)this.projectiles.getNext())
+            if(p.level != this.plane || Client.loopCycle > p.startTick)
+                p.unlink();
             else
-            if(Client.loopCycle >= class30_sub2_sub4_sub4.endTick)
+            if(Client.loopCycle >= p.endTick)
             {
-                if(class30_sub2_sub4_sub4.target > 0)
+                if(p.target > 0)
                 {
-                    NPC npc = this.npcArray[class30_sub2_sub4_sub4.target - 1];
+                    NPC npc = this.npcArray[p.target - 1];
                     if(npc != null && npc.x >= 0 && npc.x < 13312 && npc.y >= 0 && npc.y < 13312)
-                        class30_sub2_sub4_sub4.target(Client.loopCycle, npc.y, this.tileHeight(class30_sub2_sub4_sub4.anInt1597, npc.y, npc.x) - class30_sub2_sub4_sub4.destinationElevation, npc.x);
+                        p.target(Client.loopCycle, npc.y, this.tileHeight(p.level, npc.y, npc.x) - p.destinationElevation, npc.x);
                 }
-                if(class30_sub2_sub4_sub4.target < 0)
+                if(p.target < 0)
                 {
-                    int j = -class30_sub2_sub4_sub4.target - 1;
+                    int index = -p.target - 1;
                     Player player;
-                    if(j == this.unknownInt10)
-                        player = Client.myPlayer;
+                    if(index == this.localPlayerIndex)
+                        player = Client.localPlayer;
                     else
-                        player = this.playerArray[j];
+                        player = this.playerArray[index];
                     if(player != null && player.x >= 0 && player.x < 13312 && player.y >= 0 && player.y < 13312)
-                        class30_sub2_sub4_sub4.target(Client.loopCycle, player.y, this.tileHeight(class30_sub2_sub4_sub4.anInt1597, player.y, player.x) - class30_sub2_sub4_sub4.destinationElevation, player.x);
+                        p.target(Client.loopCycle, player.y, this.tileHeight(p.level, player.y, player.x) - p.destinationElevation, player.x);
                 }
-                class30_sub2_sub4_sub4.update(this.anInt945);
-                this.worldController.method285(this.plane, class30_sub2_sub4_sub4.yaw, (int)class30_sub2_sub4_sub4.z, -1, (int)class30_sub2_sub4_sub4.y, 60, (int)class30_sub2_sub4_sub4.x, class30_sub2_sub4_sub4, false);
+                p.update(this.anInt945);
+                this.worldController.method285(this.plane, p.yaw, (int)p.z, -1, (int)p.y, 60, (int)p.x, p, false);
             }
 
     }
@@ -2885,7 +2885,7 @@ public final class Client extends RSBase {
         {
             int k = WorldController.anInt470;
             int k1 = WorldController.anInt471;
-            boolean flag = pathfinder.doWalkTo(this, 0, 0, 0, 0, Client.myPlayer.smallY[0], 0, 0, k1, Client.myPlayer.smallX[0], true, k, this.aClass11Array1230[this.plane]);
+            boolean flag = pathfinder.doWalkTo(0, this, 0, 0, 0, 0, Client.localPlayer.smallY[0], 0, k1, Client.localPlayer.smallX[0], true, k, this.aClass11Array1230[this.plane]);
             WorldController.anInt470 = -1;
             if(flag)
             {
@@ -3097,13 +3097,13 @@ public final class Client extends RSBase {
                 i2 = class46.anInt761;
                 j2 = class46.anInt744;
             }
-            int k2 = class46.anInt768;
+            int surroundings = class46.surroundings;
             if(l1 != 0)
-                k2 = (k2 << l1 & 0xf) + (k2 >> 4 - l1);
-            pathfinder.doWalkTo(this, 2, 0, j2, 0, Client.myPlayer.smallY[0], i2, k2, j, Client.myPlayer.smallX[0], false, k, this.aClass11Array1230[this.plane]);
+                surroundings = (surroundings << l1 & 0xf) + (surroundings >> 4 - l1);
+            pathfinder.doWalkTo(surroundings, this, 2, 0, j2, 0, Client.localPlayer.smallY[0], i2, j, Client.localPlayer.smallX[0], false, k, this.aClass11Array1230[this.plane]);
         } else
         {
-            pathfinder.doWalkTo(this, 2, l1, 0, k1 + 1, Client.myPlayer.smallY[0], 0, 0, j, Client.myPlayer.smallX[0], false, k, this.aClass11Array1230[this.plane]);
+            pathfinder.doWalkTo(0, this, 2, l1, 0, k1 + 1, Client.localPlayer.smallY[0], 0, j, Client.localPlayer.smallX[0], false, k, this.aClass11Array1230[this.plane]);
         }
         this.crossX = this.applet.saveClickX;
         this.crossY = this.applet.saveClickY;
@@ -3184,7 +3184,7 @@ public final class Client extends RSBase {
             NPC npc = this.npcArray[i1];
             if(npc != null)
             {
-                pathfinder.doWalkTo(this, 2, 0, 1, 0, Client.myPlayer.smallY[0], 1, 0, npc.smallY[0], Client.myPlayer.smallX[0], false, npc.smallX[0], this.aClass11Array1230[this.plane]);
+                pathfinder.doWalkTo(0, this, 2, 0, 1, 0, Client.localPlayer.smallY[0], 1, npc.smallY[0], Client.localPlayer.smallX[0], false, npc.smallX[0], this.aClass11Array1230[this.plane]);
                 this.crossX = this.applet.saveClickX;
                 this.crossY = this.applet.saveClickY;
                 this.crossType = 2;
@@ -3198,9 +3198,9 @@ public final class Client extends RSBase {
         }
         if(l == 234)
         {
-            boolean flag1 = pathfinder.doWalkTo(this, 2, 0, 0, 0, Client.myPlayer.smallY[0], 0, 0, k, Client.myPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
+            boolean flag1 = pathfinder.doWalkTo(0, this, 2, 0, 0, 0, Client.localPlayer.smallY[0], 0, k, Client.localPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
             if(!flag1)
-                flag1 = pathfinder.doWalkTo(this, 2, 0, 1, 0, Client.myPlayer.smallY[0], 1, 0, k, Client.myPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
+                flag1 = pathfinder.doWalkTo(0, this, 2, 0, 1, 0, Client.localPlayer.smallY[0], 1, k, Client.localPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
             this.crossX = this.applet.saveClickX;
             this.crossY = this.applet.saveClickY;
             this.crossType = 2;
@@ -3222,9 +3222,9 @@ public final class Client extends RSBase {
         }
         if(l == 511)
         {
-            boolean flag2 = pathfinder.doWalkTo(this, 2, 0, 0, 0, Client.myPlayer.smallY[0], 0, 0, k, Client.myPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
+            boolean flag2 = pathfinder.doWalkTo(0, this, 2, 0, 0, 0, Client.localPlayer.smallY[0], 0, k, Client.localPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
             if(!flag2)
-                flag2 = pathfinder.doWalkTo(this, 2, 0, 1, 0, Client.myPlayer.smallY[0], 1, 0, k, Client.myPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
+                flag2 = pathfinder.doWalkTo(0, this, 2, 0, 1, 0, Client.localPlayer.smallY[0], 1, k, Client.localPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
             this.crossX = this.applet.saveClickX;
             this.crossY = this.applet.saveClickY;
             this.crossType = 2;
@@ -3269,7 +3269,7 @@ public final class Client extends RSBase {
             Player player = this.playerArray[i1];
             if(player != null)
             {
-                pathfinder.doWalkTo(this, 2, 0, 1, 0, Client.myPlayer.smallY[0], 1, 0, player.smallY[0], Client.myPlayer.smallX[0], false, player.smallX[0], this.aClass11Array1230[this.plane]);
+                pathfinder.doWalkTo(0, this, 2, 0, 1, 0, Client.localPlayer.smallY[0], 1, player.smallY[0], Client.localPlayer.smallX[0], false, player.smallX[0], this.aClass11Array1230[this.plane]);
                 this.crossX = this.applet.saveClickX;
                 this.crossY = this.applet.saveClickY;
                 this.crossType = 2;
@@ -3289,7 +3289,7 @@ public final class Client extends RSBase {
             NPC class30_sub2_sub4_sub1_sub1_1 = this.npcArray[i1];
             if(class30_sub2_sub4_sub1_sub1_1 != null)
             {
-                pathfinder.doWalkTo(this, 2, 0, 1, 0, Client.myPlayer.smallY[0], 1, 0, class30_sub2_sub4_sub1_sub1_1.smallY[0], Client.myPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub1_1.smallX[0], this.aClass11Array1230[this.plane]);
+                pathfinder.doWalkTo(0, this, 2, 0, 1, 0, Client.localPlayer.smallY[0], 1, class30_sub2_sub4_sub1_sub1_1.smallY[0], Client.localPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub1_1.smallX[0], this.aClass11Array1230[this.plane]);
                 this.crossX = this.applet.saveClickX;
                 this.crossY = this.applet.saveClickY;
                 this.crossType = 2;
@@ -3303,7 +3303,7 @@ public final class Client extends RSBase {
             Player class30_sub2_sub4_sub1_sub2_1 = this.playerArray[i1];
             if(class30_sub2_sub4_sub1_sub2_1 != null)
             {
-                pathfinder.doWalkTo(this, 2, 0, 1, 0, Client.myPlayer.smallY[0], 1, 0, class30_sub2_sub4_sub1_sub2_1.smallY[0], Client.myPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub2_1.smallX[0], this.aClass11Array1230[this.plane]);
+                pathfinder.doWalkTo(0, this, 2, 0, 1, 0, Client.localPlayer.smallY[0], 1, class30_sub2_sub4_sub1_sub2_1.smallY[0], Client.localPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub2_1.smallX[0], this.aClass11Array1230[this.plane]);
                 this.crossX = this.applet.saveClickX;
                 this.crossY = this.applet.saveClickY;
                 this.crossType = 2;
@@ -3414,7 +3414,7 @@ public final class Client extends RSBase {
                     Player class30_sub2_sub4_sub1_sub2_7 = this.playerArray[this.playerIndices[j3]];
                     if(class30_sub2_sub4_sub1_sub2_7 == null || class30_sub2_sub4_sub1_sub2_7.name == null || !class30_sub2_sub4_sub1_sub2_7.name.equalsIgnoreCase(s7))
                         continue;
-                    pathfinder.doWalkTo(this, 2, 0, 1, 0, Client.myPlayer.smallY[0], 1, 0, class30_sub2_sub4_sub1_sub2_7.smallY[0], Client.myPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub2_7.smallX[0], this.aClass11Array1230[this.plane]);
+                    pathfinder.doWalkTo(0, this, 2, 0, 1, 0, Client.localPlayer.smallY[0], 1, class30_sub2_sub4_sub1_sub2_7.smallY[0], Client.localPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub2_7.smallX[0], this.aClass11Array1230[this.plane]);
                     if(l == 484)
                     {
                         this.stream.writeOpcode(139);
@@ -3515,7 +3515,7 @@ public final class Client extends RSBase {
             Player class30_sub2_sub4_sub1_sub2_2 = this.playerArray[i1];
             if(class30_sub2_sub4_sub1_sub2_2 != null)
             {
-                pathfinder.doWalkTo(this, 2, 0, 1, 0, Client.myPlayer.smallY[0], 1, 0, class30_sub2_sub4_sub1_sub2_2.smallY[0], Client.myPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub2_2.smallX[0], this.aClass11Array1230[this.plane]);
+                pathfinder.doWalkTo(0, this, 2, 0, 1, 0, Client.localPlayer.smallY[0], 1, class30_sub2_sub4_sub1_sub2_2.smallY[0], Client.localPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub2_2.smallX[0], this.aClass11Array1230[this.plane]);
                 this.crossX = this.applet.saveClickX;
                 this.crossY = this.applet.saveClickY;
                 this.crossType = 2;
@@ -3533,9 +3533,9 @@ public final class Client extends RSBase {
         }
         if(l == 213)
         {
-            boolean flag3 = pathfinder.doWalkTo(this, 2, 0, 0, 0, Client.myPlayer.smallY[0], 0, 0, k, Client.myPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
+            boolean flag3 = pathfinder.doWalkTo(0, this, 2, 0, 0, 0, Client.localPlayer.smallY[0], 0, k, Client.localPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
             if(!flag3)
-                flag3 = pathfinder.doWalkTo(this, 2, 0, 1, 0, Client.myPlayer.smallY[0], 1, 0, k, Client.myPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
+                flag3 = pathfinder.doWalkTo(0, this, 2, 0, 1, 0, Client.localPlayer.smallY[0], 1, k, Client.localPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
             this.crossX = this.applet.saveClickX;
             this.crossY = this.applet.saveClickY;
             this.crossType = 2;
@@ -3577,9 +3577,9 @@ public final class Client extends RSBase {
         }
         if(l == 652)
         {
-            boolean flag4 = pathfinder.doWalkTo(this, 2, 0, 0, 0, Client.myPlayer.smallY[0], 0, 0, k, Client.myPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
+            boolean flag4 = pathfinder.doWalkTo(0, this, 2, 0, 0, 0, Client.localPlayer.smallY[0], 0, k, Client.localPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
             if(!flag4)
-                flag4 = pathfinder.doWalkTo(this, 2, 0, 1, 0, Client.myPlayer.smallY[0], 1, 0, k, Client.myPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
+                flag4 = pathfinder.doWalkTo(0, this, 2, 0, 1, 0, Client.localPlayer.smallY[0], 1, k, Client.localPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
             this.crossX = this.applet.saveClickX;
             this.crossY = this.applet.saveClickY;
             this.crossType = 2;
@@ -3591,9 +3591,9 @@ public final class Client extends RSBase {
         }
         if(l == 94)
         {
-            boolean flag5 = pathfinder.doWalkTo(this, 2, 0, 0, 0, Client.myPlayer.smallY[0], 0, 0, k, Client.myPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
+            boolean flag5 = pathfinder.doWalkTo(0, this, 2, 0, 0, 0, Client.localPlayer.smallY[0], 0, k, Client.localPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
             if(!flag5)
-                flag5 = pathfinder.doWalkTo(this, 2, 0, 1, 0, Client.myPlayer.smallY[0], 1, 0, k, Client.myPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
+                flag5 = pathfinder.doWalkTo(0, this, 2, 0, 1, 0, Client.localPlayer.smallY[0], 1, k, Client.localPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
             this.crossX = this.applet.saveClickX;
             this.crossY = this.applet.saveClickY;
             this.crossType = 2;
@@ -3625,7 +3625,7 @@ public final class Client extends RSBase {
             NPC class30_sub2_sub4_sub1_sub1_2 = this.npcArray[i1];
             if(class30_sub2_sub4_sub1_sub1_2 != null)
             {
-                pathfinder.doWalkTo(this, 2, 0, 1, 0, Client.myPlayer.smallY[0], 1, 0, class30_sub2_sub4_sub1_sub1_2.smallY[0], Client.myPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub1_2.smallX[0], this.aClass11Array1230[this.plane]);
+                pathfinder.doWalkTo(0, this, 2, 0, 1, 0, Client.localPlayer.smallY[0], 1, class30_sub2_sub4_sub1_sub1_2.smallY[0], Client.localPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub1_2.smallX[0], this.aClass11Array1230[this.plane]);
                 this.crossX = this.applet.saveClickX;
                 this.crossY = this.applet.saveClickY;
                 this.crossType = 2;
@@ -3646,7 +3646,7 @@ public final class Client extends RSBase {
             NPC class30_sub2_sub4_sub1_sub1_3 = this.npcArray[i1];
             if(class30_sub2_sub4_sub1_sub1_3 != null)
             {
-                pathfinder.doWalkTo(this, 2, 0, 1, 0, Client.myPlayer.smallY[0], 1, 0, class30_sub2_sub4_sub1_sub1_3.smallY[0], Client.myPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub1_3.smallX[0], this.aClass11Array1230[this.plane]);
+                pathfinder.doWalkTo(0, this, 2, 0, 1, 0, Client.localPlayer.smallY[0], 1, class30_sub2_sub4_sub1_sub1_3.smallY[0], Client.localPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub1_3.smallX[0], this.aClass11Array1230[this.plane]);
                 this.crossX = this.applet.saveClickX;
                 this.crossY = this.applet.saveClickY;
                 this.crossType = 2;
@@ -3667,7 +3667,7 @@ public final class Client extends RSBase {
             NPC class30_sub2_sub4_sub1_sub1_4 = this.npcArray[i1];
             if(class30_sub2_sub4_sub1_sub1_4 != null)
             {
-                pathfinder.doWalkTo(this, 2, 0, 1, 0, Client.myPlayer.smallY[0], 1, 0, class30_sub2_sub4_sub1_sub1_4.smallY[0], Client.myPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub1_4.smallX[0], this.aClass11Array1230[this.plane]);
+                pathfinder.doWalkTo(0, this, 2, 0, 1, 0, Client.localPlayer.smallY[0], 1, class30_sub2_sub4_sub1_sub1_4.smallY[0], Client.localPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub1_4.smallX[0], this.aClass11Array1230[this.plane]);
                 this.crossX = this.applet.saveClickX;
                 this.crossY = this.applet.saveClickY;
                 this.crossType = 2;
@@ -3711,7 +3711,7 @@ public final class Client extends RSBase {
             NPC class30_sub2_sub4_sub1_sub1_6 = this.npcArray[i1];
             if(class30_sub2_sub4_sub1_sub1_6 != null)
             {
-                pathfinder.doWalkTo(this, 2, 0, 1, 0, Client.myPlayer.smallY[0], 1, 0, class30_sub2_sub4_sub1_sub1_6.smallY[0], Client.myPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub1_6.smallX[0], this.aClass11Array1230[this.plane]);
+                pathfinder.doWalkTo(0, this, 2, 0, 1, 0, Client.localPlayer.smallY[0], 1, class30_sub2_sub4_sub1_sub1_6.smallY[0], Client.localPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub1_6.smallX[0], this.aClass11Array1230[this.plane]);
                 this.crossX = this.applet.saveClickX;
                 this.crossY = this.applet.saveClickY;
                 this.crossType = 2;
@@ -3725,7 +3725,7 @@ public final class Client extends RSBase {
             Player class30_sub2_sub4_sub1_sub2_3 = this.playerArray[i1];
             if(class30_sub2_sub4_sub1_sub2_3 != null)
             {
-                pathfinder.doWalkTo(this, 2, 0, 1, 0, Client.myPlayer.smallY[0], 1, 0, class30_sub2_sub4_sub1_sub2_3.smallY[0], Client.myPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub2_3.smallX[0], this.aClass11Array1230[this.plane]);
+                pathfinder.doWalkTo(0, this, 2, 0, 1, 0, Client.localPlayer.smallY[0], 1, class30_sub2_sub4_sub1_sub2_3.smallY[0], Client.localPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub2_3.smallX[0], this.aClass11Array1230[this.plane]);
                 this.crossX = this.applet.saveClickX;
                 this.crossY = this.applet.saveClickY;
                 this.crossType = 2;
@@ -3740,7 +3740,7 @@ public final class Client extends RSBase {
             Player class30_sub2_sub4_sub1_sub2_4 = this.playerArray[i1];
             if(class30_sub2_sub4_sub1_sub2_4 != null)
             {
-                pathfinder.doWalkTo(this, 2, 0, 1, 0, Client.myPlayer.smallY[0], 1, 0, class30_sub2_sub4_sub1_sub2_4.smallY[0], Client.myPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub2_4.smallX[0], this.aClass11Array1230[this.plane]);
+                pathfinder.doWalkTo(0, this, 2, 0, 1, 0, Client.localPlayer.smallY[0], 1, class30_sub2_sub4_sub1_sub2_4.smallY[0], Client.localPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub2_4.smallX[0], this.aClass11Array1230[this.plane]);
                 this.crossX = this.applet.saveClickX;
                 this.crossY = this.applet.saveClickY;
                 this.crossType = 2;
@@ -3754,7 +3754,7 @@ public final class Client extends RSBase {
             Player class30_sub2_sub4_sub1_sub2_5 = this.playerArray[i1];
             if(class30_sub2_sub4_sub1_sub2_5 != null)
             {
-                pathfinder.doWalkTo(this, 2, 0, 1, 0, Client.myPlayer.smallY[0], 1, 0, class30_sub2_sub4_sub1_sub2_5.smallY[0], Client.myPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub2_5.smallX[0], this.aClass11Array1230[this.plane]);
+                pathfinder.doWalkTo(0, this, 2, 0, 1, 0, Client.localPlayer.smallY[0], 1, class30_sub2_sub4_sub1_sub2_5.smallY[0], Client.localPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub2_5.smallX[0], this.aClass11Array1230[this.plane]);
                 this.crossX = this.applet.saveClickX;
                 this.crossY = this.applet.saveClickY;
                 this.crossType = 2;
@@ -3773,9 +3773,9 @@ public final class Client extends RSBase {
         }
         if(l == 567)
         {
-            boolean flag6 = pathfinder.doWalkTo(this, 2, 0, 0, 0, Client.myPlayer.smallY[0], 0, 0, k, Client.myPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
+            boolean flag6 = pathfinder.doWalkTo(0, this, 2, 0, 0, 0, Client.localPlayer.smallY[0], 0, k, Client.localPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
             if(!flag6)
-                flag6 = pathfinder.doWalkTo(this, 2, 0, 1, 0, Client.myPlayer.smallY[0], 1, 0, k, Client.myPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
+                flag6 = pathfinder.doWalkTo(0, this, 2, 0, 1, 0, Client.localPlayer.smallY[0], 1, k, Client.localPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
             this.crossX = this.applet.saveClickX;
             this.crossY = this.applet.saveClickY;
             this.crossType = 2;
@@ -3852,7 +3852,7 @@ public final class Client extends RSBase {
             Player class30_sub2_sub4_sub1_sub2_6 = this.playerArray[i1];
             if(class30_sub2_sub4_sub1_sub2_6 != null)
             {
-                pathfinder.doWalkTo(this, 2, 0, 1, 0, Client.myPlayer.smallY[0], 1, 0, class30_sub2_sub4_sub1_sub2_6.smallY[0], Client.myPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub2_6.smallX[0], this.aClass11Array1230[this.plane]);
+                pathfinder.doWalkTo(0, this, 2, 0, 1, 0, Client.localPlayer.smallY[0], 1, class30_sub2_sub4_sub1_sub2_6.smallY[0], Client.localPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub2_6.smallX[0], this.aClass11Array1230[this.plane]);
                 this.crossX = this.applet.saveClickX;
                 this.crossY = this.applet.saveClickY;
                 this.crossType = 2;
@@ -3912,7 +3912,7 @@ public final class Client extends RSBase {
             NPC class30_sub2_sub4_sub1_sub1_7 = this.npcArray[i1];
             if(class30_sub2_sub4_sub1_sub1_7 != null)
             {
-                pathfinder.doWalkTo(this, 2, 0, 1, 0, Client.myPlayer.smallY[0], 1, 0, class30_sub2_sub4_sub1_sub1_7.smallY[0], Client.myPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub1_7.smallX[0], this.aClass11Array1230[this.plane]);
+                pathfinder.doWalkTo(0, this, 2, 0, 1, 0, Client.localPlayer.smallY[0], 1, class30_sub2_sub4_sub1_sub1_7.smallY[0], Client.localPlayer.smallX[0], false, class30_sub2_sub4_sub1_sub1_7.smallX[0], this.aClass11Array1230[this.plane]);
                 this.crossX = this.applet.saveClickX;
                 this.crossY = this.applet.saveClickY;
                 this.crossType = 2;
@@ -4004,9 +4004,9 @@ public final class Client extends RSBase {
         }
         if(l == 244)
         {
-            boolean flag7 = pathfinder.doWalkTo(this, 2, 0, 0, 0, Client.myPlayer.smallY[0], 0, 0, k, Client.myPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
+            boolean flag7 = pathfinder.doWalkTo(0, this, 2, 0, 0, 0, Client.localPlayer.smallY[0], 0, k, Client.localPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
             if(!flag7)
-                flag7 = pathfinder.doWalkTo(this, 2, 0, 1, 0, Client.myPlayer.smallY[0], 1, 0, k, Client.myPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
+                flag7 = pathfinder.doWalkTo(0, this, 2, 0, 1, 0, Client.localPlayer.smallY[0], 1, k, Client.localPlayer.smallX[0], false, j, this.aClass11Array1230[this.plane]);
             this.crossX = this.applet.saveClickX;
             this.crossY = this.applet.saveClickY;
             this.crossType = 2;
@@ -4035,8 +4035,8 @@ public final class Client extends RSBase {
     private void method70()
     {
         this.anInt1251 = 0;
-        int j = (Client.myPlayer.x >> 7) + this.baseX;
-        int k = (Client.myPlayer.y >> 7) + this.baseY;
+        int j = (Client.localPlayer.x >> 7) + this.baseX;
+        int k = (Client.localPlayer.y >> 7) + this.baseY;
         if(j >= 3053 && j <= 3156 && k >= 3056 && k <= 3136)
             this.anInt1251 = 1;
         if(j >= 3072 && j <= 3118 && k >= 9492 && k <= 9535)
@@ -4315,7 +4315,7 @@ public final class Client extends RSBase {
         this.npcIndices = null;
         this.levelObjects = null;
         this.aClass19_1179 = null;
-        this.aClass19_1013 = null;
+        this.projectiles = null;
         this.aClass19_1056 = null;
         this.menuActionCmd2 = null;
         this.menuActionCmd3 = null;
@@ -4339,7 +4339,7 @@ public final class Client extends RSBase {
         RSInterface.interfaceCache = null;
         Animation.animations = null;
         Graphic.graphics = null;
-        SpotAnimModel.spotanimcache = null;
+        AnimableRenderer.spotanimcache = null;
         VariableParameter.destroy();
         Player.mruNodes = null;
         Texture.nullLoader();
@@ -4653,17 +4653,17 @@ public final class Client extends RSBase {
                         this.stream.writeSizeByte(this.stream.position - j3);
                         this.inputString = TextInput.processText(this.inputString);
                         this.inputString = Censor.doCensor(this.inputString);
-                        Client.myPlayer.textSpoken = this.inputString;
-                        Client.myPlayer.anInt1513 = j2;
-                        Client.myPlayer.anInt1531 = i3;
-                        Client.myPlayer.textCycle = 150;
+                        Client.localPlayer.textSpoken = this.inputString;
+                        Client.localPlayer.anInt1513 = j2;
+                        Client.localPlayer.anInt1531 = i3;
+                        Client.localPlayer.textCycle = 150;
                         if(this.myPrivilege == 2)
-                            this.pushMessage(Client.myPlayer.textSpoken, 2, "@cr2@" + Client.myPlayer.name);
+                            this.pushMessage(Client.localPlayer.textSpoken, 2, "@cr2@" + Client.localPlayer.name);
                         else
                         if(this.myPrivilege == 1)
-                            this.pushMessage(Client.myPlayer.textSpoken, 2, "@cr1@" + Client.myPlayer.name);
+                            this.pushMessage(Client.localPlayer.textSpoken, 2, "@cr1@" + Client.localPlayer.name);
                         else
-                            this.pushMessage(Client.myPlayer.textSpoken, 2, Client.myPlayer.name);
+                            this.pushMessage(Client.localPlayer.textSpoken, 2, Client.localPlayer.name);
                         if(this.publicChatMode == 2)
                         {
                             this.publicChatMode = 3;
@@ -4708,7 +4708,7 @@ public final class Client extends RSBase {
                 l++;
             if((j1 == 1 || j1 == 2) && (j1 == 1 || this.publicChatMode == 0 || this.publicChatMode == 1 && this.isFriendOrSelf(s)))
             {
-                if(j > k1 - 14 && j <= k1 && !s.equals(Client.myPlayer.name))
+                if(j > k1 - 14 && j <= k1 && !s.equals(Client.localPlayer.name))
                 {
                     if(this.myPrivilege >= 1)
                     {
@@ -4916,7 +4916,7 @@ public final class Client extends RSBase {
                     }
 
                 model.method469();
-                model.method470(Animation.animations[Client.myPlayer.anInt1511].primaryFrames[0]);
+                model.method470(Animation.animations[Client.localPlayer.anInt1511].primaryFrames[0]);
                 model.method479(64, 850, -30, -50, -30, true);
                 class9.anInt233 = 5;
                 class9.mediaID = 0;
@@ -5474,8 +5474,8 @@ public final class Client extends RSBase {
                 for(int k2 = 0; k2 < 16384; k2++)
                     this.npcArray[k2] = null;
 
-                Client.myPlayer = this.playerArray[this.myPlayerIndex] = new Player();
-                this.aClass19_1013.clear();
+                Client.localPlayer = this.playerArray[this.myPlayerIndex] = new Player();
+                this.projectiles.clear();
                 this.aClass19_1056.clear();
                 for(int l2 = 0; l2 < 4; l2++)
                 {
@@ -5807,7 +5807,7 @@ public final class Client extends RSBase {
             return;
         String s = entityDef.name;
         if(entityDef.combatLevel != 0)
-            s = s + Client.combatDiffColor(Client.myPlayer.combatLevel, entityDef.combatLevel) + " (level-" + entityDef.combatLevel + ")";
+            s = s + Client.combatDiffColor(Client.localPlayer.combatLevel, entityDef.combatLevel) + " (level-" + entityDef.combatLevel + ")";
         if(this.itemSelected == 1)
         {
             this.menuActionName[this.menuActionRow] = "Use " + this.selectedItemName + " with @yel@" + s;
@@ -5860,7 +5860,7 @@ public final class Client extends RSBase {
                     if(entityDef.actions[i1] != null && entityDef.actions[i1].equalsIgnoreCase("attack"))
                     {
                         char c = '\0';
-                        if(entityDef.combatLevel > Client.myPlayer.combatLevel)
+                        if(entityDef.combatLevel > Client.localPlayer.combatLevel)
                             c = '\u07D0';
                         this.menuActionName[this.menuActionRow] = entityDef.actions[i1] + " @yel@" + s;
                         if(i1 == 0)
@@ -5891,13 +5891,13 @@ public final class Client extends RSBase {
 
     private void buildAtPlayerMenu(int i, int j, Player player, int k)
     {
-        if(player == Client.myPlayer)
+        if(player == Client.localPlayer)
             return;
         if(this.menuActionRow >= 400)
             return;
         String s;
         if(player.skill == 0)
-            s = player.name + Client.combatDiffColor(Client.myPlayer.combatLevel, player.combatLevel) + " (level-" + player.combatLevel + ")";
+            s = player.name + Client.combatDiffColor(Client.localPlayer.combatLevel, player.combatLevel) + " (level-" + player.combatLevel + ")";
         else
             s = player.name + " (skill-" + player.skill + ")";
         if(this.itemSelected == 1)
@@ -5929,10 +5929,10 @@ public final class Client extends RSBase {
                     char c = '\0';
                     if(this.atPlayerActions[l].equalsIgnoreCase("attack"))
                     {
-                        if(player.combatLevel > Client.myPlayer.combatLevel)
+                        if(player.combatLevel > Client.localPlayer.combatLevel)
                             c = '\u07D0';
-                        if(Client.myPlayer.team != 0 && player.team != 0)
-                            if(Client.myPlayer.team == player.team)
+                        if(Client.localPlayer.team != 0 && player.team != 0)
+                            if(Client.localPlayer.team == player.team)
                                 c = '\u07D0';
                             else
                                 c = '\0';
@@ -6392,7 +6392,7 @@ public final class Client extends RSBase {
             Censor.loadConfig(wordencArchive);
             this.mouseDetection = new MouseDetection(this);
             Utils.startRunnable(this.mouseDetection, 10);
-            Animable_Sub5.clientInstance = this;
+            RenderableObject.clientInstance = this;
             ObjectDef.clientInstance = this;
             EntityDef.clientInstance = this;
             return;
@@ -6431,7 +6431,7 @@ public final class Client extends RSBase {
             int j1 = buffer.readBits(5);
             if(j1 > 15)
                 j1 -= 32;
-            player.setPos(Client.myPlayer.smallX[0] + j1, Client.myPlayer.smallY[0] + i1, l == 1);
+            player.setPos(Client.localPlayer.smallX[0] + j1, Client.localPlayer.smallY[0] + i1, l == 1);
         }
         buffer.disableBitAccess();
     }
@@ -6471,9 +6471,9 @@ public final class Client extends RSBase {
                 j1 = j1 * (this.minimapInt3 + 256) >> 8;
                 int k1 = j * i1 + i * j1 >> 11;
                 int l1 = j * j1 - i * i1 >> 11;
-                int i2 = Client.myPlayer.x + k1 >> 7;
-                int j2 = Client.myPlayer.y - l1 >> 7;
-                boolean flag1 = pathfinder.doWalkTo(this, 1, 0, 0, 0, Client.myPlayer.smallY[0], 0, 0, j2, Client.myPlayer.smallX[0], true, i2, this.aClass11Array1230[this.plane]);
+                int i2 = Client.localPlayer.x + k1 >> 7;
+                int j2 = Client.localPlayer.y - l1 >> 7;
+                boolean flag1 = pathfinder.doWalkTo(0, this, 1, 0, 0, 0, Client.localPlayer.smallY[0], 0, j2, Client.localPlayer.smallX[0], true, i2, this.aClass11Array1230[this.plane]);
                 if(flag1)
                 {
                     this.stream.writeByte(i);
@@ -6483,8 +6483,8 @@ public final class Client extends RSBase {
                     this.stream.writeByte(this.minimapInt2);
                     this.stream.writeByte(this.minimapInt3);
                     this.stream.writeByte(89);
-                    this.stream.writeShort(Client.myPlayer.x);
-                    this.stream.writeShort(Client.myPlayer.y);
+                    this.stream.writeShort(Client.localPlayer.x);
+                    this.stream.writeShort(Client.localPlayer.y);
                     this.stream.writeByte(pathfinder.anInt1264);
                     this.stream.writeByte(63);
                 }
@@ -6599,7 +6599,7 @@ public final class Client extends RSBase {
             entity.y = entity.smallY[0] * 128 + entity.anInt1540 * 64;
             entity.method446();
         }
-        if(entity == Client.myPlayer && (entity.x < 1536 || entity.y < 1536 || entity.x >= 11776 || entity.y >= 11776))
+        if(entity == Client.localPlayer && (entity.x < 1536 || entity.y < 1536 || entity.x >= 11776 || entity.y >= 11776))
         {
             entity.anim = -1;
             entity.anInt1520 = -1;
@@ -6800,7 +6800,7 @@ public final class Client extends RSBase {
         if(entity.interactingEntity >= 32768)
         {
             int j = entity.interactingEntity - 32768;
-            if(j == this.unknownInt10)
+            if(j == this.localPlayerIndex)
                 j = this.myPlayerIndex;
             Player player = this.playerArray[j];
             if(player != null)
@@ -7124,8 +7124,8 @@ public final class Client extends RSBase {
 
     private void method104()
     {
-        Animable_Sub3 class30_sub2_sub4_sub3 = (Animable_Sub3)this.aClass19_1056.getFront();
-        for(; class30_sub2_sub4_sub3 != null; class30_sub2_sub4_sub3 = (Animable_Sub3)this.aClass19_1056.getNext())
+        AnimableObject class30_sub2_sub4_sub3 = (AnimableObject)this.aClass19_1056.getFront();
+        for(; class30_sub2_sub4_sub3 != null; class30_sub2_sub4_sub3 = (AnimableObject)this.aClass19_1056.getNext())
             if(class30_sub2_sub4_sub3.anInt1560 != this.plane || class30_sub2_sub4_sub3.aBoolean1567)
                 class30_sub2_sub4_sub3.unlink();
             else
@@ -7677,7 +7677,7 @@ public final class Client extends RSBase {
                 player.textSpoken = player.textSpoken.substring(1);
                 this.pushMessage(player.textSpoken, 2, player.name);
             } else
-            if(player == Client.myPlayer)
+            if(player == Client.localPlayer)
                 this.pushMessage(player.textSpoken, 2, player.name);
             player.anInt1513 = 0;
             player.anInt1531 = 0;
@@ -7779,8 +7779,8 @@ public final class Client extends RSBase {
     {
         try
         {
-            int j = Client.myPlayer.x + this.anInt1278;
-            int k = Client.myPlayer.y + this.anInt1131;
+            int j = Client.localPlayer.x + this.anInt1278;
+            int k = Client.localPlayer.y + this.anInt1131;
             if(this.anInt1014 - j < -500 || this.anInt1014 - j > 500 || this.anInt1015 - k < -500 || this.anInt1015 - k > 500)
             {
                 this.anInt1014 = j;
@@ -7868,7 +7868,7 @@ public final class Client extends RSBase {
         }
         catch(Exception _ex)
         {
-            Utils.reporterror("glfc_ex " + Client.myPlayer.x + "," + Client.myPlayer.y + "," + this.anInt1014 + "," + this.anInt1015 + "," + this.anInt1069 + "," + this.anInt1070 + "," + this.baseX + "," + this.baseY);
+            Utils.reporterror("glfc_ex " + Client.localPlayer.x + "," + Client.localPlayer.y + "," + this.anInt1014 + "," + this.anInt1015 + "," + this.anInt1069 + "," + this.anInt1070 + "," + this.baseX + "," + this.baseY);
             throw new RuntimeException("eek");
         }
     }
@@ -7896,7 +7896,7 @@ public final class Client extends RSBase {
         for(int i = 0; i < this.friendsCount; i++)
             if(s.equalsIgnoreCase(this.friendsList[i]))
                 return true;
-        return s.equalsIgnoreCase(Client.myPlayer.name);
+        return s.equalsIgnoreCase(Client.localPlayer.name);
     }
 
     private static String combatDiffColor(int i, int j)
@@ -8178,7 +8178,7 @@ public final class Client extends RSBase {
         if(k == 1)
         {
             int l = buffer.readBits(3);
-            Client.myPlayer.moveInDir(false, l);
+            Client.localPlayer.moveInDir(false, l);
             int k1 = buffer.readBits(1);
             if(k1 == 1)
                 this.anIntArray894[this.anInt893++] = this.myPlayerIndex;
@@ -8187,9 +8187,9 @@ public final class Client extends RSBase {
         if(k == 2)
         {
             int i1 = buffer.readBits(3);
-            Client.myPlayer.moveInDir(true, i1);
+            Client.localPlayer.moveInDir(true, i1);
             int l1 = buffer.readBits(3);
-            Client.myPlayer.moveInDir(true, l1);
+            Client.localPlayer.moveInDir(true, l1);
             int j2 = buffer.readBits(1);
             if(j2 == 1)
                 this.anIntArray894[this.anInt893++] = this.myPlayerIndex;
@@ -8204,7 +8204,7 @@ public final class Client extends RSBase {
                 this.anIntArray894[this.anInt893++] = this.myPlayerIndex;
             int k2 = buffer.readBits(7);
             int l2 = buffer.readBits(7);
-            Client.myPlayer.setPos(l2, k2, j1 == 1);
+            Client.localPlayer.setPos(l2, k2, j1 == 1);
         }
     }
 
@@ -8257,8 +8257,8 @@ public final class Client extends RSBase {
         {
             int k = this.xCameraPos >> 7;
             int l = this.yCameraPos >> 7;
-            int i1 = Client.myPlayer.x >> 7;
-            int j1 = Client.myPlayer.y >> 7;
+            int i1 = Client.localPlayer.x >> 7;
+            int j1 = Client.localPlayer.y >> 7;
             if((this.byteGroundArray[this.plane][k][l] & 4) != 0)
                 j = this.plane;
             int k1;
@@ -8325,7 +8325,7 @@ public final class Client extends RSBase {
                 }
             }
         }
-        if((this.byteGroundArray[this.plane][Client.myPlayer.x >> 7][Client.myPlayer.y >> 7] & 4) != 0)
+        if((this.byteGroundArray[this.plane][Client.localPlayer.x >> 7][Client.localPlayer.y >> 7] & 4) != 0)
             j = this.plane;
         return j;
     }
@@ -8415,7 +8415,7 @@ public final class Client extends RSBase {
                 if(j1 == 7)
                     k1 = (this.variousSettings[ai[l++]] * 100) / 46875;
                 if(j1 == 8)
-                    k1 = Client.myPlayer.combatLevel;
+                    k1 = Client.localPlayer.combatLevel;
                 if(j1 == 9)
                 {
                     for(int l1 = 0; l1 < Skills.skillsCount; l1++)
@@ -8462,9 +8462,9 @@ public final class Client extends RSBase {
                 if(j1 == 17)
                     byte0 = 3;
                 if(j1 == 18)
-                    k1 = (Client.myPlayer.x >> 7) + this.baseX;
+                    k1 = (Client.localPlayer.x >> 7) + this.baseX;
                 if(j1 == 19)
-                    k1 = (Client.myPlayer.y >> 7) + this.baseY;
+                    k1 = (Client.localPlayer.y >> 7) + this.baseY;
                 if(j1 == 20)
                     k1 = ai[l++];
                 if(byte0 == 0)
@@ -8530,14 +8530,14 @@ public final class Client extends RSBase {
 			return;
         }
         int i = minimapInt1 + minimapInt2 & 0x7ff;
-        int j = 48 + Client.myPlayer.x / 32;
-        int l2 = 464 - Client.myPlayer.y / 32;
+        int j = 48 + Client.localPlayer.x / 32;
+        int l2 = 464 - Client.localPlayer.y / 32;
         SpriteRenderer.draw(client.minimapImage, 151, i, Minimap.minimapLineLengths, 256 + minimapInt3, Minimap.minimapLineStarts, l2, (RSBase.frameMode == ScreenMode.FIXED ? 9 : 7), (RSBase.frameMode == ScreenMode.FIXED ? 54 : Client.frameWidth - 158), 146, j);
 		
         for(int j5 = 0; j5 < client.minimapFunctionCount; j5++)
         {
-            int k = (client.minimapFunctionX[j5] * 4 + 2) - Client.myPlayer.x / 32;
-            int i3 = (client.minimapFunctionY[j5] * 4 + 2) - Client.myPlayer.y / 32;
+            int k = (client.minimapFunctionX[j5] * 4 + 2) - Client.localPlayer.x / 32;
+            int i3 = (client.minimapFunctionY[j5] * 4 + 2) - Client.localPlayer.y / 32;
             Minimap.drawOntoMinimap(client.minimapFunctions[j5], k, i3, minimapInt1, minimapInt2, minimapInt3);
         }
 
@@ -8548,8 +8548,8 @@ public final class Client extends RSBase {
                 Deque class19 = client.levelObjects[client.plane][k5][l5];
                 if(class19 != null)
                 {
-                    int l = (k5 * 4 + 2) - Client.myPlayer.x / 32;
-                    int j3 = (l5 * 4 + 2) - Client.myPlayer.y / 32;
+                    int l = (k5 * 4 + 2) - Client.localPlayer.x / 32;
+                    int j3 = (l5 * 4 + 2) - Client.localPlayer.y / 32;
                     Minimap.drawOntoMinimap(client.mapDotItem, l, j3, minimapInt1, minimapInt2, minimapInt3);
                 }
             }
@@ -8566,8 +8566,8 @@ public final class Client extends RSBase {
                     entityDef = entityDef.method161();
                 if(entityDef != null && entityDef.aBoolean87 && entityDef.aBoolean84)
                 {
-                    int i1 = npc.x / 32 - Client.myPlayer.x / 32;
-                    int k3 = npc.y / 32 - Client.myPlayer.y / 32;
+                    int i1 = npc.x / 32 - Client.localPlayer.x / 32;
+                    int k3 = npc.y / 32 - Client.localPlayer.y / 32;
                     Minimap.drawOntoMinimap(client.mapDotNPC, i1, k3, minimapInt1, minimapInt2, minimapInt3);
                 }
             }
@@ -8578,8 +8578,8 @@ public final class Client extends RSBase {
             Player player = client.playerArray[client.playerIndices[j6]];
             if(player != null && player.isVisible())
             {
-                int j1 = player.x / 32 - Client.myPlayer.x / 32;
-                int l3 = player.y / 32 - Client.myPlayer.y / 32;
+                int j1 = player.x / 32 - Client.localPlayer.x / 32;
+                int l3 = player.y / 32 - Client.localPlayer.y / 32;
                 boolean flag1 = false;
                 long l6 = TextClass.longForName(player.name);
                 for(int k6 = 0; k6 < client.friendsCount; k6++)
@@ -8591,7 +8591,7 @@ public final class Client extends RSBase {
                 }
 
                 boolean flag2 = false;
-                if(Client.myPlayer.team != 0 && player.team != 0 && Client.myPlayer.team == player.team)
+                if(Client.localPlayer.team != 0 && player.team != 0 && Client.localPlayer.team == player.team)
                     flag2 = true;
                 if(flag1)
                     Minimap.drawOntoMinimap(client.mapDotFriend, j1, l3, minimapInt1, minimapInt2, minimapInt3);
@@ -8610,15 +8610,15 @@ public final class Client extends RSBase {
                 NPC class30_sub2_sub4_sub1_sub1_1 = client.npcArray[client.anInt1222];
                 if(class30_sub2_sub4_sub1_sub1_1 != null)
                 {
-                    int k1 = class30_sub2_sub4_sub1_sub1_1.x / 32 - Client.myPlayer.x / 32;
-                    int i4 = class30_sub2_sub4_sub1_sub1_1.y / 32 - Client.myPlayer.y / 32;
+                    int k1 = class30_sub2_sub4_sub1_sub1_1.x / 32 - Client.localPlayer.x / 32;
+                    int i4 = class30_sub2_sub4_sub1_sub1_1.y / 32 - Client.localPlayer.y / 32;
                     Minimap.method81(client.mapMarker, i4, k1, minimapInt1, minimapInt2, minimapInt3);
                 }
             }
             if(client.anInt855 == 2)
             {
-                int l1 = ((client.anInt934 - client.baseX) * 4 + 2) - Client.myPlayer.x / 32;
-                int j4 = ((client.anInt935 - client.baseY) * 4 + 2) - Client.myPlayer.y / 32;
+                int l1 = ((client.anInt934 - client.baseX) * 4 + 2) - Client.localPlayer.x / 32;
+                int j4 = ((client.anInt935 - client.baseY) * 4 + 2) - Client.localPlayer.y / 32;
                 Minimap.method81(client.mapMarker, j4, l1, minimapInt1, minimapInt2, minimapInt3);
             }
             if(client.anInt855 == 10 && client.anInt933 >= 0 && client.anInt933 < client.playerArray.length)
@@ -8626,16 +8626,16 @@ public final class Client extends RSBase {
                 Player class30_sub2_sub4_sub1_sub2_1 = client.playerArray[client.anInt933];
                 if(class30_sub2_sub4_sub1_sub2_1 != null)
                 {
-                    int i2 = class30_sub2_sub4_sub1_sub2_1.x / 32 - Client.myPlayer.x / 32;
-                    int k4 = class30_sub2_sub4_sub1_sub2_1.y / 32 - Client.myPlayer.y / 32;
+                    int i2 = class30_sub2_sub4_sub1_sub2_1.x / 32 - Client.localPlayer.x / 32;
+                    int k4 = class30_sub2_sub4_sub1_sub2_1.y / 32 - Client.localPlayer.y / 32;
                     Minimap.method81(client.mapMarker, k4, i2, minimapInt1, minimapInt2, minimapInt3);
                 }
             }
         }
         if(client.destX != 0)
         {
-            int j2 = (client.destX * 4 + 2) - Client.myPlayer.x / 32;
-            int l4 = (client.destY * 4 + 2) - Client.myPlayer.y / 32;
+            int j2 = (client.destX * 4 + 2) - Client.localPlayer.x / 32;
+            int l4 = (client.destY * 4 + 2) - Client.localPlayer.y / 32;
             Minimap.drawOntoMinimap(client.mapFlag, j2, l4, minimapInt1, minimapInt2, minimapInt3);
         }
         //DrawingArea.drawPixels(3, 78, 97, 0xffffff, 3);
@@ -8966,7 +8966,7 @@ public final class Client extends RSBase {
             int l11 = buffer.readUByte();
             int i14 = l11 >> 4 & 0xf;
             int i16 = l11 & 7;
-            if(Client.myPlayer.smallX[0] >= k3 - i14 && Client.myPlayer.smallX[0] <= k3 + i14 && Client.myPlayer.smallY[0] >= j6 - i14 && Client.myPlayer.smallY[0] <= j6 + i14 && this.aBoolean848 && !Client.lowMem && this.anInt1062 < 50)
+            if(Client.localPlayer.smallX[0] >= k3 - i14 && Client.localPlayer.smallX[0] <= k3 + i14 && Client.localPlayer.smallY[0] >= j6 - i14 && Client.localPlayer.smallY[0] <= j6 + i14 && this.aBoolean848 && !Client.lowMem && this.anInt1062 < 50)
             {
                 this.anIntArray1207[this.anInt1062] = i9;
                 this.anIntArray1241[this.anInt1062] = i16;
@@ -8982,7 +8982,7 @@ public final class Client extends RSBase {
             int y = this.anInt1269 + (l3 & 7);
             int i12 = buffer.readUShortA();
             int j14 = buffer.readUShort();
-            if(x >= 0 && y >= 0 && x < 104 && y < 104 && i12 != this.unknownInt10)
+            if(x >= 0 && y >= 0 && x < 104 && y < 104 && i12 != this.localPlayerIndex)
             {
                 Item class30_sub2_sub4_sub2_2 = new Item();
                 class30_sub2_sub4_sub2_2.id = i1;
@@ -9044,11 +9044,11 @@ public final class Client extends RSBase {
                         int k21 = class10.uid >> 14 & 0x7fff;
                         if(j12 == 2)
                         {
-                            class10.aClass30_Sub2_Sub4_278 = new Animable_Sub5(k21, 4 + k14, 2, i19, l19, j18, k20, j17, false);
-                            class10.aClass30_Sub2_Sub4_279 = new Animable_Sub5(k21, k14 + 1 & 3, 2, i19, l19, j18, k20, j17, false);
+                            class10.aClass30_Sub2_Sub4_278 = new RenderableObject(k21, 4 + k14, 2, i19, l19, j18, k20, j17, false);
+                            class10.aClass30_Sub2_Sub4_279 = new RenderableObject(k21, k14 + 1 & 3, 2, i19, l19, j18, k20, j17, false);
                         } else
                         {
-                            class10.aClass30_Sub2_Sub4_278 = new Animable_Sub5(k21, k14, j12, i19, l19, j18, k20, j17, false);
+                            class10.aClass30_Sub2_Sub4_278 = new RenderableObject(k21, k14, j12, i19, l19, j18, k20, j17, false);
                         }
                     }
                 }
@@ -9056,21 +9056,21 @@ public final class Client extends RSBase {
                 {
                     Object2 class26 = this.worldController.method297(j4, i7, this.plane);
                     if(class26 != null)
-                        class26.aClass30_Sub2_Sub4_504 = new Animable_Sub5(class26.uid >> 14 & 0x7fff, 0, 4, i19, l19, j18, k20, j17, false);
+                        class26.aClass30_Sub2_Sub4_504 = new RenderableObject(class26.uid >> 14 & 0x7fff, 0, 4, i19, l19, j18, k20, j17, false);
                 }
                 if(j16 == 2)
                 {
-                    Object5 class28 = this.worldController.method298(j4, i7, this.plane);
+                    GameObject class28 = this.worldController.method298(j4, i7, this.plane);
                     if(j12 == 11)
                         j12 = 10;
                     if(class28 != null)
-                        class28.aClass30_Sub2_Sub4_521 = new Animable_Sub5(class28.uid >> 14 & 0x7fff, k14, j12, i19, l19, j18, k20, j17, false);
+                        class28.renderable = new RenderableObject(class28.key >> 14 & 0x7fff, k14, j12, i19, l19, j18, k20, j17, false);
                 }
                 if(j16 == 3)
                 {
                     Object3 class49 = this.worldController.method299(i7, j4, this.plane);
                     if(class49 != null)
-                        class49.aClass30_Sub2_Sub4_814 = new Animable_Sub5(class49.uid >> 14 & 0x7fff, k14, 22, i19, l19, j18, k20, j17, false);
+                        class49.aClass30_Sub2_Sub4_814 = new RenderableObject(class49.uid >> 14 & 0x7fff, k14, 22, i19, l19, j18, k20, j17, false);
                 }
             }
             return;
@@ -9093,8 +9093,8 @@ public final class Client extends RSBase {
             int l21 = buffer.readUShort();
             byte byte3 = buffer.readNegByte();
             Player player;
-            if(i10 == this.unknownInt10)
-                player = Client.myPlayer;
+            if(i10 == this.localPlayerIndex)
+                player = Client.localPlayer;
             else
                 player = this.playerArray[i10];
             if(player != null)
@@ -9166,7 +9166,7 @@ public final class Client extends RSBase {
             {
                 i5 = i5 * 128 + 64;
                 l7 = l7 * 128 + 64;
-                Animable_Sub3 class30_sub2_sub4_sub3 = new Animable_Sub3(this.plane, Client.loopCycle, j15, k10, this.tileHeight(this.plane, l7, i5) - l12, l7, i5);
+                AnimableObject class30_sub2_sub4_sub3 = new AnimableObject(this.plane, Client.loopCycle, j15, k10, this.tileHeight(this.plane, l7, i5) - l12, l7, i5);
                 this.aClass19_1056.pushBack(class30_sub2_sub4_sub3);
             }
             return;
@@ -9226,7 +9226,7 @@ public final class Client extends RSBase {
                 k13 = k13 * 128 + 64;
                 Projectile class30_sub2_sub4_sub4 = new Projectile(i21, l18, k19 + Client.loopCycle, j20 + Client.loopCycle, j21, this.plane, this.tileHeight(this.plane, k8, l5) - i18, k8, l5, l15, i17);
                 class30_sub2_sub4_sub4.target(k19 + Client.loopCycle, k13, this.tileHeight(this.plane, k13, j11) - l18, j11);
-                this.aClass19_1013.pushBack(class30_sub2_sub4_sub4);
+                this.projectiles.pushBack(class30_sub2_sub4_sub4);
             }
         }
     }
@@ -9613,10 +9613,10 @@ public final class Client extends RSBase {
             {
                 int k = this.inBuffer.readLEUShortA();
                 RSInterface.interfaceCache[k].anInt233 = 3;
-                if(Client.myPlayer.desc == null)
-                    RSInterface.interfaceCache[k].mediaID = (Client.myPlayer.anIntArray1700[0] << 25) + (Client.myPlayer.anIntArray1700[4] << 20) + (Client.myPlayer.equipment[0] << 15) + (Client.myPlayer.equipment[8] << 10) + (Client.myPlayer.equipment[11] << 5) + Client.myPlayer.equipment[1];
+                if(Client.localPlayer.desc == null)
+                    RSInterface.interfaceCache[k].mediaID = (Client.localPlayer.anIntArray1700[0] << 25) + (Client.localPlayer.anIntArray1700[4] << 20) + (Client.localPlayer.equipment[0] << 15) + (Client.localPlayer.equipment[8] << 10) + (Client.localPlayer.equipment[11] << 5) + Client.localPlayer.equipment[1];
                 else
-                    RSInterface.interfaceCache[k].mediaID = (int)(0x12345678L + Client.myPlayer.desc.type);
+                    RSInterface.interfaceCache[k].mediaID = (int)(0x12345678L + Client.localPlayer.desc.type);
                 this.pktType = -1;
                 return true;
             }
@@ -10542,7 +10542,7 @@ public final class Client extends RSBase {
             if(this.pktType == 249)
             {
                 this.anInt1046 = this.inBuffer.readUByteA();
-                this.unknownInt10 = this.inBuffer.readLEUShortA();
+                this.localPlayerIndex = this.inBuffer.readLEUShortA();
                 this.pktType = -1;
                 return true;
             }
@@ -10739,7 +10739,7 @@ public final class Client extends RSBase {
         }
         catch(Exception exception)
         {
-            String s2 = "T2 - " + this.pktType + "," + this.anInt842 + "," + this.anInt843 + " - " + this.pktSize + "," + (this.baseX + Client.myPlayer.smallX[0]) + "," + (this.baseY + Client.myPlayer.smallY[0]) + " - ";
+            String s2 = "T2 - " + this.pktType + "," + this.anInt842 + "," + this.anInt843 + " - " + this.pktSize + "," + (this.baseX + Client.localPlayer.smallX[0]) + "," + (this.baseY + Client.localPlayer.smallY[0]) + " - ";
             for(int j15 = 0; j15 < this.pktSize && j15 < 50; j15++)
                 s2 = s2 + this.inBuffer.payload[j15] + ",";
 
@@ -10756,7 +10756,7 @@ public final class Client extends RSBase {
         this.method26(true);
         this.method47(false);
         this.method26(false);
-        this.method55();
+        this.updateSceneProjectiles();
         this.method104();
         if(!this.aBoolean1160)
         {
@@ -10766,7 +10766,7 @@ public final class Client extends RSBase {
             if(this.aBooleanArray876[4] && this.anIntArray1203[4] + 128 > cameraPitch)
                 cameraPitch = this.anIntArray1203[4] + 128;
             int k = this.minimapInt1 + this.anInt896 & 0x7ff;
-            this.setCameraPos(Client.cameraZoom + cameraPitch * ((Constants.VIEW_DISTANCE == 9) && (RSBase.frameMode == ScreenMode.RESIZABLE) ? 2 : Constants.VIEW_DISTANCE == 10 ? 5 : 3), cameraPitch, this.anInt1014, this.tileHeight(this.plane, Client.myPlayer.y, Client.myPlayer.x) - 50, k, this.anInt1015);
+            this.setCameraPos(Client.cameraZoom + cameraPitch * ((Constants.VIEW_DISTANCE == 9) && (RSBase.frameMode == ScreenMode.RESIZABLE) ? 2 : Constants.VIEW_DISTANCE == 10 ? 5 : 3), cameraPitch, this.anInt1014, this.tileHeight(this.plane, Client.localPlayer.y, Client.localPlayer.x) - 50, k, this.anInt1015);
         }
         int j;
         if(!this.aBoolean1160)
@@ -10862,7 +10862,7 @@ public final class Client extends RSBase {
         this.anInt874 = -1;
         this.aBooleanArray876 = new boolean[5];
         this.reportAbuseInput = "";
-        this.unknownInt10 = -1;
+        this.localPlayerIndex = -1;
         this.menuOpen = false;
         this.inputString = "";
         this.maxPlayers = 2048;
@@ -10906,7 +10906,7 @@ public final class Client extends RSBase {
         this.aBoolean994 = false;
         this.anInt1002 = 0x23201b;
         this.amountOrNameInput = "";
-        this.aClass19_1013 = new Deque();
+        this.projectiles = new Deque();
         this.aBoolean1017 = false;
         this.anInt1018 = -1;
         this.anIntArray1030 = new int[5];
@@ -11028,7 +11028,7 @@ public final class Client extends RSBase {
     private int weight;
     private MouseDetection mouseDetection;
     private String reportAbuseInput;
-    private int unknownInt10;
+    private int localPlayerIndex;
     private boolean menuOpen;
     private int anInt886;
     private String inputString;
@@ -11143,7 +11143,7 @@ public final class Client extends RSBase {
     private int anInt1009;
     private int anInt1010;
     private int anInt1011;
-    private Deque aClass19_1013;
+    private Deque projectiles;
     private int anInt1014;
     private int anInt1015;
     private int anInt1016;
@@ -11229,7 +11229,7 @@ public final class Client extends RSBase {
     private RSImageProducer aRSImageProducer_1123;
     private RSImageProducer aRSImageProducer_1124;
     private RSImageProducer aRSImageProducer_1125;
-    public static Player myPlayer;
+    public static Player localPlayer;
     private final String[] atPlayerActions;
     private final boolean[] atPlayerArray;
     private final int[][][] anIntArrayArrayArray1129;

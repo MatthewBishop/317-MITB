@@ -1,4 +1,4 @@
-package com.jagex.map;
+package com.jagex.cache.def;
 // Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
 // Jad home page: http://www.kpdus.com/jad.html
 // Decompiler options: packimports(3) 
@@ -57,7 +57,7 @@ public final class Flo {
                 int i1 = this.weightedHue;
                 int j1 = buffer.readUTriByte();
                 this.rgbToHsl(j1);
-                this.anInt1198 = this.hslColour;
+                this.unkn1 = this.hslColour;
                 this.hue = j;
                 this.saturation = k;
                 this.luminance = l;
@@ -70,7 +70,8 @@ public final class Flo {
         } while(true);
     }
 
-	int anInt1198 = -1; 
+	public int unkn1 = -1; 
+	
     private void rgbToHsl(int i)
     {
         double d = (i >> 16 & 0xff) / 256D;

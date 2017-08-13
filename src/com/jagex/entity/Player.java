@@ -6,7 +6,6 @@ package com.jagex.entity;
 import com.jagex.Client;
 import com.jagex.cache.anim.Animation;
 import com.jagex.cache.anim.Frame;
-import com.jagex.cache.anim.Graphic;
 import com.jagex.cache.def.EntityDef;
 import com.jagex.cache.def.ItemDef;
 import com.jagex.entity.model.IDK;
@@ -21,83 +20,10 @@ public final class Player extends Entity
     @Override
 	public Model getModel()
     {
-        if(!this.visible)
-            return null;
-        Model model = this.method452();
-        if(model == null)
-            return null;
-        super.height = model.modelHeight;
-        model.aBoolean1659 = true;
-        if(this.aBoolean1699)
-            return model;
-        if(super.anInt1520 != -1 && super.anInt1521 != -1)
-        {
-            Graphic graphic = Graphic.graphics[super.anInt1520];
-            Model model_2 = SpotAnimModel.getModel(graphic);
-            if(model_2 != null)
-            {
-                Model model_3 = new Model(true, Frame.isInvalid(super.anInt1521), false, model_2);
-                model_3.method475(0, -super.anInt1524, 0);
-                model_3.method469();
-                model_3.method470(graphic.animation.primaryFrames[super.anInt1521]);
-                model_3.anIntArrayArray1658 = null;
-                model_3.anIntArrayArray1657 = null;
-                if(graphic.breadthScale != 128 || graphic.depthScale != 128)
-                    model_3.method478(graphic.breadthScale, graphic.breadthScale, graphic.depthScale);
-                model_3.method479(64 + graphic.ambience, 850 + graphic.modelShadow, -30, -50, -30, true);
-                Model aclass30_sub2_sub4_sub6_1s[] = {
-                        model, model_3
-                };
-                model = new Model(aclass30_sub2_sub4_sub6_1s);
-            }
-        }
-        if(this.aModel_1714 != null)
-        {
-            if(Client.loopCycle >= this.anInt1708)
-                this.aModel_1714 = null;
-            if(Client.loopCycle >= this.anInt1707 && Client.loopCycle < this.anInt1708)
-            {
-                Model model_1 = this.aModel_1714;
-                model_1.method475(this.anInt1711 - super.x, this.anInt1712 - this.anInt1709, this.anInt1713 - super.y);
-                if(super.turnDirection == 512)
-                {
-                    model_1.method473();
-                    model_1.method473();
-                    model_1.method473();
-                } else
-                if(super.turnDirection == 1024)
-                {
-                    model_1.method473();
-                    model_1.method473();
-                } else
-                if(super.turnDirection == 1536)
-                    model_1.method473();
-                Model aclass30_sub2_sub4_sub6s[] = {
-                        model, model_1
-                };
-                model = new Model(aclass30_sub2_sub4_sub6s);
-                if(super.turnDirection == 512)
-                    model_1.method473();
-                else
-                if(super.turnDirection == 1024)
-                {
-                    model_1.method473();
-                    model_1.method473();
-                } else
-                if(super.turnDirection == 1536)
-                {
-                    model_1.method473();
-                    model_1.method473();
-                    model_1.method473();
-                }
-                model_1.method475(super.x - this.anInt1711, this.anInt1709 - this.anInt1712, super.y - this.anInt1713);
-            }
-        }
-        model.aBoolean1659 = true;
-        return model;
+        return AnimableRenderer.getModel(this);
     }
 
-    public void updatePlayer(Buffer buffer)
+ 	public void updatePlayer(Buffer buffer)
     {
         buffer.position = 0;
         this.anInt1702 = buffer.readUByte();
@@ -182,7 +108,7 @@ public final class Player extends Entity
         this.aLong1718 += this.anInt1702;
     }
 
-    private Model method452()
+    Model method452()
     {
         if(this.desc != null)
         {
